@@ -1,0 +1,97 @@
+{
+  "status": "completed",
+  "source": "Phuscca/vietnam-real-estates",
+  "split": "train",
+  "streaming": true,
+  "revision": "68bae25c3fa65a8e694973efe80bd6e237de11f5",
+  "seed": 42,
+  "targets": [
+    50000,
+    200000,
+    500000
+  ],
+  "batch_size": 2000,
+  "shuffle_buffer": 10000,
+  "columns": [
+    "id",
+    "name",
+    "property_type_name",
+    "province_name",
+    "district_name",
+    "ward_name",
+    "price",
+    "area",
+    "published_at"
+  ],
+  "source_rows_read": 502000,
+  "invalid_rows": 203,
+  "invalid_by_reason": {
+    "invalid_required": 202,
+    "invalid_area": 1,
+    "invalid_date": 0
+  },
+  "invalid_price_values": 0,
+  "valid_rows_seen": 501797,
+  "valid_rows_not_exported": 1797,
+  "exported_rows": 500000,
+  "total_csv_rows_written": 750000,
+  "null_counts": {
+    "id": 0,
+    "name": 0,
+    "property_type_name": 0,
+    "province_name": 0,
+    "district_name": 14235,
+    "ward_name": 72150,
+    "price": 39061,
+    "area": 0,
+    "published_at": 0
+  },
+  "outputs": {
+    "50000": {
+      "path": "data\\processed\\properties_50000.csv",
+      "rows": 50000,
+      "null_counts": {
+        "id": 0,
+        "name": 0,
+        "property_type_name": 0,
+        "province_name": 0,
+        "district_name": 1507,
+        "ward_name": 7277,
+        "price": 3993,
+        "area": 0,
+        "published_at": 0
+      }
+    },
+    "200000": {
+      "path": "data\\processed\\properties_200000.csv",
+      "rows": 200000,
+      "null_counts": {
+        "id": 0,
+        "name": 0,
+        "property_type_name": 0,
+        "province_name": 0,
+        "district_name": 5704,
+        "ward_name": 28896,
+        "price": 15569,
+        "area": 0,
+        "published_at": 0
+      }
+    },
+    "500000": {
+      "path": "data\\processed\\properties_500000.csv",
+      "rows": 500000,
+      "null_counts": {
+        "id": 0,
+        "name": 0,
+        "property_type_name": 0,
+        "province_name": 0,
+        "district_name": 14235,
+        "ward_name": 72150,
+        "price": 39061,
+        "area": 0,
+        "published_at": 0
+      }
+    }
+  },
+  "elapsed_seconds": 67.23126550000234
+}
