@@ -1,0 +1,16 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Data
+data/raw/
+data/processed/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Editor
+.vscode/
