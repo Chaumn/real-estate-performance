@@ -219,3 +219,11 @@ cho tới khi transaction kết thúc. Tài khoản cần quyền đọc, ghi, k
 và quyền TRUNCATE nếu dùng `--replace`. Thống kê COUNT/DISTINCT sau COPY
 cũng cần thời gian; chức năng này chưa bao gồm benchmark. Unit test không
 chứng minh kết nối, quyền hoặc tốc độ của PostgreSQL thật.
+
+## Bàn giao benchmark cho TV2
+
+Bộ SQL độc lập nằm trong `sql/benchmark/`: reset đúng bốn Index tối ưu,
+tạo từng Index riêng và các SELECT thuần giữ nguyên truy vấn nghiệm thu.
+Xem [hướng dẫn benchmark Q1-Q4](docs/benchmark_handoff.md) để nạp lần lượt
+50K/200K/500K, chuẩn bị Q3 A/B/C/D, trường hợp đối chứng Q4 và đo EXPLAIN
+JSON với 3 warm-up + 20 lượt chính thức, dùng median.
