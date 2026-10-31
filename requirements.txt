@@ -2,3 +2,5 @@ datasets
 pandas
 pyarrow
 pytest
+psycopg[binary]
+python-dotenv

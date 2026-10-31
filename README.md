@@ -9,11 +9,13 @@ Chạy các lệnh từ thư mục gốc project trong môi trường Python c�
 
 ```powershell
 python -m pip install -r requirements.txt
-python -m pytest -q
+$pytestRunRoot = Join-Path $env:TEMP ("real-estate-tests-" + [guid]::NewGuid().ToString("N"))
+.\.venv\Scripts\python.exe -B -m pytest -q -p no:cacheprovider --basetemp $pytestRunRoot
 ```
 
 Các test cho script tạo dataset sử dụng dữ liệu giả, không kết nối Internet.
 Test hồi quy mẫu 5.000 dòng chạy khi có `data/raw/sample_5000.csv` tại máy.
+Các test import PostgreSQL dùng kết nối giả, không truy cập database thật.
 
 ## Dữ liệu mẫu 5.000 dòng
 
@@ -132,3 +134,88 @@ Script từ chối ghi đè CSV hoặc báo cáo đã tồn tại. Trước khi 
 target, di chuyển các kết quả cũ sang nơi lưu trữ khác. Không chạy đồng thời
 nhiều lượt có đường dẫn đầu ra trùng nhau. Các thư mục `data/raw/` và
 `data/processed/` được Git bỏ qua theo cấu hình hiện tại.
+
+## Import CSV vào PostgreSQL 17
+
+Database `real_estate_db` và bảng `public.properties` phải được tạo trước
+theo `sql/schema.sql`. Importer không tạo database, bảng hoặc index.
+
+Chuẩn bị môi trường tại thư mục gốc project:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+if (-not (Test-Path -LiteralPath .env)) { Copy-Item -LiteralPath .env.example -Destination .env }
+```
+
+Điền cấu hình PostgreSQL của máy vào `.env`:
+
+```dotenv
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=real_estate_db
+PGUSER=postgres
+PGPASSWORD=
+```
+
+Đặt mật khẩu thật chỉ trong `.env`, không trong source hoặc `.env.example`.
+File `.env` đã được Git ignore. Nếu mật khẩu chứa ký tự đặc biệt, dùng dấu
+nháy phù hợp theo cú pháp python-dotenv. Importer không nội suy `${...}`.
+Biến môi trường PG đã tồn tại được ưu tiên hơn giá trị trong `.env`.
+Một `PGPASSWORD` rỗng được phép để hỗ trợ cấu hình xác thực không cần mật khẩu.
+
+Import 50K dòng vào bảng đang rỗng:
+
+```powershell
+.\.venv\Scripts\python.exe -X utf8 -m scripts.import_csv --file data/processed/properties_50000.csv
+```
+
+Importer mặc định từ chối nếu bảng đã có dữ liệu. Chỉ khi chủ động muốn
+thay thế toàn bộ dữ liệu, thêm `--replace`:
+
+```powershell
+.\.venv\Scripts\python.exe -X utf8 -m scripts.import_csv --file data/processed/properties_200000.csv --replace
+```
+
+Importer đọc kiểm tra header và từng bản ghi CSV trước khi kết nối: đúng
+9 cột theo thứ tự schema, mỗi bản ghi đúng 9 trường và có ít nhất một dòng
+dữ liệu. Bộ đọc hiểu CSV có dấu phẩy, dấu nháy và xuống dòng trong tên.
+Không dùng số dòng văn bản để đếm bản ghi.
+
+Sau đó script đọc lại cùng file theo khối tối đa 1 MiB và gửi bằng
+[Psycopg 3 COPY](https://www.psycopg.org/psycopg3/docs/basic/copy.html)
+`FROM STDIN (FORMAT CSV, HEADER TRUE)`. CSV có hoặc không có UTF-8 BOM
+đều được hỗ trợ; BOM đầu file được bỏ khi truyền và dữ liệu tiếng Việt
+được gửi nguyên byte với encoding UTF8. Không nạp toàn bộ file vào RAM
+và không chạy lại quy tắc làm sạch.
+
+Trường rỗng trong `price`, `district_name`, `ward_name` được nhập thành
+SQL NULL, kể cả trường rỗng có dấu nháy, nhờ `NULL ''` và `FORCE_NULL`.
+Chuỗi chữ `NULL` không bị chuyển đổi; ở cột giá, giá trị không hợp kiểu sẽ
+bị PostgreSQL từ chối. Kiểu dữ liệu và các constraint trong schema do
+PostgreSQL kiểm tra trong COPY.
+
+Mọi thao tác database nằm trong một transaction rõ ràng:
+
+1. Khóa bảng ở chế độ SHARE ROW EXCLUSIVE để chặn ghi đồng thời; xác nhận
+   schema thực tế và kiểm tra bảng có dữ liệu hay không.
+2. Nếu có `--replace`, TRUNCATE rồi COPY trong cùng transaction.
+3. Đối chiếu số bản ghi với CSV; kiểm tra COUNT(DISTINCT id), MIN(id), MAX(id)
+   để xác nhận đầy đủ ID 1..N, không thiếu hoặc trùng; đối chiếu số NULL của
+   cả ba cột nullable.
+4. In kết quả kiểm tra trước COMMIT; chỉ commit khi mọi bước đều đạt.
+   Lỗi COPY hoặc kiểm tra làm rollback cả TRUNCATE và dữ liệu vừa nạp.
+
+Log COPY báo số byte đã gửi và thời gian, tối đa khoảng một lần mỗi 5 giây
+tại ranh giới khối, kèm cập nhật cuối. Số byte đã gửi chưa đồng nghĩa với
+dữ liệu đã commit. Sau thành công, script in số bản ghi, NULL và tổng thời
+gian gồm kiểm tra CSV, COPY và xác nhận database. Không log mật khẩu hoặc
+connection string. Thông báo lỗi driver chỉ nêu loại lỗi để tránh lộ bí mật.
+
+Giới hạn vận hành: CSV được đọc hai lượt để kiểm tra và COPY; không sửa file
+trong lúc import. Script phát hiện thay đổi kích thước/mtime nhưng không
+thay thế việc bảo đảm file bất biến. Khóa bảng và TRUNCATE có thể phải chờ
+transaction khác; TRUNCATE khóa ACCESS EXCLUSIVE và sẽ chặn truy cập bảng
+cho tới khi transaction kết thúc. Tài khoản cần quyền đọc, ghi, khóa bảng
+và quyền TRUNCATE nếu dùng `--replace`. Thống kê COUNT/DISTINCT sau COPY
+cũng cần thời gian; chức năng này chưa bao gồm benchmark. Unit test không
+chứng minh kết nối, quyền hoặc tốc độ của PostgreSQL thật.
