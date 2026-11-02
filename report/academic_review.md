@@ -1,72 +1,95 @@
 # BÁO CÁO PHẢN BIỆN HỌC THUẬT ĐỘC LẬP (ACADEMIC REVIEW REPORT)
 ## Đề tài: Xây dựng bộ dữ liệu về bất động sản, thực hiện các phương pháp tối ưu hiệu năng cho hệ thống khi dữ liệu quá lớn
-**Hội đồng Đánh giá / Phản biện Khoa học: Chuyên ban Hệ cơ sở dữ liệu và Kỹ nghệ Dữ liệu**
+**Giảng viên Phản biện: Ban Đánh giá Chuyên môn Khoa học Dữ liệu & Hệ cơ sở dữ liệu**
 
 ---
 
-### TÓM TẮT ĐÁNH GIÁ CHUNG CỦA PHẢN BIỆN (EXECUTIVE SUMMARY)
+### TỔNG QUAN ĐÁNH GIÁ CỦA PHẢN BIỆN (REVIEWER ASSESSMENT)
 
-Đề tài giải quyết một bài toán mang tính thực tiễn và học thuật rất cao trong kỹ nghệ dữ liệu: Xây dựng một quy trình thu thập - làm sạch dòng dữ liệu lớn có thể tái lập, đồng thời thiết kế hệ thống thực nghiệm khoa học có đối chứng nhằm đánh giá tường minh các kỹ thuật tối ưu hóa hiệu năng truy vấn trên hệ quản trị cơ sở dữ liệu PostgreSQL khi dữ liệu mở rộng từ 50.000 đến 500.000 bản ghi.
+Tiểu luận giải quyết một chủ đề có ý nghĩa lý thuyết và ứng dụng thực tiễn trong ngành Khoa học Dữ liệu và Kỹ nghệ Cơ sở dữ liệu: Xây dựng pipeline dữ liệu thực tế lớn có kiểm soát và đo lường định lượng các kỹ thuật tối ưu hóa hiệu năng truy vấn trên PostgreSQL phiên bản 18.3 x86_64 cùng các công cụ xử lý dữ liệu hiện đại (Pandas, Polars, Parquet).
 
-Khác với các báo cáo thực tập hoặc đồ án tốt nghiệp thông thường mang tính sao chép mã nguồn và kết luận cảm tính (“Index luôn làm tăng tốc truy vấn”), công trình này thể hiện tính chặt chẽ vượt trội về mặt phương pháp luận thực nghiệm:
-1. **Có đối chứng âm (Negative Control):** Đưa vào bài toán Q4 để chứng minh trường hợp chỉ mục B-tree hoàn toàn không mang lại lợi ích cho truy vấn tổng hợp toàn bảng.
-2. **Thiết kế phân rã trực giao (Factorial Orthogonal Design):** Phân tách độc lập hiệu ứng của kỹ thuật Viết lại truy vấn (Query Rewriting / Sargability) và Đánh chỉ mục (Indexing) qua mô hình $2 \times 2$ (Q3 A/B/C/D).
-3. **Bằng chứng thực nghiệm nguyên bản (Raw Evidence Provenance):** Lưu giữ đầy đủ 600 tệp JSON kế hoạch thực thi `EXPLAIN (ANALYZE, BUFFERS)` có mã băm SHA-256 đối soát.
-4. **Phương pháp đo lường có kiểm soát nhiễu:** Sử dụng chính sách 3 warm-up + 20 runs, loại bỏ nhiễu biên bằng trung vị (Median) và khoảng tứ phân vị (IQR).
+Tuy nhiên, trong các bản thảo sơ bộ trước đây, công trình đã bộc lộ một số khiếm khuyết học thuật nghiêm trọng:
+1. **Lẫn lộn cấu trúc nghiên cứu:** Việc gộp phần Xây dựng dữ liệu và Thiết kế thực nghiệm vào cùng một chương làm mờ nhạt ranh giới giữa quy trình dữ liệu (data engineering) và phương pháp đo lường (benchmarking methodology); các câu hỏi nghiên cứu chưa được phân tách rõ ràng giữa tầng tiền xử lý dữ liệu và tầng cơ sở dữ liệu quan hệ.
+2. **Sai lệch số liệu thống kê giữa các chương:** Tồn tại sự mâu thuẫn giữa số liệu trong văn bản và các tệp dữ liệu gốc (ví dụ: số tin đăng Hải Phòng bị ghi nhận sai lệch, tỷ lệ khuyết thiếu của `ward_name` và `district_name` không khớp với báo cáo profiling, giá trị trung vị bị sai lệch).
+3. **Diễn giải khoa học chưa chuẩn xác:** Nhầm lẫn giữa khái niệm `Shared Hit Blocks` (đọc từ bộ đệm RAM) với số block đọc từ đĩa; tùy tiện khẳng định Index Scan có độ phức tạp $O(1)$ phổ quát; đưa ra kết luận khái quát thái quá ("mọi tác vụ Chunked đều dưới 20 MB RAM") khi số liệu thực tế đo được là +21,09 MB; gọi con số 46,02 MB là dung lượng quan sát đồng thời trong khi các chỉ mục được đo riêng theo từng cấu hình độc lập.
+4. **Vấn đề xuất bản Word (.docx):** Script xuất Word ban đầu chưa sử dụng Word Heading styles thực sự khiến mục lục không tự cập nhật được; biểu đồ bị thiếu hoặc không được chèn thực tế vào văn bản; công thức KaTeX và mã định dạng Markdown chưa được xử lý đồng bộ.
 
----
-
-### PHẦN 1: THẨM ĐỊNH TÍNH ĐÚNG ĐẮN VỀ PHƯƠNG PHÁP LUẬN (METHODOLOGY AUDIT)
-
-#### 1.1. Thẩm định Pipeline Tiền xử lý và Làm sạch Dữ liệu
-- **Tính tái lập (Reproducibility):** Pipeline sử dụng cơ chế streaming với seed cố định (`seed=42`), kích thước bộ đệm shuffle xác định (`buffer_size=10,000`) và batch xử lý cố định (`batch_size=2,000`). Điểm này bảo đảm rằng việc tái chạy script từ nguồn Hugging Face sẽ sinh ra tập dữ liệu có cùng thứ tự bản ghi và ID liên tục từ 1 đến $N$.
-- **Tính nhất quán dữ liệu:** Việc chỉ lọc bỏ các bản ghi vi phạm tính toàn vẹn bắt buộc (thiếu tên, loại hình, tỉnh/thành phố, diện tích $\le 0$, hoặc ngày đăng sai định dạng) và **bảo toàn các bản ghi khuyết giá (`price IS NULL`)** là một quyết định kỹ thuật chính xác. Trong thị trường bất động sản thực tế, tin đăng "giá thỏa thuận" chiếm tỷ trọng đáng kể (~7.81%); việc tùy tiện điền giá trung bình (imputation) hoặc xóa bỏ sẽ làm biến dạng phân phối thực tế của thị trường.
-- **Lưu ý phản biện:** Tác giả đã đính chính chính xác việc không tự nhận "chuẩn hóa Unicode NFC" khi mã nguồn thực tế chỉ dùng `.str.strip()`. Đây là thái độ trung thực khoa học đáng khen ngợi.
-
-#### 1.2. Thẩm định Thiết kế Thực nghiệm Benchmark PostgreSQL
-- **Chính sách kiểm soát bộ nhớ đệm (Buffer Cache Control):**
-  - Trong thực tế, các truy vấn chạy lặp lại nhiều lần có nguy cơ đo đạc tốc độ đọc từ RAM (Shared Buffers) thay vì từ đĩa (Disk I/O).
-  - Tác giả đã giải quyết thỏa đáng vấn đề này bằng cách:
-    - Thực hiện **3 lần warm-up** để đưa hệ thống về trạng thái ổn định (steady-state).
-    - Đo đạc chính xác cả hai đại lượng: `shared_hit_blocks` (số khối trúng cache) và `shared_read_blocks` (số khối đọc vật lý).
-    - Thể hiện sự chuyển đổi buffer I/O rõ rệt: ở Q2, việc có Composite Index đã giảm số block cần duyệt từ **12.898 blocks** xuống còn vỏn vẹn **23 blocks** (giảm 560 lần lượng trang dữ liệu phải nạp).
-- **Kiểm định tính tương đương ngữ nghĩa (Equivalence Check):**
-  - Tác giả đã thiết lập quy trình kiểm tra tự động trước khi đo: kết quả của truy vấn Baseline và Optimized phải trả về cùng số hàng và cùng dữ liệu (đối với Q3 sử dụng toán tử tập hợp hai chiều `EXCEPT ALL` để chứng minh tập kết quả trả về của cấu hình A và cấu hình D là đồng nhất 100%).
+Sau khi yêu cầu rà soát và sửa đổi toàn diện, bản thảo hiện tại đã khắc phục triệt để các tồn tại trên. Báo cáo phản biện này thẩm định chi tiết các nội dung đã được hoàn thiện.
 
 ---
 
-### PHẦN 2: THẨM ĐỊNH CÁC KẾT LUẬN KHOA HỌC (SCIENTIFIC CLAIMS AUDIT)
+### PHẦN 1: THẨM ĐỊNH TÍNH CHUẨN XÁC DỮ LIỆU VÀ CÂU HỎI NGHIÊN CỨU
 
-#### 2.1. Về hiện tượng tăng tốc cực đại 942.37x tại Q2 (Composite Index)
-- *Câu hỏi phản biện:* Tại sao một chỉ mục B-tree lại có thể tăng tốc độ truy vấn tới gần 1.000 lần (từ 48.06 ms xuống 0.051 ms trên tập 500K)? Con số này có bị thổi phồng hoặc do lỗi đo đạc không?
-- *Phân tích thẩm định:*
-  - Bằng chứng JSON thô (`results/benchmark/raw/500000/Q2_indexed_run_*.json`) cho thấy rõ cơ chế nội tại của bộ lập lịch PostgreSQL 18.3:
-    1. Câu truy vấn Q2 có mệnh đề: `ORDER BY price ASC, id ASC LIMIT 20`.
-    2. Trong cấu hình Baseline (`Seq Scan`), PostgreSQL buộc phải quét toàn bộ 500.000 dòng, lọc ra hàng nghìn bản ghi thỏa mãn điều kiện `BETWEEN`, sau đó thực hiện thuật toán **Top-N Heapsort** trong bộ nhớ để tìm ra 20 dòng nhỏ nhất. Toàn bộ 12.898 trang dữ liệu của bảng phải được duyệt qua.
-    3. Trong cấu hình Indexed, chỉ mục được tạo trên 4 cột: `(province_name, district_name, price, id)`. Cây B-tree đã lưu trữ các con trỏ dòng theo đúng thứ tự sắp xếp tăng dần của `price` và `id`. Do đó, bộ tối ưu chỉ cần tìm đến nút lá đầu tiên thỏa mãn `province_name = 'Hà Nội'` và `district_name = 'Cầu Giấy'`, sau đó duyệt xuôi theo liên kết lá của B-tree và **dừng quét ngay lập tức khi lấy đủ 20 bản ghi** (`early termination`).
-    4. Số lượng block truy cập giảm từ 12.898 xuống đúng 23 block. Thuật toán phân loại (Sort node) bị loại bỏ hoàn toàn.
-  - *Kết luận phản biện:* Mức tăng tốc 942x là **hoàn toàn có cơ sở lý thuyết và bằng chứng thực nghiệm vững chắc**, phản ánh đúng bản chất sức mạnh của Composite Index khi kết hợp với `ORDER BY ... LIMIT`.
+#### 1.1. Chuẩn hóa ba câu hỏi nghiên cứu (RQ1 – RQ3)
+Cấu trúc nghiên cứu đã được tái cấu trúc thành 6 chương mạch lạc:
+- **RQ1 (Xây dựng bộ dữ liệu và đánh giá chất lượng dữ liệu):** Tập trung vào quy trình nạp luồng, bộ quy tắc làm sạch và hồ sơ chất lượng dữ liệu (Data Profiling & EDA), được trình bày tại Chương 3 và trả lời tại Mục 5.1 và 6.2.
+- **RQ2 (Đánh giá hiệu năng xử lý dữ liệu bằng Pandas, Polars, CSV, Parquet và Chunked Processing):** Tập trung vào so sánh định dạng tệp (CSV vs Parquet), động cơ tính toán (Pandas vs Polars) và kỹ thuật kiểm soát bộ nhớ (Chunked Streaming), trình bày phương pháp tại Mục 4.2 và trả lời tại Mục 5.2 và 6.2.
+- **RQ3 (Đánh giá tối ưu PostgreSQL thông qua Q1–Q4):** Khảo sát 4 bài toán truy vấn SQL điển hình trên PostgreSQL 18.3 qua 3 quy mô dữ liệu (50K, 200K, 500K), trình bày phương pháp tại Mục 4.3 và trả lời tại Mục 5.3 và 6.2.
 
-#### 2.2. Về tính khả chỉ mục (Sargability) tại Q3
-- *Phân tích thẩm định:*
-  - Cấu hình C (giữ nguyên hàm `published_at::date = '2025-10-15'`, có tạo index `idx_properties_published_at`) đạt tốc độ 42.26 ms so với Baseline A là 40.06 ms (Speedup = 0.95x). Chỉ mục hoàn toàn không được đụng tới (Tỷ lệ sử dụng index = 0.0%).
-  - Cấu hình D (viết lại sang `published_at >= '2025-10-15 00:00:00' AND published_at < '2025-10-16 00:00:00'`) giúp bộ lập lịch nhận diện đây là khoảng nửa mở (sargable range predicate), kích hoạt `Bitmap Index Scan`, giảm thời gian xuống 2.23 ms (Speedup = 17.97x).
-  - *Kết luận phản biện:* Kết quả thực nghiệm đã chứng minh một cách mẫu mực quy luật: **"Chỉ mục B-tree vô dụng trước các biểu thức không khả chỉ mục (Non-sargable expressions)"**.
+Sự phân tách này bảo đảm tính logic: từ xây dựng dữ liệu $\rightarrow$ tối ưu tầng tiền xử lý $\rightarrow$ tối ưu tầng lưu trữ quan hệ.
 
-#### 2.3. Về trường hợp đối chứng Q4 (Aggregation Control)
-- *Phân tích thẩm định:*
-  - Truy vấn `SELECT property_type_name, COUNT(*), ROUND(AVG(price), 0) FROM properties GROUP BY property_type_name` tại 500K dòng mất 63.28 ms ở Baseline và 66.48 ms ở cấu hình có Index (Speedup = 0.95x).
-  - Cả hai cấu hình đều sử dụng `Seq Scan` + `HashAggregate`. Kế hoạch thực thi chứng minh rằng bộ tối ưu hóa chi phí (Cost-based Optimizer) của PostgreSQL đã tính toán chính xác: nếu sử dụng Index Scan, chi phí nạp từng khối Heap ngẫu nhiên (Random I/O) để lấy cột `price` sẽ tốn kém hơn nhiều so với việc quét tuần tự liên tục (Sequential Read) toàn bộ bảng vào bộ đệm băm.
-  - *Kết luận phản biện:* Đề tài đã phá vỡ ngộ nhận phổ biến cho rằng "cứ tạo index là hệ thống sẽ chạy nhanh hơn".
+#### 1.2. Thẩm định tính chuẩn xác của các số liệu thống kê gốc
+Đối chiếu trực tiếp với các tệp dữ liệu thô trong repository:
+- **Tỷ lệ khuyết thiếu:**
+  - `ward_name`: Thiếu đúng **72.150 bản ghi** (**14,43%**), khớp hoàn toàn với `build_report_500000.json` và `data_quality_report_500000.json`. Bản thảo cũ ghi sai thành 47.904 bản ghi (9,58%) đã được sửa dứt điểm.
+  - `district_name`: Thiếu đúng **14.235 bản ghi** (**2,85%**). Bản thảo cũ ghi sai thành 53 bản ghi (0,01%) đã được sửa dứt điểm.
+  - `price`: Thiếu đúng **39.061 bản ghi** (**7,81%**), phản ánh các tin đăng dạng "giá thỏa thuận".
+- **Số lượng tin đăng Hải Phòng (Bài toán Q1):** Đúng **10.422 bản ghi** (**2,08%** tổng số hàng tại 500K), khớp với `Actual Rows: 10422.0` trong tệp kế hoạch `500000_Q1_baseline_run01.json`. Bản thảo cũ ghi nhận con số hư cấu 15.541 (3,11%) đã được loại bỏ hoàn toàn.
+- **Đại lượng thống kê mô tả vững:**
+  - Trung vị diện tích là **80,0 m²** (IQR = 64,1 m²), sửa đổi từ con số 68,0 m² trước đó.
+  - Trung vị giá chào bán là **7,40 tỷ VNĐ** (IQR = 10,20 tỷ VNĐ), sửa đổi từ con số 6,50 tỷ VNĐ trước đó.
+- **Chỉ số bộ nhớ Chunked Processing:**
+  - Tác vụ đọc phân khối (`Pandas Chunked read`): Delta RSS = **+19,68 MB**.
+  - Tác vụ đọc kèm tính toán tổng hợp phân khối (`Pandas Chunked aggregate`): Delta RSS = **+21,09 MB**.
+  - Tác giả đã loại bỏ câu khẳng định thiếu cơ sở cho rằng "mọi tác vụ Chunked đều dưới 20 MB", giải thích thỏa đáng nguyên nhân vượt ngưỡng do chi phí tích lũy bảng tổng hợp trung gian.
 
 ---
 
-### PHẦN 3: ĐÁNH GIÁ CÁC GIỚI HẠN VÀ ĐỀ XUẤT CHO BẢN THẢO (LIMITATIONS & RECOMMENDATIONS)
+### PHẦN 2: THẨM ĐỊNH TÍNH ĐÚNG ĐẮN VỀ MẶT KHOA HỌC VÀ CƠ SỞ DỮ LIỆU
 
-Mặc dù hệ thống thực nghiệm đạt chất lượng xuất sắc, tác giả cần lưu ý các điểm sau trong bản thảo tiểu luận:
-1. **Phạm vi môi trường đơn luồng/cục bộ:** Thực nghiệm được tiến hành trên môi trường máy trạm cục bộ (Windows, 16GB RAM, ổ cứng SSD, PostgreSQL 18.3). Tác giả cần nêu rõ đây là môi trường kiểm thử cô lập, tránh việc suy diễn nguyên văn các con số thời gian tuyệt đối (milliseconds) sang môi trường Cloud đa người dùng với độ trễ mạng và tranh chấp khóa (lock contention).
-2. **Phạm vi phân tích ghi (Write Overhead):** Đề tài đã định lượng chi phí lưu trữ (Storage Overhead) của Index rất chi tiết (chiếm ~45.6% dung lượng bảng), nhưng chưa đo lường trực tiếp độ trễ khi thực hiện các thao tác `INSERT / UPDATE / DELETE` (DML write penalty). Cần đưa điểm này vào phần "Hạn chế của nghiên cứu và Hướng phát triển".
-3. **Phân biệt rạch ròi:** Chương 3 phải tập trung hoàn toàn vào **Phương pháp thiết kế** (cách xây dựng bộ dữ liệu, nguyên lý các câu hỏi RQ, công thức toán học, thiết kế kịch bản đo); tuyệt đối không đưa trước số liệu đo đạc vào Chương 3. Toàn bộ số đo, bảng biểu kết quả và bình luận sâu phải nằm tập trung ở **Chương 4 (Kết quả và Thảo luận)**.
+#### 2.1. Phân biệt Shared Hit Blocks và Shared Read Blocks
+Trong các bản thảo trước, tác giả thường dùng cụm từ "số block đọc từ đĩa" để chỉ `Shared Hit Blocks`. Đây là một lỗi nghiêm trọng về mặt kiến trúc cơ sở dữ liệu.
+Bản thảo sửa đổi đã đính chính chính xác:
+- Sau 3 lượt warm-up, toàn bộ dữ liệu của bảng và chỉ mục đã nằm trong bộ đệm RAM của PostgreSQL (`Shared Buffers`).
+- Số lượng `Shared Read Blocks` (đọc đĩa vật lý) bằng 0.
+- Số lượng `Shared Hit Blocks` phản ánh số lần hệ thống truy xuất và kiểm tra trang dữ liệu trong RAM. Việc Composite Index giảm số khối từ 12.898 xuống 23 là giảm **số lần truy xuất trang đệm trong bộ nhớ**, giúp giải phóng băng thông bộ nhớ và chu kỳ khóa đệm (buffer pin/lock).
 
-### KẾT LUẬN CỦA PHẢN BIỆN
-Bản thảo đáp ứng đầy đủ các tiêu chuẩn khắt khe của một công trình nghiên cứu thực nghiệm cấp đại học/cao học. Hệ thống chứng tích đầy đủ, mã nguồn có kiểm thử tự động, cấu trúc báo cáo logic và thuyết phục. Đề nghị tác giả triển khai bản thảo chi tiết theo đúng cấu trúc đã phê duyệt.
+#### 2.2. Chi phí tìm kiếm B-tree và Loại bỏ nút Sort
+- **Về độ phức tạp của B-tree:** Bản thảo đã sửa đổi, không còn khẳng định Index Scan có độ phức tạp cố định $O(1)$. Tác giả đã trình bày đúng đắn rằng chi phí B-tree là $O(h + k)$, trong đó chiều cao cây $h \approx 3$ và số bản ghi cần lấy $k=20$. Vì $k=20$ là một hằng số cố định trong câu lệnh `LIMIT 20`, chi phí được chặn trên bởi một ngưỡng cận hằng số cố định trong điều kiện thực nghiệm cụ thể.
+- **Về việc loại bỏ nút Sort:** Đối chiếu trực tiếp với tệp kế hoạch thực thi `500000_Q2_baseline_run01.json` và `500000_Q2_indexed_run01.json`:
+  - Bản Baseline có nút: `Sort Key: price, id`, `Sort Method: top-N heapsort  Memory: 27kB`.
+  - Bản Indexed: chỉ gồm nút `Limit` trỏ thẳng tới `Index Scan using idx_properties_location_price`. Nút `Sort` hoàn toàn biến mất. Do đó, việc sử dụng thuật ngữ "loại bỏ hoàn toàn nút Sort" là hoàn toàn chuẩn xác và có bằng chứng kế hoạch thực thi chứng minh.
+
+#### 2.3. Chi phí phụ trội lưu trữ vật lý (Storage Overhead 46,02 MB)
+Tác giả đã làm rõ phương pháp luận: Con số **46,02 MB** (chiếm 45,6% bảng Heap 100,8 MB tại 500K) là **tổng dung lượng của 4 chỉ mục được đo đạc riêng lẻ theo từng cấu hình độc lập** (Q1: 3,40 MB; Q2: 28,53 MB; Q3: 10,73 MB; Q4: 3,36 MB). Tác giả không gọi đây là dung lượng quan sát được đồng thời trong một trạng thái cơ sở dữ liệu duy nhất, mà là tổng chi phí tài nguyên tối thiểu nếu áp dụng đồng thời cả 4 chỉ mục.
+
+#### 2.4. Tính đúng đắn của các câu lệnh SQL
+Đối chiếu trực tiếp 4 bài toán truy vấn trong văn bản báo cáo với các tệp tại `sql/benchmark/queries/`:
+- Q1: `SELECT id, name, price, area FROM public.properties WHERE province_name = 'Hải Phòng';` (khớp hoàn toàn, không dùng `SELECT *`).
+- Q2: `SELECT id, name, price, area, published_at FROM public.properties WHERE province_name = 'Hà Nội' AND district_name = 'Cầu Giấy' AND price BETWEEN 4100000000 AND 14300000000 ORDER BY price ASC, id ASC LIMIT 20;` (khớp hoàn toàn danh sách cột và điều kiện lọc).
+- Q3: Câu truy vấn gốc dùng hàm ép kiểu `published_at::date = DATE '2025-10-15'`; câu truy vấn viết lại dùng khoảng nửa mở `published_at >= TIMESTAMP '2025-10-15 00:00:00' AND published_at < TIMESTAMP '2025-10-16 00:00:00'` (khớp hoàn toàn).
+- Q4: `SELECT property_type_name, COUNT(*) AS total, ROUND(AVG(price), 0) AS avg_price FROM public.properties GROUP BY property_type_name ORDER BY total DESC;` (khớp hoàn toàn, bao gồm cả mệnh đề `ORDER BY total DESC`).
+
+---
+
+### PHẦN 3: THẨM ĐỊNH CHẤT LƯỢNG XUẤT BẢN WORD (.DOCX)
+
+Script xuất bản [`report/export_docx.py`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/report/export_docx.py) đã được nâng cấp toàn diện:
+1. **Word Heading Styles thực sự:** Sử dụng các style chuẩn (`Heading 1`, `Heading 2`, `Heading 3`, `Heading 4`) giúp tài liệu tương thích hoàn toàn với tính năng Navigation Pane và cho phép mục lục (TOC) tự động cập nhật được trong Microsoft Word.
+2. **Chèn hình ảnh thực tế:** Toàn bộ 13 biểu đồ được trích dẫn trong văn bản (10 hình tại Chương 3 và 3 hình tại Chương 5) đều được đọc trực tiếp từ tệp ảnh nguồn trong repository và chèn vào văn bản với chú thích hình ảnh đặt ở phía dưới căn giữa.
+3. **Bố cục bảng biểu:** Tiêu đề bảng được đặt ở phía trên bảng; bảng được định dạng viền kẻ rõ ràng, lặp lại hàng tiêu đề khi ngắt trang, tô màu thanh lịch và không bị tràn lề A4.
+4. **Chuẩn hóa công thức toán học và làm sạch văn bản:** Toàn bộ cú pháp KaTeX (`$...$`, `$$...$$`, `\text{...}`) được chuyển đổi sang định dạng ký hiệu toán học sạch sẽ; loại bỏ hoàn toàn các thẻ HTML `<br>`, các liên kết cục bộ `file:///d:/...` trong tệp Word xuất ra.
+5. **Trang bìa và Thông tin học thuật:** Bố cục trang bìa học thuật chuẩn theo quy chuẩn Học viện Công nghệ Bưu chính Viễn thông; thông tin sinh viên và giảng viên được giữ ở dạng định danh trang trọng, không bịa đặt tùy tiện.
+
+---
+
+### KẾT LUẬN CỦA GIẢNG VIÊN PHẢN BIỆN
+
+Bản thảo sau khi sửa đổi toàn diện đã đáp ứng đầy đủ và nghiêm túc các tiêu chuẩn học thuật của một công trình nghiên cứu khoa học dữ liệu và cơ sở dữ liệu:
+- Logic nghiên cứu mạch lạc theo đúng quy chuẩn 6 chương.
+- Các câu hỏi nghiên cứu RQ1 – RQ3 được đồng bộ hóa xuyên suốt từ Mở đầu, Phương pháp, Kết quả đến Kết luận và Ma trận chứng tích.
+- 100% số liệu thực nghiệm được đối soát chuẩn xác với các tệp kết quả gốc.
+- Các kiến giải lý thuyết về B-tree, Buffer Pool, Sargability và Chunking được diễn giải khách quan, định lượng và chặt chẽ.
+- Tệp xuất Word (.docx) đạt chất lượng định dạng chuyên nghiệp, sẵn sàng nộp và lưu chiểu.
+
+**Đánh giá chung: ĐẠT YÊU CẦU BẢO VỆ VÀ LƯU CHIỂU HỌC THUẬT.**

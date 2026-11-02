@@ -16,30 +16,34 @@ Mỗi hàng trong bảng Heap được định danh duy nhất bởi một con t
 > [!IMPORTANT]
 > Do các hàng trong bảng Heap được chèn vào bất kỳ trang nào còn chỗ trống, việc truy xuất dữ liệu mà không có chỉ mục buộc PostgreSQL phải đọc tuần tự từ Block số 0 đến Block cuối cùng. Khóa chính (Primary Key) trong PostgreSQL mặc định tạo ra một cây chỉ mục B-tree duy nhất trên cột khóa, nhưng **hoàn toàn không tự động sắp xếp vật lý các hàng trong bảng Heap** trên đĩa theo thứ tự khóa chính (khác biệt căn bản với Clustered Index trong Microsoft SQL Server hoặc MySQL InnoDB).
 
-### 2.1.2. Cơ chế Buffer Pool và Chính sách Đọc/Ghi đệm
+### 2.1.2. Cơ chế Buffer Pool và Phân biệt Shared Hit Blocks với Shared Read Blocks
 Để giảm thiểu độ trễ cơ học và điện tử khi truy xuất đĩa cứng (Disk I/O), PostgreSQL duy trì một vùng nhớ đệm chia sẻ gọi là **Shared Buffers** trong RAM. Khi một câu lệnh truy vấn cần dữ liệu từ một trang, luồng xử lý (backend process) sẽ thực hiện các bước:
 1. Tra cứu bảng băm bộ đệm (**Buffer Mapping Table**) xem trang `(relfilenode, forknum, blocknum)` đã có sẵn trong Shared Buffers hay chưa.
-2. Nếu trang đã có sẵn trong RAM: ghi nhận một sự kiện **Shared Hit Block** (trúng bộ đệm), tăng số đếm sử dụng (`usage_count`) của trang đó theo thuật toán quét đồng hồ (**Clock Sweep** - biến thể hiệu năng cao của LRU), và đọc trực tiếp từ bộ nhớ với độ trễ cỡ nano-giây.
-3. Nếu trang chưa có trong RAM: chọn một khung đệm (buffer frame) nạn nhân theo giải thuật Clock Sweep, đẩy trang cũ xuống đĩa nếu trang đó bị bẩn (`dirty page`), sau đó đọc trang 8 KB từ tệp trên đĩa cứng vào khung đệm, ghi nhận một sự kiện **Shared Read Block** (đọc đĩa vật lý) với độ trễ cỡ mili-giây.
+2. Nếu trang đã có sẵn trong RAM: ghi nhận một sự kiện **Shared Hit Block** (truy cập bộ đệm trúng đích). Đây là các lần truy xuất trang dữ liệu (8 KB) được phục vụ trực tiếp từ vùng nhớ đệm tuần hoàn Shared Buffers trong RAM, **hoàn toàn không phải là số block đọc vật lý từ ổ đĩa**. Tiến trình tăng số đếm sử dụng (`usage_count`) của trang đó theo thuật toán quét đồng hồ (**Clock Sweep** - biến thể hiệu năng cao của LRU) và đọc trực tiếp từ bộ nhớ với độ trễ cỡ nano-giây.
+3. Nếu trang chưa có trong RAM: chọn một khung đệm (buffer frame) nạn nhân theo giải thuật Clock Sweep, đẩy trang cũ xuống đĩa nếu trang đó bị bẩn (`dirty page`), sau đó đọc trang 8 KB từ tệp trên đĩa cứng vào khung đệm, ghi nhận một sự kiện **Shared Read Block** (đọc khối đệm vật lý từ đĩa) với độ trễ cỡ mili-giây.
 
-Trong các thực nghiệm đo lường hiệu năng chuyên sâu, chỉ số `Shared Hit Blocks` và `Shared Read Blocks` được trích xuất từ câu lệnh `EXPLAIN (ANALYZE, BUFFERS)` là thước đo định lượng khách quan nhất phản ánh chính xác khối lượng công việc I/O mà hệ thống phải gánh chịu, loại bỏ hoàn toàn các sai số do biến động ngẫu nhiên của CPU hoặc tác vụ nền của hệ điều hành.
+Trong các thực nghiệm đo lường hiệu năng chuyên sâu, chỉ số `Shared Hit Blocks` và `Shared Read Blocks` được trích xuất từ câu lệnh `EXPLAIN (ANALYZE, BUFFERS)` là thước đo định lượng khách quan nhất phản ánh chính xác khối lượng công việc I/O mà hệ thống phải gánh chịu. Khi hệ thống đã qua các lượt warm-up và dữ liệu nằm trọn trong RAM, `Shared Read Blocks` bằng 0 và toàn bộ công việc truy xuất được phản ánh qua `Shared Hit Blocks`.
 
 ---
 
 ## 2.2. Cấu trúc dữ liệu và Cơ chế hoạt động của Chỉ mục B-tree
 
-### 2.2.1. Cây B-tree đa nhánh và Thứ tự khóa (Key Ordering)
-Chỉ mục mặc định và phổ biến nhất trong PostgreSQL là **B-tree (Balanced Tree)**, cụ thể là biến thể **B+ tree** được thiết kế tối ưu cho lưu trữ khối. Cây B-tree trong PostgreSQL là một cây tìm kiếm đa nhánh tự cân bằng hoàn hảo, trong đó tất cả các nút lá (Leaf Nodes) đều nằm ở cùng một độ sâu.
+### 2.2.1. Cây B-tree đa nhánh và Phân tích chi phí tìm kiếm
+Chỉ mục mặc định và phổ biến nhất trong PostgreSQL là **B-tree (Balanced Tree)**, cụ thể là biến thể **B+ tree** được thiết kế tối ưu cho lưu trữ khối. Cây B-tree trong PostgreSQL là một cây tìm kiếm đa nhánh tự cân bằng, trong đó tất cả các nút lá (Leaf Nodes) đều nằm ở cùng một độ sâu.
 
 Cấu trúc hình học của cây B-tree bao gồm:
 - **Nút gốc (Root Node):** Nằm ở đỉnh cây, chứa các khóa phân cách hướng dẫn đường đi xuống các nút con.
 - **Các nút trung gian (Internal Nodes):** Chứa các cặp `(Key, Child_BlockNumber)`, chia không gian khóa thành các khoảng rời rạc. Mỗi nút có hệ số phân nhánh (**Fan-out**) rất lớn, thường chứa từ hàng trăm đến hàng nghìn phần tử trên một trang 8 KB.
 - **Các nút lá (Leaf Nodes):** Chứa các cặp `(IndexKey, TID)`. Trong đó `IndexKey` là giá trị thuộc tính được đánh chỉ mục và `TID` là con trỏ vật lý trỏ trực tiếp về trang Heap chứa hàng dữ liệu thực tế.
-- **Liên kết hai chiều (Bidirectional Sibling Pointers):** Các nút lá ở cùng tầng đáy được liên kết chặt chẽ với nhau bằng con trỏ trái và phải (`bpt_left`, `bpt_right`). Đặc tính này cho phép hệ thống thực hiện các phép quét khoảng (**Range Scan**) hoặc duyệt theo thứ tự sắp xếp (**Ordered Scan**) với độ phức tạp $O(\log N + K)$ cực kỳ hiệu quả mà không cần quay lui lên các nút cha.
+- **Liên kết hai chiều (Bidirectional Sibling Pointers):** Các nút lá ở cùng tầng đáy được liên kết chặt chẽ với nhau bằng con trỏ trái và phải (`bpt_left`, `bpt_right`). Đặc tính này cho phép hệ thống thực hiện các phép quét khoảng (**Range Scan**) hoặc duyệt theo thứ tự sắp xếp (**Ordered Scan**) cực kỳ hiệu quả mà không cần quay lui lên các nút cha.
 
-Độ phức tạp thời gian để tìm kiếm một khóa trong cây B-tree với $N$ bản ghi là:
-$$T_{lookup} = O(\log_{B} N)$$
-Trong đó $B$ là hệ số phân nhánh (Fan-out) của mỗi trang. Với bảng 500.000 dòng, độ sâu của cây B-tree thường chỉ từ 2 đến 3 tầng, đồng nghĩa với việc PostgreSQL chỉ cần tối đa 3 lần truy cập trang là có thể xác định chính xác vị trí con trỏ của bản ghi cần tìm.
+**Phân tích chi phí tìm kiếm (Search Cost Analysis):**
+Không thể khẳng định Index Scan có độ phức tạp thời gian cố định $O(1)$ trong mọi trường hợp. Về mặt lý thuyết cấu trúc dữ liệu và giải thuật, chi phí tìm kiếm trong cây B-tree phụ thuộc vào:
+1. **Chiều cao của cây ($h$):** Để định vị khóa lá đầu tiên thỏa mãn vị từ tìm kiếm từ nút gốc, hệ thống cần duyệt qua $h$ tầng của cây:
+   $$h \approx \lceil \log_{B} (N / C_{leaf}) \rceil$$
+   Trong đó $B$ là hệ số phân nhánh trung bình của nút trung gian, $N$ là tổng số bản ghi và $C_{leaf}$ là dung lượng chứa khóa của nút lá. Tại quy mô 500.000 bản ghi trong bài toán thực nghiệm, chiều cao cây B-tree $h \approx 3$. Mỗi tầng tương ứng với một lần truy xuất trang chỉ mục (thường là 3 block truy cập).
+2. **Số lượng bản ghi cần truy xuất ($k$):** Sau khi chạm đến nút lá đầu tiên, nếu câu truy vấn cần lấy $k$ bản ghi, hệ thống phải duyệt tuần tự qua các trang lá lân cận và thực hiện các phép truy xuất trang Heap tương ứng để lấy dữ liệu chi tiết.
+Do đó, tổng chi phí I/O và thời gian của Index Scan tổng quát có độ phức tạp là $O(h + k)$, không phải $O(1)$. Chỉ trong trường hợp bài toán có giới hạn cắt ngọn cố định rất nhỏ ($k = \text{const}$, ví dụ $k = 20$ trong truy vấn phân trang `LIMIT 20`) và các khóa đã được sắp xếp sẵn trên cây, chi phí duyệt lá mới bị chặn trên bởi một hằng số nhỏ độc lập với kích thước tổng thể $N$ của bảng dữ liệu.
 
 ### 2.2.2. Composite Index và Quy tắc tiền tố ngoài cùng bên trái (Leftmost Prefix Rule)
 Chỉ mục tổ hợp đa cột (**Composite Index**) là chỉ mục được xây dựng trên hai hoặc nhiều thuộc tính: `CREATE INDEX idx ON table (col1, col2, col3, ...)`.
@@ -51,7 +55,7 @@ Trong cấu trúc nội tại của cây B-tree đa cột, các khóa được s
 
 Từ nguyên lý sắp xếp từ điển này, quy tắc **Tiền tố ngoài cùng bên trái (Leftmost Prefix Rule)** được xác lập:
 - Chỉ mục có thể phục vụ tối ưu cho các truy vấn lọc trên: `(col1)`, `(col1, col2)` hoặc `(col1, col2, col3)`.
-- Chỉ mục **hoàn toàn không thể sử dụng** để tìm kiếm trực tiếp trên `col2` hoặc `col3` nếu thiếu vắng điều kiện đẳng thức trên `col1`, bởi vì tại tầng lá, các giá trị của `col2` bị phân tán ngẫu nhiên qua các nhánh khác nhau của `col1`.
+- Chỉ mục **không thể sử dụng** để tìm kiếm trực tiếp trên `col2` hoặc `col3` nếu thiếu vắng điều kiện đẳng thức trên `col1`, bởi vì tại tầng lá, các giá trị của `col2` bị phân tán ngẫu nhiên qua các nhánh khác nhau của `col1`.
 
 Đặc biệt, khi truy vấn kết hợp giữa phép lọc đẳng thức (`col1 = 'A'`), phép lọc khoảng (`col2 BETWEEN X AND Y`), phép sắp xếp (`ORDER BY col2, col3`) và cắt ngọn (`LIMIT K`), nếu chỉ mục được sắp xếp theo đúng thứ tự:
 $$\text{Index Columns} = (\text{Equality\_Cols}, \text{Range\_or\_Sort\_Cols}, \text{Tie\_breaker\_Cols})$$
@@ -70,15 +74,15 @@ Các tham số mặc định trong PostgreSQL:
 - `cpu_tuple_cost = 0.01`: Chi phí CPU để xử lý một hàng dữ liệu.
 - `cpu_operator_cost = 0.0025`: Chi phí CPU để kiểm tra một toán tử điều kiện trong mệnh đề WHERE.
 
-Bộ lập lịch sẽ so sánh chi phí giữa ba phương thức quét bảng cơ bản:
+Bộ lập lịch sẽ so sánh chi phí giữa ba phương thức quét bảng cơ bản (được tổng hợp trong Bảng 2.1):
 
-```mermaid
-flowchart TD
-    A["Mệnh đề WHERE trong Query"] --> B{"Tồn tại Index khả dụng & Chi phí ước tính?"}
-    B -- "Không có Index HOẶC Độ chọn lọc thấp (> 15-20%)" --> C["Sequential Scan (Seq Scan)<br>Đọc tuần tự toàn bộ trang Heap 8KB"]
-    B -- "Có Index & Độ chọn lọc cực cao (< 1-2%) & Cần ít dòng" --> D["Index Scan<br>Duyệt B-tree -> Lấy TID -> Random I/O Heap"]
-    B -- "Có Index & Độ chọn lọc trung bình (2-15%)" --> E["Bitmap Index Scan + Bitmap Heap Scan<br>Tạo bitmap trong RAM -> Sắp xếp TID theo Page -> Sequential I/O"]
-```
+**Bảng 2.1: Ma trận tiêu chí lựa chọn phương thức quét bảng của Bộ tối ưu hóa chi phí (PostgreSQL CBO)**
+
+| Phương thức quét | Điều kiện Index & Độ chọn lọc (Selectivity) | Cơ chế truy cập I/O | Kịch bản áp dụng tối ưu |
+| :--- | :--- | :--- | :--- |
+| **Sequential Scan (Seq Scan)** | Không có Index phù hợp HOẶC độ chọn lọc thấp (> 15–20% tổng số dòng) | Đọc tuần tự toàn bộ các trang Heap 8 KB từ đầu đến cuối bảng | Bảng có kích thước nhỏ, hoặc câu truy vấn cần nạp phần lớn dữ liệu bảng |
+| **Index Scan** | Có Index khả dụng, độ chọn lọc cực cao (< 1–2%), cần lấy ít dòng | Duyệt B-tree lấy TID, sau đó đọc ngẫu nhiên (Random I/O) trực tiếp vào trang Heap | Truy vấn tìm kiếm theo khóa chính/duy nhất, hoặc có mệnh đề LIMIT nhỏ kèm ORDER BY trùng index |
+| **Bitmap Index Scan + Bitmap Heap Scan** | Có Index khả dụng, độ chọn lọc trung bình (khoảng 2–15% số dòng) | Tạo bitmap các TID trong RAM, sắp xếp theo số hiệu trang vật lý, đọc tuần tự cục bộ các trang Heap | Truy vấn tìm kiếm hàng nghìn bản ghi, hoặc khi cần kết hợp nhiều điều kiện lọc bằng BitmapAnd/BitmapOr |
 
 1. **Quét tuần tự (Sequential Scan - Seq Scan):**
    - Đọc lần lượt từng trang Heap từ đầu đến cuối tệp dữ liệu.
@@ -86,19 +90,19 @@ flowchart TD
 2. **Quét chỉ mục trực tiếp (Index Scan):**
    - Duyệt từ nút gốc cây B-tree xuống nút lá để tìm các khóa thỏa mãn điều kiện.
    - Với mỗi khóa tìm thấy, lấy con trỏ `TID` và thực hiện truy cập ngẫu nhiên (**Random I/O**) ngay lập tức vào trang Heap tương ứng để lấy các cột dữ liệu còn thiếu.
-   - Cực kỳ nhanh khi độ chọn lọc cao (số lượng dòng trả về rất ít, ví dụ 1 đến 100 dòng), nhưng nếu số dòng tăng lên, việc nhảy ngẫu nhiên giữa các trang Heap sẽ gây nghẽn I/O nghiêm trọng.
+   - Hiệu quả khi độ chọn lọc cao (số lượng dòng trả về rất ít, ví dụ 1 đến 100 dòng), nhưng nếu số dòng tăng lên, việc nhảy ngẫu nhiên giữa các trang Heap sẽ gây nghẽn I/O.
 3. **Quét đống bản đồ bit (Bitmap Index Scan + Bitmap Heap Scan):**
    - Được thiết kế nhằm khắc phục nhược điểm đọc ngẫu nhiên của Index Scan khi số lượng dòng thỏa mãn điều kiện nằm ở mức trung bình (từ vài trăm đến vài chục nghìn dòng).
    - **Giai đoạn 1 (Bitmap Index Scan):** Duyệt cây B-tree, gom toàn bộ các con trỏ `TID` thỏa mãn điều kiện và xây dựng một mảng bit (**Bitmap**) trong bộ nhớ RAM. Mỗi bit trong mảng đại diện cho một trang dữ liệu hoặc một dòng trong bảng Heap.
-   - **Giai đoạn 2 (Bitmap Heap Scan):** Sắp xếp lại danh sách các trang cần đọc theo đúng thứ tự vật lý tăng dần của chúng trên đĩa, sau đó đọc tuần tự các trang Heap có đánh dấu bit. Điều này biến các truy cập ngẫu nhiên phân tán thành các truy cập tuần tự cục bộ, giảm đáng kể thời gian di chuyển đầu đọc đĩa.
+   - **Giai đoạn 2 (Bitmap Heap Scan):** Sắp xếp lại danh sách các trang cần đọc theo đúng thứ tự vật lý tăng dần của chúng trên đĩa, sau đó đọc tuần tự các trang Heap có đánh dấu bit. Điều này biến các truy cập ngẫu nhiên phân tán thành các truy cập tuần tự cục bộ, giảm thời gian di chuyển đầu đọc đĩa.
 
-### 2.3.2. Thuật toán sắp xếp trong bộ nhớ (Top-N Heapsort vs External Merge Sort)
+### 2.3.2. Thuật toán sắp xếp trong bộ nhớ (Top-N Heapsort vs Loại bỏ nút Sort)
 Khi câu truy vấn chứa mệnh đề `ORDER BY col LIMIT K`:
 - Nếu bộ lập lịch phải dùng `Seq Scan`, nó sẽ phải lọc toàn bộ các bản ghi thỏa mãn điều kiện vào bộ nhớ.
 - Khi dung lượng dữ liệu cần sắp xếp nhỏ hơn tham số `work_mem` (mặc định 4 MB trong PostgreSQL), hệ thống sẽ sử dụng thuật toán **Top-N Heapsort**: duy trì một cấu trúc đống nhị phân (Binary Heap) có kích thước cố định là $K$ phần tử. Với mỗi hàng mới nạp vào, chi phí cập nhật đống là $O(\log K)$. Độ phức tạp tổng thể là:
 $$T_{heapsort} = O(M \cdot \log K)$$
 Trong đó $M$ là tổng số hàng thỏa mãn điều kiện lọc ($M \gg K$). Dù thuật toán này không cần ghi tạm ra đĩa cứng, CPU vẫn phải xử lý $M$ lần so sánh và duy trì đống trong RAM.
-- Ngược lại, nếu câu truy vấn tận dụng được một chỉ mục B-tree đã có thứ tự sẵn theo đúng các cột trong `ORDER BY`, PostgreSQL hoàn toàn **không cần khởi tạo nút Sort**. Nó chỉ việc đọc tuần tự đúng $K$ con trỏ đầu tiên từ cây B-tree, đem lại độ phức tạp lý thuyết là $O(K)$, độc lập hoàn toàn với tổng số dòng $M$ thỏa mãn điều kiện trong bảng.
+- Ngược lại, nếu câu truy vấn tận dụng được một chỉ mục B-tree tổ hợp đã lưu trữ các khóa theo đúng thứ tự của các cột trong `ORDER BY`, PostgreSQL có thể sử dụng phương thức `Index Scan` dọc theo các nút lá của cây. Kế hoạch thực thi lúc này **loại bỏ hoàn toàn nút Sort**, đưa dữ liệu trực tiếp vào nút `Limit`. Thuật ngữ "loại bỏ nút Sort" chỉ được sử dụng một cách khoa học khi cây kế hoạch thực thi thực tế (`EXPLAIN`) chứng minh rằng nút `Sort` không còn xuất hiện trong luồng xử lý của hệ thống.
 
 ---
 
@@ -119,14 +123,14 @@ Xét trường hợp cụ thể của cột `published_at` có kiểu dữ liệ
   ```sql
   WHERE published_at::date = DATE '2025-10-15';
   ```
-  Trong trường hợp này, cây B-tree được đánh chỉ mục trên giá trị thô `published_at` (chứa cả ngày, giờ, phút, giây, microsecond). Cây B-tree không hề lưu trữ kết quả của hàm ép kiểu `::date`. Do hàm toán học $f(x) = x\text{::date}$ chưa được tính toán từ trước, bộ tối ưu hóa của PostgreSQL không thể so khớp giá trị `'2025-10-15'` với các nút trên cây B-tree. Kết quả là bộ lập lịch **buộc phải vô hiệu hóa hoàn toàn chỉ mục**, chuyển sang quét tuần tự (`Seq Scan`) toàn bộ bảng và thực thi hàm ép kiểu trên từng bản ghi một.
+  Trong trường hợp này, cây B-tree được đánh chỉ mục trên giá trị thô `published_at` (chứa cả ngày, giờ, phút, giây, microsecond). Cây B-tree không hề lưu trữ kết quả của hàm ép kiểu `::date`. Do hàm biến đổi $f(x) = x\text{::date}$ chưa được tính toán từ trước, bộ tối ưu hóa của PostgreSQL không thể so khớp giá trị `'2025-10-15'` với các nút trên cây B-tree. Kết quả là bộ lập lịch **buộc phải vô hiệu hóa hoàn toàn chỉ mục**, chuyển sang quét tuần tự (`Seq Scan`) toàn bộ bảng và thực thi hàm ép kiểu trên từng bản ghi một.
 - **Biến đổi sang Sargable Range Predicate (Khoảng thời gian nửa mở):**
   Để bảo toàn tính sargable, biểu thức cần được viết lại sao cho cột dữ liệu đứng hoàn toàn độc lập ở một vế của toán tử:
   ```sql
   WHERE published_at >= TIMESTAMP '2025-10-15 00:00:00'
     AND published_at <  TIMESTAMP '2025-10-16 00:00:00';
   ```
-  Biểu thức này thiết lập một khoảng nửa mở $[T_{start}, T_{end})$. Bộ tối ưu hóa PostgreSQL lập tức nhận dạng đây là điều kiện lọc khoảng trực tiếp trên khóa chỉ mục, cho phép duyệt cây B-tree đến vị trí $T_{start}$ và quét đến vị trí $T_{end}$, giảm số lượng trang dữ liệu cần đọc xuống hàng trăm lần.
+  Biểu thức này thiết lập một khoảng nửa mở $[T_{start}, T_{end})$. Bộ tối ưu hóa PostgreSQL lập tức nhận dạng đây là điều kiện lọc khoảng trực tiếp trên khóa chỉ mục, cho phép duyệt cây B-tree đến vị trí $T_{start}$ và quét đến vị trí $T_{end}$, giảm số lượng trang dữ liệu cần đọc xuống hàng chục lần.
 
 ---
 
@@ -144,14 +148,15 @@ Sự khác biệt cốt lõi giữa hai định dạng tệp lưu trữ dữ li�
    - Định dạng lưu trữ nhị phân mã nguồn mở, có cấu trúc hướng cột (Columnar Storage Format).
    - Dữ liệu của cùng một thuộc tính được lưu trữ liên tục cạnh nhau trong các nhóm dòng (**Row Groups**), được chia thành các trang dữ liệu (**Data Pages**).
    - Tận dụng các thuật toán nén hiện đại như Snappy hoặc Zstandard (zstd), kết hợp mã hóa chuyên sâu cho dữ liệu số và chuỗi (Run-Length Encoding - RLE, Dictionary Encoding, Bit-Packing).
-   - Tệp Parquet lưu trữ sẵn siêu dữ liệu lược đồ (Schema Metadata) và thống kê cực trị (`min`, `max`, `null_count`) của từng cột trong phần đuôi tệp (Footer). Điều này cho phép các công cụ phân tích hiện đại thực hiện kỹ thuật cắt tỉa trang (**Predicate Pushdown / Row Group Pruning**): chỉ đọc các cột cần thiết và bỏ qua hoàn toàn các nhóm dòng không chứa dữ liệu thỏa mãn điều kiện lọc.
+   - Tệp Parquet lưu trữ sẵn siêu dữ liệu lược đồ (Schema Metadata) và thống kê cực trị (`min`, `max`, `null_count`) của từng cột trong phần đuôi tệp (Footer). Điều này cho phép các công cụ phân tích hiện đại thực hiện kỹ thuật cắt tỉa trang (**Predicate Pushdown / Row Group Pruning**): chỉ đọc các cột cần thiết và bỏ qua các nhóm dòng không chứa dữ liệu thỏa mãn điều kiện lọc.
 
-### 2.5.2. Kỹ thuật nạp phân khối (Chunked Streaming) kiểm soát giới hạn RAM
-Khi khối lượng tệp CSV vượt quá dung lượng RAM khả dụng của hệ thống, việc nạp toàn bộ tệp vào DataFrame bằng hàm thông thường (như `pd.read_csv()`) sẽ gây ra hiện tượng tràn bộ nhớ (**Out-Of-Memory - OOM Error**). 
+### 2.5.2. Kỹ thuật nạp phân khối (Chunked Streaming) và Giới hạn đo lường RAM RSS
+Khi khối lượng tệp CSV lớn, việc nạp toàn bộ tệp vào DataFrame bằng hàm thông thường (như `pd.read_csv()`) có thể gây áp lực nghiêm trọng lên bộ nhớ. Bộ quản lý bộ nhớ của Python cần cấp phát không gian RAM không chỉ cho dữ liệu thuần mà còn cho các đối tượng phụ trợ (`PyObject`), con trỏ mảng và bộ nhớ đệm sao chép tạm thời trong quá trình parse văn bản, khiến dung lượng RAM tiêu thụ thực tế có thể lớn hơn nhiều lần kích thước tệp trên đĩa.
 
-Nguyên nhân là do bộ quản lý bộ nhớ của Python cần cấp phát không gian RAM không chỉ cho dữ liệu thuần mà còn cho các đối tượng phụ trợ (`PyObject`), con trỏ mảng và bộ nhớ đệm sao chép tạm thời trong quá trình parse văn bản, khiến dung lượng RAM tiêu thụ thực tế có thể gấp **3 đến 5 lần kích thước tệp CSV trên đĩa**.
+Giải pháp kỹ thuật để kiểm soát vấn đề này là kỹ thuật **Nạp phân khối (Chunked Streaming)**:
+- Chia nhỏ tệp dữ liệu đầu vào thành các khối có số dòng cố định (ví dụ $C = 10.000$ bản ghi).
+- Sử dụng cơ chế phát sinh dòng (Generator Iterator) để nạp từng khối vào RAM, thực hiện các biến đổi hoặc tính toán tổng hợp cục bộ (như tính tổng $\sum x_i$ và đếm số lượng $n_i$), giải phóng bộ nhớ của khối đó trước khi nạp khối tiếp theo.
+- Kỹ thuật này giúp giữ mức tăng tài nguyên bộ nhớ thực tế (**Resident Set Size - RSS**) ở một ngưỡng ổn định, nhưng phải đánh đổi bằng chi phí chu kỳ lặp CPU cao hơn so với việc nạp trọn gói được tối ưu hóa ở tầng mã máy C/Rust.
 
-Giải pháp kỹ nghệ chuẩn mực để xử lý thách thức này là kỹ thuật **Nạp phân khối (Chunked Streaming)**:
-- Chia nhỏ tệp dữ liệu đầu vào thành các khối có số dòng cố định (ví dụ $C = 10.000$ hoặc $50.000$ bản ghi).
-- Sử dụng cơ chế phát sinh dòng (Generator Iterator) để nạp từng khối vào RAM, thực hiện các biến đổi hoặc tính toán tổng hợp cục bộ (như tính tổng $\sum x_i$ và đếm số lượng $n_i$), giải phóng ngay bộ nhớ của khối đó trước khi nạp khối tiếp theo.
-- Kỹ thuật này giới hạn đỉnh tiêu thụ bộ nhớ RAM thực tế (**Peak RSS**) ở mức hằng số $O(C)$, hoàn toàn độc lập với tổng kích thước dữ liệu $N$, cho phép xử lý an toàn các tệp dữ liệu hàng chục gigabyte trên máy trạm cá nhân tiêu chuẩn.
+**Giới hạn phương pháp luận của phép đo RAM RSS:**
+Cần lưu ý rằng chỉ số RSS lấy mẫu định kỳ (ví dụ chu kỳ 1 ms thông qua thư viện `psutil`) phản ánh số lượng trang nhớ vật lý thực tế được hệ điều hành ánh xạ cho tiến trình. Phép đo này chịu ảnh hưởng bởi cơ chế cấp phát bộ nhớ của Python runtime (vốn giải phóng bộ nhớ về hệ điều hành theo chính sách khối trễ của `pymalloc`) và hiện tượng phân mảnh bộ nhớ (Memory Fragmentation). Do đó, mức tăng RSS ($\Delta \text{RSS}$) là một thước đo thực nghiệm tương đối về dấu chân bộ nhớ của tác vụ trong môi trường cụ thể, chứ không phải một đại lượng định mức tuyệt đối bất biến.
