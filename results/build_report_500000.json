@@ -3,7 +3,7 @@
   "source": "Phuscca/vietnam-real-estates",
   "split": "train",
   "streaming": true,
-  "revision": "68bae25c3fa65a8e694973efe80bd6e237de11f5",
+  "revision": null,
   "seed": 42,
   "targets": [
     50000,
@@ -93,5 +93,5 @@
       }
     }
   },
-  "elapsed_seconds": 67.23126550000234
+  "elapsed_seconds": 377.3978400999986
 }

@@ -220,10 +220,199 @@ và quyền TRUNCATE nếu dùng `--replace`. Thống kê COUNT/DISTINCT sau COP
 cũng cần thời gian; chức năng này chưa bao gồm benchmark. Unit test không
 chứng minh kết nối, quyền hoặc tốc độ của PostgreSQL thật.
 
-## Bàn giao benchmark cho TV2
+## Bàn giao benchmark và Quy trình Thực nghiệm Tự động
 
-Bộ SQL độc lập nằm trong `sql/benchmark/`: reset đúng bốn Index tối ưu,
-tạo từng Index riêng và các SELECT thuần giữ nguyên truy vấn nghiệm thu.
-Xem [hướng dẫn benchmark Q1-Q4](docs/benchmark_handoff.md) để nạp lần lượt
-50K/200K/500K, chuẩn bị Q3 A/B/C/D, trường hợp đối chứng Q4 và đo EXPLAIN
-JSON với 3 warm-up + 20 lượt chính thức, dùng median.
+Dự án cung cấp bộ công cụ tự động hóa toàn diện từ chuẩn bị dữ liệu, phân tích khám phá (EDA), kỹ thuật tạo đặc trưng (Feature Engineering), kiểm thử hiệu năng xử lý (Pandas vs Polars), đến nạp CSDL, đo đạc benchmark PostgreSQL và hiển thị trực quan:
+
+`
+real-estate-performance/
+├── data/
+│   └── processed/                 # Chứa các file CSV & Parquet (50K, 200K, 500K)
+├── docs/
+│   ├── benchmark_handoff.md       # Bàn giao kỹ thuật benchmark
+│   ├── benchmark_methodology_and_analysis.md # Phương pháp luận benchmark
+│   ├── cleaning_review.md         # Báo cáo thẩm định quy trình làm sạch dữ liệu
+│   ├── data_quality_report.md     # Báo cáo hồ sơ chất lượng & ngoại lệ IQR
+│   ├── eda_findings.md            # Báo cáo khám phá dữ liệu & tương quan
+│   ├── data_dictionary.md         # Từ điển dữ liệu chuẩn (9 cột CSDL + 15 đặc trưng)
+│   ├── feature_analysis.md        # Phân tích kỹ thuật phân khúc & tạo đặc trưng
+│   └── processing_performance.md  # Báo cáo đo lường hiệu năng Pandas vs Polars vs Parquet
+├── notebooks/
+│   └── real_estate_eda.ipynb      # Jupyter Notebook phân tích EDA tương tác
+├── sql/
+│   ├── schema.sql                 # Cấu trúc bảng properties và ràng buộc CHECK
+│   ├── baseline_queries.sql       # Truy vấn baseline mẫu
+│   ├── benchmark/
+│   │   ├── reset_indexes.sql      # Dọn dẹp cách ly 4 supplemental index
+│   │   ├── indexes/               # Định nghĩa 4 B-tree index
+│   │   └── queries/           # 5 file truy vấn nghiệm thu độc lập
+├── scripts/
+│   ├── build_large_dataset.py     # Sinh dataset 50K, 200K, 500K từ Hugging Face
+│   ├── cleaning.py                # Quy tắc làm sạch chuẩn hóa dữ liệu
+│   ├── data_quality.py            # Module profiling, phân tích trùng lặp và ngoại lệ IQR
+│   ├── run_eda.py                 # Module sinh 10 biểu đồ phân tích EDA chất lượng cao
+│   ├── feature_engineering.py     # Module tạo đặc trưng kinh doanh & phân khúc
+│   ├── benchmark_processing.py    # Benchmark hiệu năng Pandas vs Polars, CSV vs Parquet
+│   ├── import_csv.py              # Nạp CSV vào PostgreSQL với transactional COPY
+│   ├── benchmark_runner.py        # Runner tự động 3 scales x 10 configs, 3 warm-up + 20 runs
+│   ├── analyze_results.py         # Phân tích kết quả, sinh biểu đồ và báo cáo Markdown
+│   ├── dashboard.py               # Web Dashboard trực quan hóa kế hoạch và số liệu đo
+│   └── pipeline.py            # Điều phối toàn bộ quy trình từ A đến Z
+├── tests/                         # 178 unit test kiểm thử toàn diện (177 passed, 1 skipped)
+└── results/
+    ├── quality/                   # Báo cáo chất lượng dữ liệu JSON (50K, 200K, 500K)
+    ├── eda/                       # 10 biểu đồ trực quan hóa dữ liệu EDA (.png)
+    ├── features/                  # File Parquet đặc trưng mở rộng (500K x 24 cột)
+    ├── processing_benchmark/      # Bảng kết quả đo hiệu năng xử lý (Pandas/Polars)
+    └── benchmark/                 # Thư mục lưu kết quả SQL benchmark CSV, JSON và raw plans
+`
+
+### 1. Kiểm thử Toàn bộ Hệ thống (Unit Tests)
+
+Toàn bộ 178 unit tests chạy hoàn toàn offline, độc lập không cần kết nối internet hay database thật:
+
+`powershell
+python -m pytest
+`
+
+### 2. Quy Trình Khoa Học Dữ Liệu (Data Science Pipeline)
+
+#### 2.1. Phân Tích Chất Lượng & Ngoại Lệ Dữ Liệu (Data Profiling & Quality)
+Tự động thống kê phân bố, độ đầy đủ, giá trị thiếu, phát hiện bản ghi trùng lặp và ngoại lệ theo IQR:
+`powershell
+python -m scripts.data_quality --targets 50000,200000,500000
+`
+- **Báo cáo JSON:** 
+esults/quality/data_quality_report_*.json
+- **Báo cáo tổng hợp:** docs/data_quality_report.md
+
+#### 2.2. Khám Phá Dữ Liệu Tự Động (Automated EDA)
+Sinh 10 biểu đồ phân tích phân phối đơn biến, đa biến, mật độ Hexbin và tương quan Spearman chất lượng cao (DPI 300):
+`powershell
+python -m scripts.run_eda --input data/processed/properties_500000.csv --output-dir results/eda
+`
+- **Bộ biểu đồ:** 
+esults/eda/*.png
+- **Báo cáo nhận định:** docs/eda_findings.md
+- **Jupyter Notebook thực nghiệm:** 
+otebooks/real_estate_eda.ipynb
+
+#### 2.3. Kỹ Thuật Tạo Đặc Trưng (Feature Engineering)
+Sinh 15 đặc trưng phái sinh về kinh doanh, phân khúc diện tích/giá, mốc thời gian và cờ ngoại lệ. Bảo toàn tuyệt đối schema 9 cột của cơ sở dữ liệu PostgreSQL benchmark bằng cách lưu tập đặc trưng mở rộng riêng biệt vào file Parquet:
+`powershell
+python -m scripts.feature_engineering --input data/processed/properties_500000.csv --output-dir results/features --format parquet
+`
+- **Tập dữ liệu đặc trưng (500K x 24 cột):** 
+esults/features/properties_500000_enriched.parquet
+- **Từ điển dữ liệu chuẩn:** docs/data_dictionary.md
+- **Báo cáo phân tích đặc trưng:** docs/feature_analysis.md
+
+#### 2.4. Đo Lường Hiệu Năng Xử Lý (Pandas vs. Polars & CSV vs. Parquet)
+Đo lường thời gian thực thi (median/std) và mức tiêu thụ RAM (Peak RSS) giữa Pandas và Polars, đọc file CSV truyền thống so với Chunked Streaming (10.000 dòng/khối) và định dạng Parquet Snappy:
+`powershell
+python -m scripts.benchmark_processing --targets 50000,200000,500000 --warmups 2 --iterations 5
+`
+- **Dữ liệu đo đạc chi tiết:** 
+esults/processing_benchmark/processing_benchmark.csv
+- **Báo cáo phân tích chuyên sâu:** docs/processing_performance.md
+
+---
+
+### 3. Thiết lập Môi trường PostgreSQL
+
+Sao chép `.env.example` thành `.env` và điền cấu hình PostgreSQL của máy:
+
+```dotenv
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=real_estate_db
+PGUSER=postgres
+PGPASSWORD=mat_khau_cua_ban
+```
+
+Tạo database và bảng theo schema nếu chưa có:
+
+```powershell
+psql -h localhost -p 5432 -U postgres -d postgres -c "CREATE DATABASE real_estate_db;"
+psql -h localhost -p 5432 -U postgres -d real_estate_db -f sql/schema.sql
+```
+
+Kiểm tra kết nối và thông số cấu hình:
+
+```powershell
+python -m scripts.benchmark_runner --check-only
+```
+
+### 3. Sinh Dữ liệu và Nạp vào PostgreSQL
+
+Tạo 3 tập dữ liệu 50K, 200K, 500K từ Hugging Face:
+
+```powershell
+python -X utf8 -m scripts.build_large_dataset --targets 50000,200000,500000
+```
+
+Nạp tập dữ liệu cần đo vào PostgreSQL (ví dụ tập 500.000 dòng):
+
+```powershell
+python -X utf8 -m scripts.import_csv --file data/processed/properties_500000.csv --replace
+```
+
+### 4. Chạy Benchmark Tự Động (Automated Benchmark Runner)
+
+Runner tự động thực hiện:
+- Reset index, tạo index theo từng cấu hình độc lập.
+- Cập nhật thống kê `ANALYZE public.properties`.
+- Kiểm tra tính cô lập index và đo dung lượng `index_bytes`.
+- Kiểm chứng tính tương đương truy vấn (Equivalence check, bao gồm `EXCEPT ALL` 2 chiều cho Q3).
+- Chạy 3 lần warm-up (bỏ qua kết quả).
+- Chạy 20 lần đo chính thức, ghi nhận `Planning Time`, `Execution Time`, `Shared Hit/Read Blocks`, `Scan Type`.
+- Lưu trữ toàn bộ 20 JSON thô cho mỗi cấu hình vào `results/benchmark/raw/`.
+- Tính toán `Median`, `Min`, `Max`, `IQR`, `Speedup` và xuất ra `results/benchmark/benchmark_results.csv` cùng `benchmark_summary.json`.
+
+Chạy toàn bộ 10 cấu hình trên quy mô hiện tại:
+
+```powershell
+python -m scripts.benchmark_runner --scales 500000 --runs 20 --warmups 3
+```
+
+Chạy tùy chọn cấu hình cụ thể hoặc tùy chỉnh số lần lặp:
+
+```powershell
+python -m scripts.benchmark_runner --scales 50000,200000,500000 --configs Q1_baseline,Q1_indexed,Q2_baseline,Q2_indexed
+```
+
+### 5. Phân Tích Kết Quả và Xuất Biểu Đồ
+
+Tự động đọc `results/benchmark/benchmark_results.csv`, tính toán các chỉ số và vẽ 3 biểu đồ khoa học:
+1. `execution_time_by_scale.png`: Thời gian thực thi theo quy mô dữ liệu cho 4 truy vấn.
+2. `speedup_comparison.png`: Hệ số tăng tốc (Speedup) của từng phương pháp qua 3 quy mô.
+3. `index_storage_overhead.png`: Dung lượng Index B-tree (MB) qua các quy mô.
+
+```powershell
+python -m scripts.analyze_results
+```
+
+Báo cáo phân tích chuyên sâu được xuất tại: `results/benchmark/analysis/benchmark_analysis_report.md`.
+
+### 6. Trực Quan Hóa Với Web Dashboard
+
+Khởi chạy máy chủ web tương tác cục bộ (không cần cài thêm thư viện):
+
+```powershell
+python -m scripts.dashboard --port 8000 --open
+```
+
+Dashboard cho phép:
+- Chọn quy mô dữ liệu (50K, 200K, 500K).
+- Chọn bài toán (Q1, Q2, Q3, Q4) và cấu hình tối ưu.
+- Xem thẻ chỉ số: Median Execution Time, IQR, Speedup, Primary Scan Type, Shared Buffers.
+- Xem cây kế hoạch thực thi trực quan (EXPLAIN Plan) và mã SQL.
+- Xem biểu đồ tương tác thời gian và hệ số tăng tốc.
+
+### 7. Điều Phối Toàn Quy Trình (Pipeline Runner)
+
+Bạn cũng có thể chạy quy trình trọn gói chỉ với một lệnh:
+
+```powershell
+python -m scripts.pipeline --action all
+```

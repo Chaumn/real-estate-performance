@@ -1,0 +1,22 @@
+﻿scale,category,operation,format,median_ms,mean_ms,std_ms,ram_delta_mb,file_size_mb
+50000,File Ingestion (CSV),Pandas read_csv,CSV,229.75,232.88,5.35,3.33,9.35
+50000,File Ingestion (CSV),Polars read_csv,CSV,8.88,8.75,0.97,10.39,9.35
+50000,File Ingestion (Parquet),Pandas read_parquet,Parquet,16.59,16.49,2.07,10.27,4.3
+50000,File Ingestion (Parquet),Polars read_parquet,Parquet,25.5,25.95,4.8,8.7,4.3
+50000,Memory-bounded Ingestion,Pandas Chunked read_csv (10k),CSV,333.92,330.43,18.95,0.0,9.35
+50000,In-Memory Analytics,Pandas Filter + GroupBy,In-Memory,3.49,3.76,0.57,0.0,0.0
+50000,In-Memory Analytics,Polars Filter + GroupBy,In-Memory,4.04,4.15,0.5,0.26,0.0
+200000,File Ingestion (CSV),Pandas read_csv,CSV,1206.33,1234.25,74.24,9.72,37.49
+200000,File Ingestion (CSV),Polars read_csv,CSV,36.62,35.17,4.51,39.65,37.49
+200000,File Ingestion (Parquet),Pandas read_parquet,Parquet,58.76,58.78,5.99,3.39,16.78
+200000,File Ingestion (Parquet),Polars read_parquet,Parquet,72.58,73.86,2.36,16.91,16.78
+200000,Memory-bounded Ingestion,Pandas Chunked read_csv (10k),CSV,1383.82,1425.78,151.62,0.5,37.49
+200000,In-Memory Analytics,Pandas Filter + GroupBy,In-Memory,5.06,5.36,1.25,0.0,0.0
+200000,In-Memory Analytics,Polars Filter + GroupBy,In-Memory,3.83,3.69,0.36,0.07,0.0
+500000,File Ingestion (CSV),Pandas read_csv,CSV,2996.45,3111.85,341.02,20.92,93.88
+500000,File Ingestion (CSV),Polars read_csv,CSV,77.25,75.08,7.73,98.68,93.88
+500000,File Ingestion (Parquet),Pandas read_parquet,Parquet,142.18,145.26,7.62,4.34,41.42
+500000,File Ingestion (Parquet),Polars read_parquet,Parquet,167.36,175.32,18.51,42.96,41.42
+500000,Memory-bounded Ingestion,Pandas Chunked read_csv (10k),CSV,2782.27,2889.09,269.31,0.0,93.88
+500000,In-Memory Analytics,Pandas Filter + GroupBy,In-Memory,6.54,6.51,1.54,0.0,0.0
+500000,In-Memory Analytics,Polars Filter + GroupBy,In-Memory,4.0,3.69,0.59,0.02,0.0

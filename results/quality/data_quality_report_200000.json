@@ -1,0 +1,543 @@
+{
+  "dataset_name": "properties_200000.csv",
+  "total_rows": 200000,
+  "total_columns": 9,
+  "file_size_bytes": 39311466,
+  "file_size_mb": 37.49,
+  "columns": [
+    "id",
+    "name",
+    "property_type_name",
+    "province_name",
+    "district_name",
+    "ward_name",
+    "price",
+    "area",
+    "published_at"
+  ],
+  "validity_checks": {
+    "invalid_area_le_zero_or_null": 0,
+    "invalid_price_le_zero": 0,
+    "missing_required_name": 0,
+    "missing_required_property_type": 0,
+    "missing_required_province": 0,
+    "status": "PASS"
+  },
+  "column_summary": {
+    "id": {
+      "dtype": "int64",
+      "total_count": 200000,
+      "non_null_count": 200000,
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "unique_count": 200000,
+      "cardinality_pct": 100.0,
+      "sample_values": [
+        1,
+        2,
+        3
+      ]
+    },
+    "name": {
+      "dtype": "str",
+      "total_count": 200000,
+      "non_null_count": 200000,
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "unique_count": 195321,
+      "cardinality_pct": 97.66,
+      "sample_values": [
+        "Bán CH Skyforest 63m2. Hướng biệt thự đảo. Tầng trung. Giá bán 4.15 tỷ. Liên hệ",
+        "Chủ gửi bán vila, kiệt ôtô Ngũ Hành Sơn TPĐN",
+        "Nhà bán chính chủ 2 lầu, hẻm xe hơi"
+      ]
+    },
+    "property_type_name": {
+      "dtype": "str",
+      "total_count": 200000,
+      "non_null_count": 200000,
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "unique_count": 5,
+      "cardinality_pct": 0.0,
+      "sample_values": [
+        "Căn hộ chung cư",
+        "Nhà",
+        "Đất"
+      ]
+    },
+    "province_name": {
+      "dtype": "str",
+      "total_count": 200000,
+      "non_null_count": 200000,
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "unique_count": 63,
+      "cardinality_pct": 0.03,
+      "sample_values": [
+        "Hưng Yên",
+        "Đà Nẵng",
+        "Hồ Chí Minh"
+      ]
+    },
+    "district_name": {
+      "dtype": "str",
+      "total_count": 200000,
+      "non_null_count": 194296,
+      "missing_count": 5704,
+      "missing_pct": 2.85,
+      "unique_count": 546,
+      "cardinality_pct": 0.27,
+      "sample_values": [
+        "Văn Giang",
+        "Ngũ Hành Sơn",
+        "Nhà Bè"
+      ]
+    },
+    "ward_name": {
+      "dtype": "str",
+      "total_count": 200000,
+      "non_null_count": 171104,
+      "missing_count": 28896,
+      "missing_pct": 14.45,
+      "unique_count": 2755,
+      "cardinality_pct": 1.38,
+      "sample_values": [
+        "Xuân Quan",
+        "Mỹ An",
+        "Nhà Bè"
+      ]
+    },
+    "price": {
+      "dtype": "float64",
+      "total_count": 200000,
+      "non_null_count": 184431,
+      "missing_count": 15569,
+      "missing_pct": 7.78,
+      "unique_count": 7232,
+      "cardinality_pct": 3.62,
+      "sample_values": [
+        4150000000.0,
+        27000000000.0,
+        1800000000.0
+      ]
+    },
+    "area": {
+      "dtype": "float64",
+      "total_count": 200000,
+      "non_null_count": 200000,
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "unique_count": 7190,
+      "cardinality_pct": 3.6,
+      "sample_values": [
+        63.0,
+        500.0,
+        21.0
+      ]
+    },
+    "published_at": {
+      "dtype": "str",
+      "total_count": 200000,
+      "non_null_count": 200000,
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "unique_count": 199987,
+      "cardinality_pct": 99.99,
+      "sample_values": [
+        "2025-07-06 11:36:56.502000",
+        "2025-07-02 14:11:58.762000",
+        "2025-08-30 08:21:24.342000"
+      ]
+    }
+  },
+  "numeric_stats": {
+    "price": {
+      "name": "price",
+      "count": 184431,
+      "missing_count": 15569,
+      "missing_pct": 7.78,
+      "min": 100000.0,
+      "max": 920000000000000.0,
+      "mean": 22045422990.44,
+      "std": 2174632669208.51,
+      "p1": 560000000.0,
+      "p5": 1400000000.0,
+      "q1": 4130000000.0,
+      "median": 7400000000.0,
+      "q3": 14400000000.0,
+      "p95": 47000000000.0,
+      "p99": 130000000000.0,
+      "iqr": 10270000000.0,
+      "lower_bound": 0.0,
+      "upper_bound": 29805000000.0,
+      "outlier_count_low": 0,
+      "outlier_count_high": 17815,
+      "outlier_count_total": 17815,
+      "outlier_pct": 9.66
+    },
+    "area": {
+      "name": "area",
+      "count": 200000,
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "min": 3.339,
+      "max": 13326000.0,
+      "mean": 346.3,
+      "std": 31897.72,
+      "p1": 25.0,
+      "p5": 35.0,
+      "q1": 55.5,
+      "median": 80.0,
+      "q3": 120.0,
+      "p95": 381.4,
+      "p99": 2226.0,
+      "iqr": 64.5,
+      "lower_bound": 0.0,
+      "upper_bound": 216.75,
+      "outlier_count_low": 0,
+      "outlier_count_high": 20938,
+      "outlier_count_total": 20938,
+      "outlier_pct": 10.47
+    },
+    "price_per_m2": {
+      "name": "price_per_m2",
+      "count": 184431,
+      "missing_count": 15569,
+      "missing_pct": 7.78,
+      "min": 10.087763542822556,
+      "max": 3758169934640.5225,
+      "mean": 172126897.83,
+      "std": 8926533511.05,
+      "p1": 1792480.29,
+      "p5": 9418478.26,
+      "q1": 52083333.33,
+      "median": 98000000.0,
+      "q3": 188888888.89,
+      "p95": 364971264.37,
+      "p99": 600000000.0,
+      "iqr": 136805555.56,
+      "lower_bound": 0.0,
+      "upper_bound": 394097222.22,
+      "outlier_count_low": 0,
+      "outlier_count_high": 7153,
+      "outlier_count_total": 7153,
+      "outlier_pct": 3.88
+    }
+  },
+  "grouped_outliers": {
+    "price_by_property_type": {
+      "Biệt thự/Nhà liền kề": {
+        "sample_size": 13280,
+        "median": 19500000000.0,
+        "q1": 10700000000.0,
+        "q3": 35000000000.0,
+        "iqr": 24300000000.0,
+        "lower_bound": 0.0,
+        "upper_bound": 71450000000.0,
+        "outlier_count": 987,
+        "outlier_pct": 7.43
+      },
+      "Căn hộ chung cư": {
+        "sample_size": 37140,
+        "median": 4850000000.0,
+        "q1": 3139875000.0,
+        "q3": 7700000000.0,
+        "iqr": 4560125000.0,
+        "lower_bound": 0.0,
+        "upper_bound": 14540187500.0,
+        "outlier_count": 2294,
+        "outlier_pct": 6.18
+      },
+      "Nhà": {
+        "sample_size": 87594,
+        "median": 8900000000.0,
+        "q1": 6000000000.0,
+        "q3": 16500000000.0,
+        "iqr": 10500000000.0,
+        "lower_bound": 0.0,
+        "upper_bound": 32250000000.0,
+        "outlier_count": 8485,
+        "outlier_pct": 9.69
+      },
+      "Shophouse": {
+        "sample_size": 2905,
+        "median": 9600000000.0,
+        "q1": 6000000000.0,
+        "q3": 18000000000.0,
+        "iqr": 12000000000.0,
+        "lower_bound": 0.0,
+        "upper_bound": 36000000000.0,
+        "outlier_count": 224,
+        "outlier_pct": 7.71
+      },
+      "Đất": {
+        "sample_size": 43512,
+        "median": 4470000000.0,
+        "q1": 2000000000.0,
+        "q3": 10072500000.0,
+        "iqr": 8072500000.0,
+        "lower_bound": 0.0,
+        "upper_bound": 22181250000.0,
+        "outlier_count": 4745,
+        "outlier_pct": 10.91
+      }
+    },
+    "area_by_property_type": {
+      "Biệt thự/Nhà liền kề": {
+        "sample_size": 14694,
+        "median": 129.0,
+        "q1": 90.0,
+        "q3": 210.0,
+        "iqr": 120.0,
+        "lower_bound": 0.0,
+        "upper_bound": 390.0,
+        "outlier_count": 867,
+        "outlier_pct": 5.9
+      },
+      "Căn hộ chung cư": {
+        "sample_size": 41612,
+        "median": 73.0,
+        "q1": 60.0,
+        "q3": 95.0,
+        "iqr": 35.0,
+        "lower_bound": 7.5,
+        "upper_bound": 147.5,
+        "outlier_count": 1877,
+        "outlier_pct": 4.51
+      },
+      "Nhà": {
+        "sample_size": 92536,
+        "median": 62.0,
+        "q1": 45.0,
+        "q3": 90.0,
+        "iqr": 45.0,
+        "lower_bound": 0.0,
+        "upper_bound": 157.5,
+        "outlier_count": 8265,
+        "outlier_pct": 8.93
+      },
+      "Shophouse": {
+        "sample_size": 3367,
+        "median": 100.0,
+        "q1": 80.0,
+        "q3": 126.0,
+        "iqr": 46.0,
+        "lower_bound": 11.0,
+        "upper_bound": 195.0,
+        "outlier_count": 266,
+        "outlier_pct": 7.9
+      },
+      "Đất": {
+        "sample_size": 47791,
+        "median": 113.4,
+        "q1": 82.9,
+        "q3": 220.0,
+        "iqr": 137.1,
+        "lower_bound": 0.0,
+        "upper_bound": 425.65,
+        "outlier_count": 6707,
+        "outlier_pct": 14.03
+      }
+    }
+  },
+  "duplicate_analysis": {
+    "total_rows": 200000,
+    "id_duplicates": 0,
+    "exact_duplicates_excl_id": 0,
+    "exact_duplicate_pct": 0.0,
+    "suspected_duplicates": 9777,
+    "suspected_duplicate_pct": 4.89,
+    "sample_suspected_duplicates": [
+      [
+        {
+          "id": 109609,
+          "name": "Đất có sẵn thổ cư hẻm đường Thanh Niên Vĩnh Trạch Thoại Sơn, diện tích đẹp",
+          "property_type_name": "Đất",
+          "province_name": "An Giang",
+          "price": 10390000000.0,
+          "area": 1298.6,
+          "published_at": "2025-12-28 18:19:18.657000"
+        },
+        {
+          "id": 119825,
+          "name": "Đất có sẵn thổ cư hẻm đường Thanh Niên Vĩnh Trạch Thoại Sơn, diện tích đẹp",
+          "property_type_name": "Đất",
+          "province_name": "An Giang",
+          "price": 10390000000.0,
+          "area": 1298.6,
+          "published_at": "2025-12-28 18:04:39.673000"
+        }
+      ],
+      [
+        {
+          "id": 49493,
+          "name": "Bán biệt thự 2 tầng sân vườn đường Huyền Trân Công Chúa, P. 8, Vũng Tàu - 14.5 tỷ/170m2",
+          "property_type_name": "Biệt thự/Nhà liền kề",
+          "province_name": "Bà Rịa - Vũng Tàu",
+          "price": 14500000000.0,
+          "area": 170.0,
+          "published_at": "2025-09-18 15:58:36.723000"
+        },
+        {
+          "id": 173390,
+          "name": "Bán biệt thự 2 tầng sân vườn đường Huyền Trân Công Chúa, P. 8, Vũng Tàu - 14.5 tỷ/170m2",
+          "property_type_name": "Biệt thự/Nhà liền kề",
+          "province_name": "Bà Rịa - Vũng Tàu",
+          "price": 14500000000.0,
+          "area": 170.0,
+          "published_at": "2025-09-18 10:20:14.880000"
+        }
+      ],
+      [
+        {
+          "id": 163942,
+          "name": "Bán nhanh biệt thự biển 3 tầng view biển Bãi Dâu Trần Phú cách biển 20m giá siêu tốt chỉ 15.5 tỷ",
+          "property_type_name": "Biệt thự/Nhà liền kề",
+          "province_name": "Bà Rịa - Vũng Tàu",
+          "price": 15500000000.0,
+          "area": 172.0,
+          "published_at": "2025-11-08 15:38:36.693000"
+        },
+        {
+          "id": 172083,
+          "name": "Bán nhanh biệt thự biển 3 tầng view biển Bãi Dâu Trần Phú cách biển 20m giá siêu tốt chỉ 15.5 tỷ",
+          "property_type_name": "Biệt thự/Nhà liền kề",
+          "province_name": "Bà Rịa - Vũng Tàu",
+          "price": 15500000000.0,
+          "area": 172.0,
+          "published_at": "2025-11-08 10:54:15.923000"
+        }
+      ],
+      [
+        {
+          "id": 23547,
+          "name": "Bán biệt thự 1 trệt 1 lầu khu Đại An, Phường 9, Tp Vũng Tàu",
+          "property_type_name": "Biệt thự/Nhà liền kề",
+          "province_name": "Bà Rịa - Vũng Tàu",
+          "price": 18500000000.0,
+          "area": 173.0,
+          "published_at": "2025-12-24 14:13:28.027000"
+        },
+        {
+          "id": 126751,
+          "name": "Bán biệt thự 1 trệt 1 lầu khu Đại An, Phường 9, Tp Vũng Tàu",
+          "property_type_name": "Biệt thự/Nhà liền kề",
+          "province_name": "Bà Rịa - Vũng Tàu",
+          "price": 18500000000.0,
+          "area": 173.0,
+          "published_at": "2025-12-12 05:28:18.232000"
+        }
+      ],
+      [
+        {
+          "id": 137998,
+          "name": "Bán nhà góc 2 mặt tiền khu đô thị chí linh vị trí đắc địa 180m ( 14x13m)",
+          "property_type_name": "Biệt thự/Nhà liền kề",
+          "province_name": "Bà Rịa - Vũng Tàu",
+          "price": 26000000000.0,
+          "area": 180.0,
+          "published_at": "2025-12-10 04:48:58.337000"
+        },
+        {
+          "id": 185123,
+          "name": "BÁN NHÀ GÓC 2 MẶT TIỀN KHU ĐÔ THỊ CHÍ LINH VỊ TRÍ ĐẮC ĐỊA 180m ( 14X13m)",
+          "property_type_name": "Biệt thự/Nhà liền kề",
+          "province_name": "Bà Rịa - Vũng Tàu",
+          "price": 26000000000.0,
+          "area": 180.0,
+          "published_at": "2025-12-10 10:16:58.112000"
+        }
+      ]
+    ]
+  },
+  "categorical_distributions": {
+    "property_type_distribution": {
+      "Nhà": {
+        "count": 92536,
+        "pct": 46.27
+      },
+      "Đất": {
+        "count": 47791,
+        "pct": 23.9
+      },
+      "Căn hộ chung cư": {
+        "count": 41612,
+        "pct": 20.81
+      },
+      "Biệt thự/Nhà liền kề": {
+        "count": 14694,
+        "pct": 7.35
+      },
+      "Shophouse": {
+        "count": 3367,
+        "pct": 1.68
+      }
+    },
+    "top_provinces": {
+      "Hồ Chí Minh": {
+        "count": 74599,
+        "pct": 37.3
+      },
+      "Hà Nội": {
+        "count": 68299,
+        "pct": 34.15
+      },
+      "Đà Nẵng": {
+        "count": 10306,
+        "pct": 5.15
+      },
+      "Bình Dương": {
+        "count": 8630,
+        "pct": 4.32
+      },
+      "Khánh Hòa": {
+        "count": 5508,
+        "pct": 2.75
+      },
+      "Hải Phòng": {
+        "count": 4180,
+        "pct": 2.09
+      },
+      "Hưng Yên": {
+        "count": 3582,
+        "pct": 1.79
+      },
+      "Đồng Nai": {
+        "count": 3315,
+        "pct": 1.66
+      },
+      "Long An": {
+        "count": 2736,
+        "pct": 1.37
+      },
+      "Bà Rịa - Vũng Tàu": {
+        "count": 2691,
+        "pct": 1.35
+      },
+      "Lâm Đồng": {
+        "count": 1438,
+        "pct": 0.72
+      },
+      "Bắc Ninh": {
+        "count": 1194,
+        "pct": 0.6
+      },
+      "Quảng Ninh": {
+        "count": 1123,
+        "pct": 0.56
+      },
+      "Quảng Nam": {
+        "count": 1119,
+        "pct": 0.56
+      },
+      "Hòa Bình": {
+        "count": 767,
+        "pct": 0.38
+      }
+    },
+    "total_unique_provinces": 63,
+    "total_unique_districts": 546,
+    "total_unique_wards": 2755
+  }
+}

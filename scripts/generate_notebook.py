@@ -1,0 +1,242 @@
+"""Script to generate clean, reproducible Jupyter Notebook for Real Estate EDA."""
+
+import json
+from pathlib import Path
+
+
+def build_notebook():
+    nb = {
+        "cells": [
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "# Khảo Sát và Khám Phá Dữ Liệu Bất Động Sản (Exploratory Data Analysis - EDA)\n",
+                    "\n",
+                    "**Đề tài:** Xây dựng bộ dữ liệu về bất động sản, thực hiện các phương pháp tối ưu hiệu năng cho hệ thống khi dữ liệu quá lớn.\n",
+                    "**Quy mô dữ liệu:** 500,000 bản ghi thực tế từ Hugging Face `Phuscca/vietnam-real-estates`.\n",
+                    "**Mục tiêu nghiên cứu:** Phân tích cấu trúc phân phối, kiểm chứng dữ liệu khuyết thiếu, phát hiện điểm dị biệt và xác lập nền tảng đặc trưng (Feature Engineering) phục vụ tối ưu hóa truy vấn CSDL PostgreSQL."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "import matplotlib.pyplot as plt\n",
+                    "import numpy as np\n",
+                    "import pandas as pd\n",
+                    "import seaborn as sns\n",
+                    "\n",
+                    "# Thiết lập giao diện đồ họa chuẩn học thuật\n",
+                    "sns.set_theme(style=\"whitegrid\", palette=\"deep\")\n",
+                    "plt.rcParams[\"font.sans-serif\"] = [\"DejaVu Sans\", \"Arial\", \"Segoe UI\"]\n",
+                    "plt.rcParams[\"axes.unicode_minus\"] = False\n",
+                    "pd.set_option(\"display.max_columns\", 20)\n",
+                    "pd.set_option(\"display.float_format\", lambda x: f\"{x:,.2f}\")\n",
+                    "\n",
+                    "DATA_PATH = \"../data/processed/properties_500000.csv\"\n",
+                    "print(f\"Dang doc du lieu tu {DATA_PATH}...\")\n",
+                    "df = pd.read_csv(DATA_PATH)\n",
+                    "print(f\"So dong: {len(df):,}, So cot: {len(df.columns)}\")\n",
+                    "df.head()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 1. Phân Tích Dữ Liệu Khuyết Thiếu (Missing Values Analysis)\n",
+                    "\n",
+                    "Đánh giá mức độ hoàn thiện của từng cột dữ liệu. Chú ý thuộc tính `price` có giá trị thiếu phản ánh các tin đăng có giá bán ở trạng thái \"Thỏa thuận\"."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "missing = pd.DataFrame({\n",
+                    "    \"Total\": len(df),\n",
+                    "    \"Missing_Count\": df.isna().sum(),\n",
+                    "    \"Missing_Percent\": (df.isna().mean() * 100).round(2)\n",
+                    "})\n",
+                    "missing.sort_values(by=\"Missing_Percent\", ascending=False)"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 2. Thống Kê Mô Tả và Phân Bố Thuộc Tính Số Học (Price & Area)\n",
+                    "\n",
+                    "Khảo sát các đại lượng thống kê tứ phân vị (Q1, Median, Q3), trung bình, độ lệch chuẩn và phân vị ngoại vi (P95, P99)."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "num_cols = [\"price\", \"area\"]\n",
+                    "df[num_cols].describe(percentiles=[0.01, 0.05, 0.25, 0.50, 0.75, 0.95, 0.99])"
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "fig, axes = plt.subplots(1, 2, figsize=(14, 5))\n",
+                    "\n",
+                    "# Phân bố giá dưới P99\n",
+                    "valid_p = df[\"price\"].dropna()\n",
+                    "p99 = valid_p.quantile(0.99)\n",
+                    "sns.histplot(valid_p[valid_p <= p99] / 1e9, bins=50, kde=True, ax=axes[0], color=\"#2b5c8f\")\n",
+                    "axes[0].set_title(\"Phân Bố Giá Bán (< 99th Percentile: 130 Tỷ VNĐ)\")\n",
+                    "axes[0].set_xlabel(\"Giá Bán (Tỷ VNĐ)\")\n",
+                    "axes[0].set_ylabel(\"Số Lượng\")\n",
+                    "\n",
+                    "# Phân bố Log10\n",
+                    "sns.histplot(np.log10(valid_p[valid_p > 0]), bins=50, kde=True, ax=axes[1], color=\"#d95f02\")\n",
+                    "axes[1].set_title(\"Phân Bố Giá Bán Dạng Log10\")\n",
+                    "axes[1].set_xlabel(\"Log10(Giá VNĐ)\")\n",
+                    "\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 3. Phân Tích Phân Loại Bất Động Sản và Địa Bàn Hành Chính\n",
+                    "\n",
+                    "Khảo sát thị phần tin đăng theo các loại hình (Nhà riêng, Căn hộ, Đất nền, Biệt thự) và mật độ tin đăng theo tỉnh/thành phố."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "fig, axes = plt.subplots(1, 2, figsize=(16, 6))\n",
+                    "\n",
+                    "# Loại BĐS\n",
+                    "ptypes = df[\"property_type_name\"].value_counts().reset_index()\n",
+                    "ptypes.columns = [\"Type\", \"Count\"]\n",
+                    "sns.barplot(data=ptypes, x=\"Count\", y=\"Type\", palette=\"viridis\", ax=axes[0])\n",
+                    "axes[0].set_title(\"Cơ Cấu Loại Bất Động Sản\")\n",
+                    "\n",
+                    "# Top 10 Tỉnh/Thành\n",
+                    "top_prov = df[\"province_name\"].value_counts().head(10).reset_index()\n",
+                    "top_prov.columns = [\"Province\", \"Count\"]\n",
+                    "sns.barplot(data=top_prov, x=\"Count\", y=\"Province\", palette=\"mako\", ax=axes[1])\n",
+                    "axes[1].set_title(\"Top 10 Địa Phương Có Lượng Tin Đăng Lớn Nhất\")\n",
+                    "\n",
+                    "plt.tight_layout()\n",
+                    "plt.show()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 4. Tương Quan Giá và Diện Tích & Biến Động Theo Loại Hình\n",
+                    "\n",
+                    "Sử dụng biểu đồ mật độ Hexbin để trực quan hóa dữ liệu lớn mà không bị chồng lấp (overplotting)."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "# Lọc mẫu đại diện 20,000 điểm dữ liệu hợp lệ dưới P99 để trực quan\n",
+                    "valid_subset = df.dropna(subset=[\"price\", \"area\"]).copy()\n",
+                    "p99_p = valid_subset[\"price\"].quantile(0.99)\n",
+                    "p99_a = valid_subset[\"area\"].quantile(0.99)\n",
+                    "filtered = valid_subset[(valid_subset[\"price\"] <= p99_p) & (valid_subset[\"area\"] <= p99_a)]\n",
+                    "sample = filtered.sample(min(20000, len(filtered)), random_state=42)\n",
+                    "\n",
+                    "fig, ax = plt.subplots(figsize=(10, 6))\n",
+                    "hb = ax.hexbin(sample[\"area\"], sample[\"price\"] / 1e9, gridsize=35, cmap=\"Blues\", bins=\"log\")\n",
+                    "cb = fig.colorbar(hb, ax=ax)\n",
+                    "cb.set_label(\"Log10(Mật độ)\")\n",
+                    "ax.set_title(\"Quan Hệ Diện Tích (m²) và Giá Bán (Tỷ VNĐ)\")\n",
+                    "ax.set_xlabel(\"Diện Tích (m²)\")\n",
+                    "ax.set_ylabel(\"Giá Bán (Tỷ VNĐ)\")\n",
+                    "plt.show()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 5. Phân Tích Chuỗi Thời Gian và Ma Trận Tương Quan Thứ Hạng\n",
+                    "\n",
+                    "Kiểm tra tính mùa vụ theo tháng và tương quan Spearman giữa các biến số."
+                ]
+            },
+            {
+                "cell_type": "code",
+                "execution_count": None,
+                "metadata": {},
+                "outputs": [],
+                "source": [
+                    "corr_df = pd.DataFrame({\n",
+                    "    \"price\": df[\"price\"],\n",
+                    "    \"area\": df[\"area\"],\n",
+                    "    \"price_per_m2\": df[\"price\"] / df[\"area\"]\n",
+                    "})\n",
+                    "dates = pd.to_datetime(df[\"published_at\"], errors=\"coerce\")\n",
+                    "corr_df[\"year\"] = dates.dt.year\n",
+                    "corr_df[\"month\"] = dates.dt.month\n",
+                    "\n",
+                    "spearman_corr = corr_df.corr(method=\"spearman\")\n",
+                    "plt.figure(figsize=(7, 5))\n",
+                    "sns.heatmap(spearman_corr, annot=True, cmap=\"coolwarm\", fmt=\".2f\", square=True)\n",
+                    "plt.title(\"Ma Trận Tương Quan Thứ Hạng Spearman\")\n",
+                    "plt.show()"
+                ]
+            },
+            {
+                "cell_type": "markdown",
+                "metadata": {},
+                "source": [
+                    "## 6. Kết Luận Nghiệm Thu EDA\n",
+                    "\n",
+                    "1. **Phân phối lệch phải cực mạnh:** Cả `price` và `area` đều có phân phối Pareto-like, với P50 = 7.4 tỷ VNĐ nhưng Mean = 20.78 tỷ VNĐ do sự xuất hiện của các bất động sản thương mại/dự án lớn.\n",
+                    "2. **Tương quan thuận:** Tương quan Spearman giữa `area` và `price` đạt 0.58, khẳng định diện tích là nhân tố quyết định bậc nhất tới giá thành.\n",
+                    "3. **Tập trung hóa vùng địa lý:** Hà Nội và TP.HCM chiếm đa số tuyệt đối tổng lượng tin đăng, là cơ sở khoa học cho bài toán lập chỉ mục theo `province_name` (Q1) và truy vấn kết hợp lọc địa lý - sắp xếp thời gian (Q2).\n",
+                    "4. **Cơ sở cho Feature Engineering:** Sự biến thiên mạnh mẽ của đơn giá trên m² giữa các tỉnh cho thấy `price_per_m2` là chỉ số chuẩn hóa hữu hiệu nhất để phân tích định giá thị trường."
+                ]
+            }
+        ],
+        "metadata": {
+            "language_info": {
+                "name": "python",
+                "version": "3.13"
+            }
+        },
+        "nbformat": 4,
+        "nbformat_minor": 5
+    }
+
+    out_dir = Path("notebooks")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_file = out_dir / "real_estate_eda.ipynb"
+    with open(out_file, "w", encoding="utf-8") as f:
+        json.dump(nb, f, ensure_ascii=False, indent=2)
+    print(f"Da tao Jupyter Notebook: {out_file}")
+
+
+if __name__ == "__main__":
+    build_notebook()
+
