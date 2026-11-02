@@ -3,21 +3,21 @@
 **Tài liệu thẩm định:** Kiểm thử hồi quy tự động toàn diện hệ thống mã nguồn và cơ sở dữ liệu  
 **Công cụ kiểm thử:** Pytest 8.4.2, Python 3.13.7, PostgreSQL 18.3 x86_64, Windows 11  
 **Tập dữ liệu kiểm định:** `data/processed/properties_50000.csv` $\rightarrow$ `properties_500000.csv`  
-**Cơ sở dữ liệu kiểm thử độc lập:** `real_estate_test_db` trên cụm PostgreSQL port 5433  
-**Tổng số ca kiểm thử:** **198 test cases** (197 passed, 1 skipped, 0 failed)  
-**Thời gian thực thi:** 18,91 giây
+**Cơ sở dữ liệu kiểm thử độc lập:** Cấu hình cơ sở dữ liệu cách ly động (ephemeral) `real_estate_qa_e2e_<uuid>` trên cụm PostgreSQL port 5433 (không DROP cơ sở dữ liệu có sẵn)  
+**Tổng số ca kiểm thử:** **203 test cases** (202 passed, 1 skipped, 0 failed)  
+**Thời gian thực thi:** 16,54 giây
 
 ---
 
 ## 1. PHÂN CẤP VÀ KẾT QUẢ KIỂM THỬ THEO 3 TẦNG (THREE-TIER TESTING ARCHITECTURE)
 
-Nhằm bảo đảm tính minh bạch và tránh ngộ nhận giữa việc sử dụng giả lập (Mock/Fake) với kiểm thử thực tế, toàn bộ 198 bài kiểm thử được phân định nghiêm ngặt thành 3 cấp độ:
+Nhằm bảo đảm tính minh bạch và tránh ngộ nhận giữa việc sử dụng giả lập (Mock/Fake) với kiểm thử thực tế, toàn bộ 203 bài kiểm thử được phân định nghiêm ngặt thành 3 cấp độ:
 
 ```mermaid
 graph TD
-    A["Toàn bộ 198 Ca kiểm thử"] --> B["Tầng 1: Unit Tests<br>(124 tests / 123 pass, 1 skip)"]
-    A --> C["Tầng 2: Integration Tests<br>(60 tests / 60 pass)"]
-    A --> D["Tầng 3: End-to-End Tests<br>(14 tests / 14 pass)"]
+    A["Toàn bộ 203 Ca kiểm thử"] --> B["Tầng 1: Unit Tests<br>(124 tests / 123 pass, 1 skip)"]
+    A --> C["Tầng 2: Integration Tests<br>(61 tests / 61 pass)"]
+    A --> D["Tầng 3: End-to-End Tests<br>(18 tests / 18 pass)"]
 
     B --> B1["Hàm làm sạch, Cắt tỉa chuỗi, Regex"]
     B --> B2["Sinh đặc trưng, Logic phân khúc"]
@@ -29,7 +29,7 @@ graph TD
 
     D --> D1["Đường ống Smoke Pipeline hoàn chỉnh"]
     D --> D2["Đối soát mã băm 600 JSON kế hoạch thực thi"]
-    D --> D3["Bảo vệ tính nhất quán số liệu báo cáo"]
+    D --> D3["Bảo vệ tính nhất quán số liệu và Checksum báo cáo"]
 ```
 
 *Bảng 1.1: Bảng tổng hợp số lượng và trạng thái kiểm thử theo từng tầng*
@@ -37,9 +37,9 @@ graph TD
 | Tầng kiểm thử (Testing Tier) | Mục tiêu và Phạm vi kiểm tra | Số lượng test | Passed | Failed | Skipped | Blocked | Trạng thái nghiệm thu |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Tier 1: Unit Tests** | Kiểm tra độc lập logic xử lý dữ liệu, kiểm tra hợp đồng cột, xử lý giá trị biên, tính toán thống kê mô tả trên dữ liệu tổng hợp. | 124 | 123 | 0 | 1 | 0 | **PASS** |
-| **Tier 2: Integration Tests** | Kiểm tra tương tác thật với hệ thống tệp Parquet/CSV qua Pandas và Polars; kiểm tra nạp dữ liệu COPY, ràng buộc CHECK, cơ chế Transaction Rollback và câu truy vấn SQL trên PostgreSQL 18.3 thật (port 5433). | 60 | 60 | 0 | 0 | 0 | **PASS** |
-| **Tier 3: End-to-End Tests** | Kiểm tra toàn bộ chu trình luân chuyển dữ liệu từ thô đến báo cáo; kiểm toán mã băm của 600 tệp kế hoạch thực thi và đối soát số liệu báo cáo. | 14 | 14 | 0 | 0 | 0 | **PASS** |
-| **TỔNG CỘNG** | **Toàn bộ kho mã nguồn và hệ thống thực nghiệm** | **198** | **197** | **0** | **1** | **0** | **100% PASS** |
+| **Tier 2: Integration Tests** | Kiểm tra tương tác thật với hệ thống tệp Parquet/CSV qua Pandas và Polars; kiểm tra nạp dữ liệu COPY, ràng buộc CHECK, cơ chế Transaction Rollback, bảo tồn DB có sẵn và câu truy vấn SQL trên PostgreSQL 18.3 thật (port 5433). | 61 | 61 | 0 | 0 | 0 | **PASS** |
+| **Tier 3: End-to-End Tests** | Kiểm tra toàn bộ chu trình luân chuyển dữ liệu từ thô đến báo cáo; kiểm toán mã băm của 600 tệp kế hoạch thực thi, negative tests chống giả mạo và đối soát số liệu/mã băm báo cáo. | 18 | 18 | 0 | 0 | 0 | **PASS** |
+| **TỔNG CỘNG** | **Toàn bộ kho mã nguồn và hệ thống thực nghiệm** | **203** | **202** | **0** | **1** | **0** | **100% PASS** |
 
 ---
 
@@ -64,10 +64,10 @@ Bảng 2.1 liệt kê toàn bộ 17 tệp kiểm thử trong thư mục `tests/`
 | `tests/test_benchmark_processing.py` | Integration | 5 | 5 | 0 | 0 | Kiểm tra hiệu năng nạp tệp CSV/Parquet và tính toán gom nhóm bằng Pandas và Polars thật trên đĩa. |
 | `tests/test_import_csv.py` | Integration | 36 | 36 | 0 | 0 | Kiểm tra các hàm hỗ trợ import CSV, phân tích cú pháp kết nối và cấu trúc lệnh COPY. |
 | `tests/test_benchmark_sql.py` | Integration | 11 | 11 | 0 | 0 | Kiểm tra tính hợp lệ cú pháp của 5 câu lệnh SQL chuẩn hóa tại `sql/benchmark/queries/`. |
-| `tests/test_live_postgresql_e2e.py` | Integration & E2E | 9 | 9 | 0 | 0 | **Kiểm thử trực tiếp trên PostgreSQL 18.3 thật (port 5433):** Nạp CSV bằng COPY thật, kiểm tra số dòng, kiểm tra Rollback, thực thi Q1–Q4, kiểm tra tương đương ngữ nghĩa Q3 Original vs Rewritten và smoke pipeline. |
+| `tests/test_live_postgresql_e2e.py` | Integration & E2E | 10 | 10 | 0 | 0 | **Kiểm thử trực tiếp trên PostgreSQL 18.3 thật (port 5433):** Nạp CSV bằng COPY thật, kiểm tra số dòng, kiểm tra Rollback, thực thi Q1–Q4, kiểm tra tương đương ngữ nghĩa Q3 Original vs Rewritten, smoke pipeline và bảo toàn database có sẵn. |
 | `tests/test_pipeline.py` | End-to-End | 2 | 2 | 0 | 0 | Kiểm tra luồng thực thi toàn bộ pipeline từ nạp dữ liệu đến xuất báo cáo tóm tắt. |
-| `tests/test_benchmark_evidence.py` | End-to-End | 3 | 3 | 0 | 0 | Kiểm toán mã băm SHA-256 của toàn bộ 600 tệp JSON kế hoạch thực thi thô đối soát với `results/benchmark/raw_manifest.json`. |
-| `tests/test_report_statistics_consistency.py` | End-to-End | 7 | 7 | 0 | 0 | Kiểm tra tính nhất quán số liệu giữa các tệp báo cáo Markdown và dữ liệu JSON gốc: tỷ lệ khuyết thiếu ward 14,43%, district 2,85%, Hải Phòng 10.422 dòng, trung vị 7,4 tỷ và 80 m², Delta RAM Chunked. |
+| `tests/test_benchmark_evidence.py` | End-to-End | 6 | 6 | 0 | 0 | Kiểm toán mã băm SHA-256 của toàn bộ 600 tệp JSON kế hoạch thực thi thô đối soát với `results/benchmark/raw_manifest.json`, tích hợp 3 bài kiểm tra tiêu cực (negative tests) phát hiện dữ liệu giả mạo. |
+| `tests/test_report_statistics_consistency.py` | End-to-End | 8 | 8 | 0 | 0 | Kiểm tra tính nhất quán số liệu giữa các tệp báo cáo Markdown và dữ liệu JSON gốc: tỷ lệ khuyết thiếu ward 14,43%, district 2,85%, Hải Phòng 10.422 dòng, trung vị 7,4 tỷ và 80 m², Delta RAM Chunked, đồng thời bảo đảm không có mã băm SHA-256 lỗi thời. |
 
 ---
 
@@ -75,16 +75,16 @@ Bảng 2.1 liệt kê toàn bộ 17 tệp kiểm thử trong thư mục `tests/`
 
 Kiểm thử `tests/test_live_postgresql_e2e.py` đã thực hiện tương tác trực tiếp với phiên bản PostgreSQL 18.3 đang vận hành tại `127.0.0.1:5433`:
 
-1. **Khởi tạo Database độc lập:**  
-   Tạo cơ sở dữ liệu riêng biệt `real_estate_test_db`, thực thi toàn bộ DDL từ `sql/schema.sql` với các ràng buộc khóa chính `id BIGINT PRIMARY KEY`, ràng buộc CHECK `price > 0`, `area > 0` và `BTRIM(name) <> ''`.
+1. **Khởi tạo Database cách ly động (Ephemeral Isolation):**  
+   Tạo cơ sở dữ liệu riêng biệt dạng `real_estate_qa_e2e_<uuid>`, kiểm tra sự tồn tại trước khi khởi tạo và bảo đảm tuyệt đối không bao giờ thực hiện DROP bất kỳ database có sẵn nào; thực thi toàn bộ DDL từ `sql/schema.sql` với các ràng buộc khóa chính `id BIGINT PRIMARY KEY`, ràng buộc CHECK `price > 0`, `area > 0` và `BTRIM(name) <> ''`. Khi kết thúc bài kiểm thử, chỉ có database tạm này được giải phóng an toàn.
 2. **Nạp dữ liệu thực tế bằng Transactional COPY:**  
    Thực thi lệnh `COPY public.properties ... FROM STDIN WITH (FORMAT CSV, HEADER TRUE, NULL '', FORCE_NULL (price, district_name, ward_name))` nạp trọn vẹn 50.000 dòng từ tệp `data/processed/properties_50000.csv`.
 3. **Đối soát tính toàn vẹn sau nạp (Post-Import Data Audit):**
    - Tổng số dòng: đúng **50.000**.
    - Số lượng ID duy nhất: đúng **50.000**, giá trị nhỏ nhất: **1**, giá trị lớn nhất: **50.000**.
-   - Số lượng NULL trường `price`: đúng **3.931** bản ghi (khớp 100% với CSV).
-   - Số lượng NULL trường `district_name`: đúng **1.465** bản ghi (khớp 100% với CSV).
-   - Số lượng NULL trường `ward_name`: đúng **7.151** bản ghi (khớp 100% với CSV).
+   - Số lượng NULL trường `price`: đúng **3.993** bản ghi (khớp 100% với CSV).
+   - Số lượng NULL trường `district_name`: đúng **1.507** bản ghi (khớp 100% với CSV).
+   - Số lượng NULL trường `ward_name`: đúng **7.277** bản ghi (khớp 100% với CSV).
 4. **Kiểm tra tính nguyên tử của Giao dịch (ACID Rollback Test):**  
    Thực hiện chèn một bản ghi hợp lệ (`id = 999999`) và một bản ghi vi phạm ràng buộc CHECK (`area = -50.0`) trong cùng một khối giao dịch `conn.transaction()`. Hệ thống bắt được lỗi ngoại lệ và thực thi ROLLBACK tự động. Kiểm tra lại cho thấy cơ sở dữ liệu giữ nguyên 50.000 dòng ban đầu, bản ghi `999999` hoàn toàn không bị rò rỉ vào bảng.
 5. **Thực thi và Kiểm chứng tương đương ngữ nghĩa Q3 (Semantic Equivalence):**  

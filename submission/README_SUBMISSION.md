@@ -37,10 +37,10 @@ Tất cả các tệp trong gói giao nộp đều được tính toán mã băm
 
 | Tệp bàn giao (Artifact) | Dung lượng (Bytes) | Dung lượng (MB) | Mã băm SHA-256 (Checksum) |
 | :--- | :---: | :---: | :--- |
-| `submission/TieuLuan_BatDongSan.docx` | 2.943.576 | 2,81 MB | `750fb5a347b580977648694fb302be60ba665811f16532f6d5d35aadb90b507b` |
-| `submission/TieuLuan_BatDongSan.pdf` | 6.222.013 | 5,93 MB | `baab85fefc175d2e50b913ec05b57e754d70f3470b25373aee5861c297c3883d` |
-| `submission/evidence/dataset_manifest.json` | 3.529 | 0,003 MB | `5bcea1bfa797edd804dba4c533d4a8861ce6eaaa0ac1b74bc9f167a7824f3ec4` |
-| `submission/evidence/benchmark_manifest.json` | 94.180 | 0,09 MB | `b6f032cfb82af0216f08b6b85dedc341c903b3e00b372ba7c7f54a279570c63b` |
+| submission/TieuLuan_BatDongSan.docx | 2.455.343 | 2,34 MB | d260c6433e2b26407def5d177e9fdc3e0781a62171f58fbdfd8d9b9a92ecc4c5 |
+| submission/TieuLuan_BatDongSan.pdf | 6.222.013 | 5,93 MB | 9b6a7fef8ecf1c98e6a1120036e434a76d1f9ccf3e84302706847c72ac1bb815 |
+| submission/evidence/dataset_manifest.json | 3.529 | 0,003 MB | 5bcea1bfa797edd804dba4c533d4a8861ce6eaaa0ac1b74bc9f167a7824f3ec4 |
+| submission/evidence/benchmark_manifest.json | 94.216 | 0,09 MB | e16c1e64141a89f64660846a8e2565bd1ca7e9ad42bb0832605d968f0960e02 |
 | `submission/evidence/benchmark_raw_plans.zip` | 504.366 | 0,48 MB | `262ed49431c0a4c758ad638dd253726273119acf27a23ca20997cec477677753` |
 
 ### Bảng đối chiếu mã băm ba tập dữ liệu chuẩn hóa cục bộ (`data/processed/`):
@@ -48,9 +48,9 @@ Tất cả các tệp trong gói giao nộp đều được tính toán mã băm
 
 | Tập dữ liệu (Processed Dataset) | Số dòng (Rows) | Số cột | Dung lượng (Bytes) | Mã băm SHA-256 (Checksum) |
 | :--- | :---: | :---: | :---: | :--- |
-| `properties_50000.csv` | 50.000 | 9 | 9.803.441 | `11bc4fe13aafbcbb8be177b94dbba221199a4fe9963f2766dc8257ee7a89849b` |
-| `properties_200000.csv` | 200.000 | 9 | 39.311.466 | `84eabf931d8d87d00fef07e60fa0d6a2f8c5b3c59cf6b8f52fe6305a41755106` |
-| `properties_500000.csv` | 500.000 | 9 | 98.442.479 | `9ba1afe8ce7edbf6f6df615822be88dd33fca401a4e1564aa6a56e0767e3a89e` |
+| properties_50000.csv | 50.000 | 9 | 9.803.441 | 11bc4fe13aafbcbb7e8802e82b8262d157821bf52f44b1436dd6aea918da2f8b |
+| properties_200000.csv | 200.000 | 9 | 39.311.466 | 84eabf931d8d87d0df1e3d0387d2a4e22f90599415abe93daddcd8400951ce19 |
+| properties_500000.csv | 500.000 | 9 | 98.442.479 | 9ba1afe8ce7edbf66e8c35f193e7ee955ccd85e5b24544e6eed3ea86418e789c |
 
 ---
 

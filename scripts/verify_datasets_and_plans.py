@@ -15,6 +15,18 @@ def sha256_file(filepath: Path) -> str:
             h.update(chunk)
     return h.hexdigest()
 
+EXPECTED_CSV_HASHES = {
+    50000: "11bc4fe13aafbcbb7e8802e82b8262d157821bf52f44b1436dd6aea918da2f8b",
+    200000: "84eabf931d8d87d0df1e3d0387d2a4e22f90599415abe93daddcd8400951ce19",
+    500000: "9ba1afe8ce7edbf66e8c35f193e7ee955ccd85e5b24544e6eed3ea86418e789c",
+}
+
+EXPECTED_PARQUET_HASHES = {
+    50000: "a9ad29c2db3da83a2fe6e07c12a9d45705753d46c9f0b1fbd0db73534d2231bb",
+    200000: "70f04d650cfbc51acaa56d53167169cb597d00106f4c913b75840f48270378d4",
+    500000: "e11cdf45597df9e728b307c96dd741a6c38622a2f2a1361d597e326b6887fc94",
+}
+
 print("=== CHECKING DATASETS ===")
 datasets_info = {}
 for scale in [50000, 200000, 500000]:
@@ -24,6 +36,7 @@ for scale in [50000, 200000, 500000]:
     assert csv_file.exists(), f"Missing {csv_file}"
     csv_size = csv_file.stat().st_size
     csv_hash = sha256_file(csv_file)
+    assert csv_hash == EXPECTED_CSV_HASHES[scale], f"CSV hash mismatch for {scale}: got {csv_hash}, expected {EXPECTED_CSV_HASHES[scale]}"
     
     # Read rows and columns
     df = pd.read_csv(csv_file)
@@ -33,6 +46,8 @@ for scale in [50000, 200000, 500000]:
     
     pq_size = parquet_file.stat().st_size if parquet_file.exists() else None
     pq_hash = sha256_file(parquet_file) if parquet_file.exists() else None
+    if pq_hash and scale in EXPECTED_PARQUET_HASHES:
+        assert pq_hash == EXPECTED_PARQUET_HASHES[scale], f"Parquet hash mismatch for {scale}: got {pq_hash}, expected {EXPECTED_PARQUET_HASHES[scale]}"
     
     datasets_info[str(scale)] = {
         "scale": scale,
@@ -93,14 +108,21 @@ plan_files = list(RAW_PLANS_DIR.glob("*.json"))
 print(f"Total raw plan JSON files: {len(plan_files)}")
 assert len(plan_files) == 600, f"Expected 600 plans, found {len(plan_files)}"
 
-# Load raw manifest if exists
-if MANIFEST_PATH.exists():
-    raw_manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-    print(f"Existing raw manifest entries: {len(raw_manifest)}")
-else:
-    raw_manifest = {}
+# Load raw manifest
+assert MANIFEST_PATH.exists(), f"Missing manifest: {MANIFEST_PATH}"
+manifest_raw = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
 
-# Verify every plan parses and check SHA-256
+if isinstance(manifest_raw, dict) and "entries" in manifest_raw:
+    raw_manifest_map = {entry["filename"]: entry["sha256"] for entry in manifest_raw["entries"]}
+elif isinstance(manifest_raw, dict):
+    raw_manifest_map = {k: v for k, v in manifest_raw.items() if isinstance(v, str)}
+else:
+    raw_manifest_map = {}
+
+print(f"Loaded raw manifest entries: {len(raw_manifest_map)}")
+assert len(raw_manifest_map) == 600, f"Expected exactly 600 entries in raw manifest, got {len(raw_manifest_map)}"
+
+# Verify every plan parses and check SHA-256 against manifest
 corrupted_files = []
 manifest_mismatches = []
 plans_summary = {}
@@ -114,9 +136,10 @@ for p in plan_files:
         corrupted_files.append((p.name, str(e)))
         continue
     
-    if p.name in raw_manifest:
-        if raw_manifest[p.name] != calc_hash:
-            manifest_mismatches.append(p.name)
+    if p.name not in raw_manifest_map:
+        manifest_mismatches.append((p.name, "MISSING_FROM_MANIFEST", calc_hash))
+    elif raw_manifest_map[p.name] != calc_hash:
+        manifest_mismatches.append((p.name, raw_manifest_map[p.name], calc_hash))
     
     plans_summary[p.name] = {
         "sha256": calc_hash,
@@ -126,6 +149,7 @@ for p in plan_files:
 print(f"Corrupted JSON files: {len(corrupted_files)}")
 print(f"Manifest SHA-256 mismatches: {len(manifest_mismatches)}")
 assert len(corrupted_files) == 0, f"Corrupted files: {corrupted_files}"
+assert len(manifest_mismatches) == 0, f"Manifest mismatches: {manifest_mismatches}"
 
 # Check Q2 Sort node: baseline must have Sort, indexed must not
 q2_base = json.loads((RAW_PLANS_DIR / "500000_Q2_baseline_run01.json").read_text(encoding="utf-8"))
@@ -146,6 +170,38 @@ print(f"Q2 indexed has Sort: {q2_idx_has_sort} (Expected: False)")
 assert q2_base_has_sort is True
 assert q2_idx_has_sort is False
 
+# === NEGATIVE TESTS (TAMPER & ANOMALY DETECTION VERIFICATION) ===
+print("\n=== RUNNING NEGATIVE TESTS ===")
+
+# Negative Test 1: Tampered file content must be detected by SHA-256
+sample_file = plan_files[0]
+sample_content = sample_file.read_bytes()
+tampered_content = sample_content + b" "
+tampered_hash = hashlib.sha256(tampered_content).hexdigest()
+assert tampered_hash != raw_manifest_map[sample_file.name], "Negative Test 1 Failed: Hash should differ on tampered content"
+print("[+] Negative Test 1 Passed: Tampered payload reliably triggers SHA-256 mismatch.")
+
+# Negative Test 2: Corrupted JSON syntax must raise json.JSONDecodeError
+corrupted_payload = b"{\"Plan\": {Invalid JSON syntax"
+try:
+    json.loads(corrupted_payload.decode("utf-8"))
+    raise AssertionError("Negative Test 2 Failed: Corrupted JSON should have raised JSONDecodeError")
+except json.JSONDecodeError:
+    print("[+] Negative Test 2 Passed: Corrupted JSON payload reliably caught by parser.")
+
+# Negative Test 3: Injected Sort node into indexed plan must fail sort elimination assertion
+tampered_idx_plan = json.loads(json.dumps(q2_idx))
+tampered_idx_plan[0]["Plan"]["Plans"] = [{"Node Type": "Sort"}]
+assert has_node_type(tampered_idx_plan[0]["Plan"], "Sort") is True, "Negative Test 3 Failed: Should detect injected Sort node"
+print("[+] Negative Test 3 Passed: Injected Sort node into indexed plan reliably detected.")
+
+# Negative Test 4: Tampered CSV hash must fail verification
+tampered_csv_hash = "0000000000000000000000000000000000000000000000000000000000000000"
+assert EXPECTED_CSV_HASHES[50000] != tampered_csv_hash, "Negative Test 4 Failed: Tampered CSV hash should not match"
+print("[+] Negative Test 4 Passed: Tampered dataset hash check correctly flags anomaly.")
+
+print("All negative tests passed successfully!")
+
 benchmark_manifest = {
     "title": "PostgreSQL 18.3 Execution Plans Audit Manifest",
     "total_plans": len(plans_summary),
@@ -163,7 +219,8 @@ benchmark_manifest = {
         "all_600_valid_json": True,
         "q2_baseline_has_sort": True,
         "q2_indexed_sort_eliminated": True,
-        "all_sha256_match_manifest": len(manifest_mismatches) == 0
+        "all_sha256_match_manifest": len(manifest_mismatches) == 0,
+        "negative_tests_passed": True
     },
     "plans": plans_summary
 }

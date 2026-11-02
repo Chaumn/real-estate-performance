@@ -42,8 +42,8 @@ def main():
             "name": str(row["name"]),
             "property_type_name": str(row["property_type_name"]),
             "province_name": str(row["province_name"]),
-            "district_name": str(row["district_name"]),
-            "ward_name": str(row["ward_name"]),
+            "district_name": str(row["district_name"]) if pd.notna(row["district_name"]) else None,
+            "ward_name": str(row["ward_name"]) if pd.notna(row["ward_name"]) else None,
             "price": float(row["price"]) if pd.notna(row["price"]) else None,
             "area": float(row["area"]),
             "published_at": str(row["published_at"])
@@ -86,14 +86,34 @@ def main():
     pct_groups_diff_dates = float((group_counts["unique_dates"] > 1).sum() / len(group_counts) * 100)
     pct_groups_diff_wards = float((group_counts["unique_wards"] > 1).sum() / len(group_counts) * 100)
 
+    # Helper to convert records without NaN
+    def extract_clean_records(sub_df):
+        records = []
+        for r in sub_df.to_dict(orient="records"):
+            clean_r = {}
+            for k, v in r.items():
+                if pd.isna(v) or v is None or str(v).lower() == "nan":
+                    clean_r[k] = None
+                elif isinstance(v, (np.integer, int)):
+                    clean_r[k] = int(v)
+                elif isinstance(v, (np.floating, float)):
+                    clean_r[k] = None if (np.isnan(v) or np.isinf(v)) else float(v)
+                else:
+                    clean_r[k] = str(v)
+            records.append(clean_r)
+        return records
+
     # 3. Extreme outliers investigation
-    # Top 10 prices
-    top_10_prices = df.nlargest(10, "price")[["id", "name", "property_type_name", "province_name", "district_name", "price", "area", "published_at"]].to_dict(orient="records")
-    top_10_areas = df.nlargest(10, "area")[["id", "name", "property_type_name", "province_name", "district_name", "price", "area", "published_at"]].to_dict(orient="records")
+    cols_to_extract = ["id", "name", "property_type_name", "province_name", "district_name", "ward_name", "price", "area", "published_at"]
+    # Available columns only
+    cols_available = [c for c in cols_to_extract if c in df.columns]
+
+    top_10_prices = extract_clean_records(df.nlargest(10, "price")[cols_available])
+    top_10_areas = extract_clean_records(df.nlargest(10, "area")[cols_available])
 
     # Min 10 prices (non-null)
-    min_10_prices = df[df["price"].notna()].nsmallest(10, "price")[["id", "name", "property_type_name", "province_name", "district_name", "price", "area", "published_at"]].to_dict(orient="records")
-    min_10_areas = df.nsmallest(10, "area")[["id", "name", "property_type_name", "province_name", "district_name", "price", "area", "published_at"]].to_dict(orient="records")
+    min_10_prices = extract_clean_records(df[df["price"].notna()].nsmallest(10, "price")[cols_available])
+    min_10_areas = extract_clean_records(df.nsmallest(10, "area")[cols_available])
 
     # 4. Statistical Impact: With vs Without Outliers
     # For price:
@@ -201,9 +221,26 @@ def main():
         }
     }
 
+    def sanitize_for_json(data):
+        if isinstance(data, dict):
+            return {k: sanitize_for_json(v) for k, v in data.items()}
+        elif isinstance(data, list):
+            return [sanitize_for_json(v) for v in data]
+        elif isinstance(data, (np.floating, float)):
+            if np.isnan(data) or np.isinf(data):
+                return None
+            return float(data)
+        elif isinstance(data, (np.integer, int)):
+            return int(data)
+        elif pd.isna(data) or data is None or str(data).lower() == "nan":
+            return None
+        return data
+
+    sanitized_report = sanitize_for_json(investigation_report)
+
     out_file = RESULTS_DIR / "quality_deep_investigation_500000.json"
     with open(out_file, "w", encoding="utf-8") as f:
-        json.dump(investigation_report, f, indent=2, ensure_ascii=False)
+        json.dump(sanitized_report, f, indent=2, ensure_ascii=False)
     print(f"[+] Saved quality investigation report to: {out_file}")
 
     print("\nSummary of findings:")

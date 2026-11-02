@@ -93,7 +93,7 @@ def main():
         "by_tier": category_counts,
         "live_postgresql_verified": True,
         "live_port": 5433,
-        "database_tested": "real_estate_test_db",
+        "database_tested": "ephemeral_isolated_db (real_estate_qa_e2e_<uuid>)",
         "tests_detail": tests_detail
     }
 

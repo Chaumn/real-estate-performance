@@ -162,3 +162,23 @@ def test_report_markdown_no_stale_statistics():
 
     if errors:
         pytest.fail(f"Found {len(errors)} stale statistical/query errors in report:\n" + "\n".join(errors))
+
+
+def test_report_no_stale_checksums():
+    """Verify that report markdown files do not contain stale checksums."""
+    stale_hashes = [
+        "11bc4fe13aafbcbb8be177b94dbba221199a4fe9963f2766dc8257ee7a89849b",
+        "84eabf931d8d87d00fef07e60fa0d6a2f8c5b3c59cf6b8f52fe6305a41755106",
+        "9ba1afe8ce7edbf6f6df615822be88dd33fca401a4e1564aa6a56e0767e3a89e",
+    ]
+    exempt_files = {"academic_review.md"}
+    errors = []
+    for f in REPORT_DIR.glob("*.md"):
+        if f.name in exempt_files:
+            continue
+        content = f.read_text(encoding="utf-8")
+        for bad_h in stale_hashes:
+            if bad_h in content:
+                errors.append(f"{f.name}: Found stale checksum '{bad_h}'")
+    assert not errors, f"Stale checksums found:\n" + "\n".join(errors)
+

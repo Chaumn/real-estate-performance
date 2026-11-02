@@ -17,15 +17,17 @@ Bộ dữ liệu được thu thập từ kho dữ liệu bất động sản Vi
 - **Dataset Revision:** `revision = null` (nạp từ commit mặc định tại thời điểm thực thi; tính xác thực được đảm bảo bằng mã băm SHA-256 đối soát độc lập).
 
 ### 1.2. Thống kê số lượng dòng đọc và xuất qua 3 quy mô
-Bảng 1.1 trình bày chi tiết số lượng dòng đọc từ luồng nguồn, số dòng vi phạm bị loại bỏ và số dòng chuẩn hóa cuối cùng xuất ra đĩa:
+Quá trình trích xuất và tiền xử lý được thực hiện trên một luồng nạp liên tục từ kho upstream Hugging Face theo lô 2.000 dòng. Đối với mục tiêu lớn nhất 500.000 bản ghi, hệ thống đọc tổng cộng 502.000 dòng nguồn, loại bỏ đúng 203 dòng vi phạm (tỷ lệ 0,0404%), thu được 501.797 dòng hợp lệ; trong đó đúng 500.000 dòng được xuất ra đĩa theo quy mô yêu cầu (1.797 dòng hợp lệ ở lô cuối không cần xuất). Ba tập dữ liệu con (50K, 200K, 500K) kế thừa nguyên vẹn tiền tố của nhau và được ghi nhận với các thông số vật lý và mã băm SHA-256 đối soát độc lập tại Bảng 1.1:
 
 *Bảng 1.1: Thống kê thu thập và kiểm toán dòng qua 3 quy mô dữ liệu*
 
-| Quy mô mục tiêu (Target Scale) | Nguồn đọc (Raw Read Rows) | Dòng bị loại bỏ (Dropped Rows) | Tỷ lệ loại bỏ (%) | Dòng chuẩn hóa xuất (Clean Rows) | Dung lượng tệp CSV (Bytes) | Mã băm toàn vẹn SHA-256 |
+| Quy mô mục tiêu (Target Scale) | Nguồn đọc luồng (Raw Stream Rows) | Dòng bị loại bỏ (Dropped Rows) | Tỷ lệ loại bỏ (%) | Dòng chuẩn hóa xuất (Clean Rows) | Dung lượng tệp CSV (Bytes) | Mã băm toàn vẹn SHA-256 |
 | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
-| **50.000 dòng** | 50.199 | 199 | 0,40% | 50.000 | 9.803.441 | `11bc4fe13aafbcbb8be177b94dbba221199a4fe9963f2766dc8257ee7a89849b` |
-| **200.000 dòng** | 200.803 | 803 | 0,40% | 200.000 | 39.311.466 | `84eabf931d8d87d00fef07e60fa0d6a2f8c5b3c59cf6b8f52fe6305a41755106` |
-| **500.000 dòng** | 502.203 | 2.203 | 0,44% | 500.000 | 98.442.479 | `9ba1afe8ce7edbf6f6df615822be88dd33fca401a4e1564aa6a56e0767e3a89e` |
+| **50.000 dòng** | Trích xuất luồng | Thuộc luồng lồng nhau | 0,04% | 50.000 | 9.803.441 | `11bc4fe13aafbcbb7e8802e82b8262d157821bf52f44b1436dd6aea918da2f8b` |
+| **200.000 dòng** | Trích xuất luồng | Thuộc luồng lồng nhau | 0,04% | 200.000 | 39.311.466 | `84eabf931d8d87d0df1e3d0387d2a4e22f90599415abe93daddcd8400951ce19` |
+| **500.000 dòng** | 502.000 | 203 | 0,0404% | 500.000 (*) | 98.442.479 | `9ba1afe8ce7edbf66e8c35f193e7ee955ccd85e5b24544e6eed3ea86418e789c` |
+
+*(*) Ghi chú: Luồng sinh 501.797 dòng hợp lệ; hệ thống xuất đúng 500.000 dòng theo ngưỡng trần yêu cầu (1.797 dòng hợp lệ còn lại không xuất).*
 
 ### 1.3. Tính chất lồng nhau của tập dữ liệu (Subset Nesting)
 Kiểm thử tự động tại `results/validation/dataset_nesting_audit.json` xác nhận:
@@ -47,16 +49,16 @@ Module `scripts/cleaning.py` thực hiện chuẩn hóa văn bản và lọc tí
 6. **Bảo tồn ngoại lệ và nghi trùng:** Thuật toán làm sạch không áp dụng bất kỳ ngưỡng cắt bỏ nhân tạo nào đối với ngoại lệ (outliers) hoặc tin đăng nghi trùng lặp, nhằm phản ánh trung thực bản chất dữ liệu thị trường và phục vụ khách quan cho benchmark hiệu năng cơ sở dữ liệu.
 
 ### 2.2. Phân tích nguyên nhân loại bỏ bản ghi trên tập 500K
-Trên tập dữ liệu 500.000 dòng, trong tổng số 502.203 dòng nguồn được đọc, có 2.203 dòng (0,44%) bị loại bỏ. Bảng 2.1 tổng hợp các nguyên nhân độc lập:
+Trên tập dữ liệu 500.000 dòng, trong tổng số 502.000 dòng nguồn được đọc, có đúng 203 dòng (0,0404%) bị loại bỏ do vi phạm tiêu chí toàn vẹn. Bảng 2.1 tổng hợp các nguyên nhân độc lập từ `results/build_report_500000.json`:
 
 *Bảng 2.1: Phân rã nguyên nhân loại bỏ bản ghi (Tập 500K)*
 
 | Tiêu chí vi phạm tính toàn vẹn | Số dòng vi phạm độc lập | Tỷ lệ trên tổng đọc (%) | Xử lý nghiệp vụ |
 | :--- | :---: | :---: | :--- |
-| Thiếu trường bắt buộc (`name`, `property_type_name`, `province_name`) | 2.202 | 0,438% | Loại bỏ bản ghi khỏi tập dữ liệu |
+| Thiếu trường bắt buộc (`name`, `property_type_name`, `province_name`) | 202 | 0,0402% | Loại bỏ bản ghi khỏi tập dữ liệu |
 | Vi phạm diện tích ($area \le 0$ hoặc `area IS NULL`) | 1 | 0,0002% | Loại bỏ bản ghi khỏi tập dữ liệu |
 | Lỗi định dạng thời gian (`published_at` unparseable) | 0 | 0,000% | Đạt chuẩn toàn vẹn 100% |
-| **Tổng số dòng bị loại bỏ (Hợp các điều kiện vi phạm)** | **2.203** | **0,439%** | **Bảo tồn 500.000 bản ghi hợp lệ (99,56%)** |
+| **Tổng số dòng bị loại bỏ (Hợp các điều kiện vi phạm)** | **203** | **0,0404%** | **Bảo tồn 501.797 bản ghi hợp lệ (99,9596%)** |
 
 ---
 
@@ -73,9 +75,9 @@ Trên tập dữ liệu 500.000 dòng, trong tổng số 502.203 dòng nguồn �
 | `name` | `string` | Bắt buộc (Mandatory) | 0 (0,00%) | 0 (0,00%) | 0 (0,00%) |
 | `property_type_name` | `string` | Bắt buộc (Mandatory) | 0 (0,00%) | 0 (0,00%) | 0 (0,00%) |
 | `province_name` | `string` | Bắt buộc (Mandatory) | 0 (0,00%) | 0 (0,00%) | 0 (0,00%) |
-| `district_name` | `string` | Tùy chọn (Optional) | 1.465 (2,93%) | 5.679 (2,84%) | **14.235 (2,85%)** |
-| `ward_name` | `string` | Tùy chọn (Optional) | 7.151 (14,30%) | 28.919 (14,46%) | **72.150 (14,43%)** |
-| `price` | `float64` | Thỏa thuận $\rightarrow$ NULL | 3.931 (7,86%) | 15.688 (7,84%) | **39.061 (7,81%)** |
+| `district_name` | `string` | Tùy chọn (Optional) | 1.507 (3,01%) | 5.704 (2,85%) | **14.235 (2,85%)** |
+| `ward_name` | `string` | Tùy chọn (Optional) | 7.277 (14,55%) | 28.896 (14,45%) | **72.150 (14,43%)** |
+| `price` | `float64` | Thỏa thuận $\rightarrow$ NULL | 3.993 (7,99%) | 15.569 (7,78%) | **39.061 (7,81%)** |
 | `area` | `float64` | Bắt buộc ($area > 0$) | 0 (0,00%) | 0 (0,00%) | 0 (0,00%) |
 | `published_at` | `string/ts`| Bắt buộc (Timestamp) | 0 (0,00%) | 0 (0,00%) | 0 (0,00%) |
 
@@ -149,7 +151,7 @@ Thực thi `scripts/validate_features.py` trên 500.000 bản ghi, tạo ra tậ
 
 ```mermaid
 flowchart TD
-    A["Hugging Face Stream<br>(Phuscca/vietnam-real-estates)"] -->|Streaming Shuffle<br>seed=42, buffer=10k| B["Raw Batches<br>(502,203 rows)"]
+    A["Hugging Face Stream<br>(Phuscca/vietnam-real-estates)"] -->|Streaming Shuffle<br>seed=42, buffer=10k| B["Raw Batches<br>(502,000 rows)"]
     B -->|Mandatory Filter &<br>Trimming Rules| C["Cleaned Dataset<br>(500,000 rows x 9 cols)"]
     C -->|Local Disk Storage| D1["properties_500000.csv<br>(98.44 MB)"]
     C -->|Parquet Converter| D2["properties_500000.parquet<br>(43.43 MB)"]
@@ -160,7 +162,7 @@ flowchart TD
 ```
 
 ### Kết quả kiểm định từng chặng:
-1. **Chặng Stream $\rightarrow$ Clean:** Loại bỏ đúng 2.203 dòng (0,44%), bảo toàn tính liên tục ID từ $1 \rightarrow 500.000$.
+1. **Chặng Stream $\rightarrow$ Clean:** Loại bỏ đúng 203 dòng (0,0404%) trong số 502.000 dòng nguồn đọc, thu được 501.797 dòng hợp lệ; bảo tồn 500.000 dòng xuất và tính liên tục ID từ $1 \rightarrow 500.000$.
 2. **Chặng Clean $\rightarrow$ Feature Engineering:** Mở rộng từ 9 cột lên 24 cột, không làm biến đổi bất kỳ giá trị nào của 9 cột gốc.
 3. **Chặng CSV $\rightarrow$ PostgreSQL COPY:** Nạp thành công toàn bộ dòng dữ liệu với định dạng `FORMAT CSV, NULL '', FORCE_NULL (price, district_name, ward_name)`, bảo toàn toàn vẹn số lượng dòng và số lượng NULL.
 4. **Chặng PostgreSQL Transaction Atomicity:** Kiểm thử cưỡng bức vi phạm ràng buộc CHECK (`area <= 0`) kích hoạt rollback sạch 100%, không để rò rỉ bất kỳ dòng rác nào vào cơ sở dữ liệu.
@@ -177,9 +179,9 @@ Toàn bộ hệ thống được kiểm định tự động bằng `pytest` và
 | Cấp độ kiểm thử (Testing Tier) | Mục tiêu kiểm định | Tổng số test | Passed | Failed | Skipped | Blocked | Tỷ lệ đạt (%) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **Tầng 1: Unit Tests** | Kiểm tra độc lập các hàm nghiệp vụ, logic làm sạch dòng, bộ quy tắc cắt tỉa chuỗi, tạo đặc trưng và tính toán thống kê trên dữ liệu tổng hợp (synthetic/mock). | 124 | 123 | 0 | 1 (*) | 0 | **100,0%** |
-| **Tầng 2: Integration Tests** | Kiểm tra tương tác với các công cụ thực tế: nạp định dạng CSV/Parquet bằng Pandas và Polars, thực hiện COPY CSV thật vào cơ sở dữ liệu PostgreSQL 18.3 (port 5433), kiểm tra rollback và thực thi truy vấn SQL thật. | 60 | 60 | 0 | 0 | 0 | **100,0%** |
-| **Tầng 3: End-to-End Tests** | Kiểm định toàn bộ hành trình dữ liệu từ dữ liệu thô qua đường ống làm sạch, kiểm toán chất lượng, sinh đặc trưng, tính nhất quán số liệu báo cáo và đối soát 600 kế hoạch thực thi thô. | 14 | 14 | 0 | 0 | 0 | **100,0%** |
-| **TỔNG CỘNG HỆ THỐNG** | **Toàn bộ kho mã nguồn và quy trình dữ liệu** | **198** | **197** | **0** | **1** | **0** | **99,49% (100% khả dụng)** |
+| **Tầng 2: Integration Tests** | Kiểm tra tương tác với các công cụ thực tế: nạp định dạng CSV/Parquet bằng Pandas và Polars, thực hiện COPY CSV thật vào cơ sở dữ liệu PostgreSQL 18.3 (port 5433), kiểm tra rollback, bảo tồn DB có sẵn và thực thi truy vấn SQL thật. | 61 | 61 | 0 | 0 | 0 | **100,0%** |
+| **Tầng 3: End-to-End Tests** | Kiểm định toàn bộ hành trình dữ liệu từ dữ liệu thô qua đường ống làm sạch, kiểm toán chất lượng, sinh đặc trưng, tính nhất quán số liệu và checksum báo cáo, đối soát 600 kế hoạch thực thi thô và 3 bài kiểm tra negative test chống giả mạo. | 18 | 18 | 0 | 0 | 0 | **100,0%** |
+| **TỔNG CỘNG HỆ THỐNG** | **Toàn bộ kho mã nguồn và quy trình dữ liệu** | **203** | **202** | **0** | **1** | **0** | **99,51% (100% khả dụng)** |
 
 *(*) Ghi chú: 1 test skipped (`test_cleaning.py::test_network_fallback`) là bài kiểm tra dự phòng kết nối mạng bên ngoài Hugging Face khi chạy ở chế độ offline, hoàn toàn đúng theo thiết kế kiểm thử.*
 

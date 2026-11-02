@@ -11,7 +11,7 @@
         "property_type_name": "Đất",
         "province_name": "Đồng Nai",
         "district_name": "Nhơn Trạch",
-        "ward_name": "nan",
+        "ward_name": null,
         "price": 2300000000.0,
         "area": 140.0,
         "published_at": "2025-09-09 04:44:23.873000"
@@ -22,7 +22,7 @@
         "property_type_name": "Đất",
         "province_name": "Đồng Nai",
         "district_name": "Nhơn Trạch",
-        "ward_name": "nan",
+        "ward_name": null,
         "price": 2300000000.0,
         "area": 140.0,
         "published_at": "2025-09-09 04:44:23.873000"
@@ -33,7 +33,7 @@
         "property_type_name": "Đất",
         "province_name": "Đồng Nai",
         "district_name": "Nhơn Trạch",
-        "ward_name": "nan",
+        "ward_name": null,
         "price": 2300000000.0,
         "area": 140.0,
         "published_at": "2025-09-09 04:44:23.873000"
@@ -63,6 +63,7 @@
         "property_type_name": "Đất",
         "province_name": "Cần Thơ",
         "district_name": "Cái Răng",
+        "ward_name": "Hưng Thạnh",
         "price": 920000000000000.0,
         "area": 244.8,
         "published_at": "2025-11-17 20:01:40.573000"
@@ -73,6 +74,7 @@
         "property_type_name": "Nhà",
         "province_name": "Hà Nội",
         "district_name": "Hai Bà Trưng",
+        "ward_name": "Bách Khoa",
         "price": 280280000000000.0,
         "area": 460.0,
         "published_at": "2025-12-08 23:48:49.098000"
@@ -83,6 +85,7 @@
         "property_type_name": "Đất",
         "province_name": "Hà Nội",
         "district_name": "Thạch Thất",
+        "ward_name": "Tiến Xuân",
         "price": 240000000000000.0,
         "area": 24000000.0,
         "published_at": "2025-11-11 12:05:04.283000"
@@ -93,6 +96,7 @@
         "property_type_name": "Nhà",
         "province_name": "Hà Nội",
         "district_name": "Long Biên",
+        "ward_name": "Đức Giang",
         "price": 150000000000000.0,
         "area": 315.0,
         "published_at": "2025-09-18 13:51:37.471000"
@@ -103,6 +107,7 @@
         "property_type_name": "Nhà",
         "province_name": "Hà Nội",
         "district_name": "Hai Bà Trưng",
+        "ward_name": "Nguyễn Du",
         "price": 130130000000000.0,
         "area": 176.0,
         "published_at": "2025-12-08 23:54:47.247000"
@@ -113,6 +118,7 @@
         "property_type_name": "Nhà",
         "province_name": "Hồ Chí Minh",
         "district_name": "1",
+        "ward_name": "Bến Nghé",
         "price": 105000000000000.0,
         "area": 180.0,
         "published_at": "2025-06-18 13:30:26.782000"
@@ -123,6 +129,7 @@
         "property_type_name": "Nhà",
         "province_name": "Hà Nội",
         "district_name": "Đống Đa",
+        "ward_name": "Ô Chợ Dừa",
         "price": 67999000000000.0,
         "area": 100.0,
         "published_at": "2025-12-28 19:52:05.181000"
@@ -133,6 +140,7 @@
         "property_type_name": "Căn hộ chung cư",
         "province_name": "Hồ Chí Minh",
         "district_name": "Thủ Đức",
+        "ward_name": "Thạnh Mỹ Lợi",
         "price": 61600000000000.0,
         "area": 2200.0,
         "published_at": "2025-09-10 17:24:50.249000"
@@ -143,6 +151,7 @@
         "property_type_name": "Đất",
         "province_name": "Long An",
         "district_name": "Đức Hòa",
+        "ward_name": null,
         "price": 55000000000000.0,
         "area": 10000000.0,
         "published_at": "2025-10-30 05:23:36.457000"
@@ -153,6 +162,7 @@
         "property_type_name": "Đất",
         "province_name": "Hồ Chí Minh",
         "district_name": "Hóc Môn",
+        "ward_name": "Xuân Thới Thượng",
         "price": 52800000000000.0,
         "area": 24000000.0,
         "published_at": "2025-06-03 03:25:48.476000"
@@ -165,6 +175,7 @@
         "property_type_name": "Đất",
         "province_name": "Hồ Chí Minh",
         "district_name": "Hóc Môn",
+        "ward_name": "Xuân Thới Thượng",
         "price": 52800000000000.0,
         "area": 24000000.0,
         "published_at": "2025-06-03 03:25:48.476000"
@@ -175,6 +186,7 @@
         "property_type_name": "Đất",
         "province_name": "Hà Nội",
         "district_name": "Thạch Thất",
+        "ward_name": "Tiến Xuân",
         "price": 240000000000000.0,
         "area": 24000000.0,
         "published_at": "2025-11-11 12:05:04.283000"
@@ -185,6 +197,7 @@
         "property_type_name": "Đất",
         "province_name": "Bình Thuận",
         "district_name": "Phan Thiết",
+        "ward_name": "Thiện Nghiệp",
         "price": 29317200000000.0,
         "area": 13326000.0,
         "published_at": "2025-12-12 06:28:39.203000"
@@ -195,6 +208,7 @@
         "property_type_name": "Đất",
         "province_name": "Long An",
         "district_name": "Đức Hòa",
+        "ward_name": null,
         "price": 55000000000000.0,
         "area": 10000000.0,
         "published_at": "2025-10-30 05:23:36.457000"
@@ -205,6 +219,7 @@
         "property_type_name": "Đất",
         "province_name": "Đồng Nai",
         "district_name": "Định Quán",
+        "ward_name": null,
         "price": 600000000.0,
         "area": 10000000.0,
         "published_at": "2025-09-13 02:21:57.866000"
@@ -215,6 +230,7 @@
         "property_type_name": "Đất",
         "province_name": "Bình Phước",
         "district_name": "Bù Đăng",
+        "ward_name": "Phước Sơn",
         "price": 230000000000.0,
         "area": 4530000.0,
         "published_at": "2025-10-01 10:34:58.486000"
@@ -225,6 +241,7 @@
         "property_type_name": "Đất",
         "province_name": "Hưng Yên",
         "district_name": "Kim Động",
+        "ward_name": "Chính Nghĩa",
         "price": 7722000000000.0,
         "area": 2250000.0,
         "published_at": "2025-09-12 09:54:34.254000"
@@ -235,6 +252,7 @@
         "property_type_name": "Đất",
         "province_name": "Gia Lai",
         "district_name": "Chư Sê",
+        "ward_name": "AYun",
         "price": 100240000000.0,
         "area": 1790000.0,
         "published_at": "2025-10-16 08:38:46.728000"
@@ -245,6 +263,7 @@
         "property_type_name": "Đất",
         "province_name": "Hải Phòng",
         "district_name": "Lê Chân",
+        "ward_name": "Vĩnh Niệm",
         "price": 2000000000000.0,
         "area": 1655579.0,
         "published_at": "2025-07-14 09:58:29.116000"
@@ -255,6 +274,7 @@
         "property_type_name": "Đất",
         "province_name": "Khánh Hòa",
         "district_name": "Vạn Ninh",
+        "ward_name": "Vạn Thắng",
         "price": 3500000000000.0,
         "area": 1000000.0,
         "published_at": "2025-09-19 16:29:39.157000"
@@ -267,6 +287,7 @@
         "property_type_name": "Đất",
         "province_name": "Hòa Bình",
         "district_name": "Lương Sơn",
+        "ward_name": "Cao Dương",
         "price": 1000.0,
         "area": 8227.0,
         "published_at": "2025-11-05 23:53:20.648000"
@@ -277,6 +298,7 @@
         "property_type_name": "Căn hộ chung cư",
         "province_name": "Hà Nội",
         "district_name": "Hoàng Mai",
+        "ward_name": "Yên Sở",
         "price": 6967.0,
         "area": 90.0,
         "published_at": "2025-12-04 15:26:31.260000"
@@ -287,6 +309,7 @@
         "property_type_name": "Biệt thự/Nhà liền kề",
         "province_name": "Kiên Giang",
         "district_name": "Phú Quốc",
+        "ward_name": null,
         "price": 18000.0,
         "area": 15300.0,
         "published_at": "2025-11-20 09:56:22.101000"
@@ -297,6 +320,7 @@
         "property_type_name": "Đất",
         "province_name": "Đắk Nông",
         "district_name": "Gia Nghĩa",
+        "ward_name": "Đăk R'Moan",
         "price": 100000.0,
         "area": 9913.0,
         "published_at": "2025-11-08 11:48:34.842000"
@@ -307,6 +331,7 @@
         "property_type_name": "Đất",
         "province_name": "Khánh Hòa",
         "district_name": "Ninh Hòa",
+        "ward_name": "Ninh Thân",
         "price": 199000.0,
         "area": 98.8,
         "published_at": "2025-07-02 11:17:37.700000"
@@ -317,6 +342,7 @@
         "property_type_name": "Đất",
         "province_name": "Hà Nam",
         "district_name": "Bình Lục",
+        "ward_name": "Bồ Đề",
         "price": 300000.0,
         "area": 82.0,
         "published_at": "2025-06-04 09:49:11.283000"
@@ -327,6 +353,7 @@
         "property_type_name": "Đất",
         "province_name": "An Giang",
         "district_name": "An Phú",
+        "ward_name": "Đa Phước",
         "price": 330000.0,
         "area": 5071.0,
         "published_at": "2025-11-08 19:46:32.406000"
@@ -337,6 +364,7 @@
         "property_type_name": "Đất",
         "province_name": "Đắk Lắk",
         "district_name": "Buôn Ma Thuột",
+        "ward_name": null,
         "price": 399000.0,
         "area": 768.0,
         "published_at": "2025-11-28 13:27:31.550000"
@@ -347,6 +375,7 @@
         "property_type_name": "Đất",
         "province_name": "Hà Nam",
         "district_name": "Bình Lục",
+        "ward_name": "Bồ Đề",
         "price": 400000.0,
         "area": 60.0,
         "published_at": "2025-08-23 08:31:31.010000"
@@ -357,6 +386,7 @@
         "property_type_name": "Đất",
         "province_name": "Thái Bình",
         "district_name": "Thái Thụy",
+        "ward_name": "Tân Học",
         "price": 500000.0,
         "area": 110.0,
         "published_at": "2025-11-10 19:07:55.018000"
@@ -369,6 +399,7 @@
         "property_type_name": "Đất",
         "province_name": "Bình Phước",
         "district_name": "Bình Long",
+        "ward_name": "Thanh Phú",
         "price": 1600000000.0,
         "area": 3.156,
         "published_at": "2025-06-10 13:39:20.947000"
@@ -379,6 +410,7 @@
         "property_type_name": "Đất",
         "province_name": "Phú Thọ",
         "district_name": "Phù Ninh",
+        "ward_name": "Trung Giáp",
         "price": 75000000.0,
         "area": 3.339,
         "published_at": "2025-07-31 16:17:37.927000"
@@ -389,6 +421,7 @@
         "property_type_name": "Nhà",
         "province_name": "Hà Nội",
         "district_name": "Bắc Từ Liêm",
+        "ward_name": "Phú Diễn",
         "price": 15900000000.0,
         "area": 3.4,
         "published_at": "2025-12-07 03:16:32.134000"
@@ -399,6 +432,7 @@
         "property_type_name": "Đất",
         "province_name": "Đồng Nai",
         "district_name": "Vĩnh Cửu",
+        "ward_name": "Bình Lợi",
         "price": 8000000000.0,
         "area": 3.505,
         "published_at": "2025-09-10 01:35:31.057000"
@@ -409,6 +443,7 @@
         "property_type_name": "Nhà",
         "province_name": "Hà Nội",
         "district_name": "Hoài Đức",
+        "ward_name": "An Khánh",
         "price": 11900000000.0,
         "area": 3.7,
         "published_at": "2025-08-05 06:10:14.960000"
@@ -419,6 +454,7 @@
         "property_type_name": "Nhà",
         "province_name": "Hồ Chí Minh",
         "district_name": "8",
+        "ward_name": "16",
         "price": 175000000000.0,
         "area": 3.756,
         "published_at": "2025-08-29 17:59:44.605000"
@@ -429,6 +465,7 @@
         "property_type_name": "Căn hộ chung cư",
         "province_name": "Hà Nội",
         "district_name": "Nam Từ Liêm",
+        "ward_name": "Tây Mỗ",
         "price": 4120000000.0,
         "area": 3.88,
         "published_at": "2025-10-06 12:41:02.233000"
@@ -439,7 +476,8 @@
         "property_type_name": "Nhà",
         "province_name": "Hà Nội",
         "district_name": "Hoàng Mai",
-        "price": NaN,
+        "ward_name": "Tương Mai",
+        "price": null,
         "area": 4.0,
         "published_at": "2025-12-07 11:53:43.997000"
       },
@@ -449,6 +487,7 @@
         "property_type_name": "Đất",
         "province_name": "Đồng Nai",
         "district_name": "Long Thành",
+        "ward_name": "Tân Hiệp",
         "price": 100000000.0,
         "area": 4.0,
         "published_at": "2025-08-27 09:29:43.145000"
@@ -459,6 +498,7 @@
         "property_type_name": "Đất",
         "province_name": "Long An",
         "district_name": "Cần Giuộc",
+        "ward_name": null,
         "price": 99000000.0,
         "area": 4.0,
         "published_at": "2025-11-03 21:03:14.733000"

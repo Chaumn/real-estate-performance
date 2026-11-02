@@ -1,8 +1,8 @@
 {
-  "timestamp": "2026-11-03T00:43:27.992772",
-  "total_collected": 198,
+  "timestamp": "2026-11-03T01:48:35.428238",
+  "total_collected": 203,
   "overall_status": "ALL_PASSED",
-  "total_passed": 197,
+  "total_passed": 202,
   "total_failed": 0,
   "total_skipped": 1,
   "by_tier": {
@@ -13,21 +13,21 @@
       "total": 124
     },
     "Integration": {
-      "passed": 60,
+      "passed": 61,
       "failed": 0,
       "skipped": 0,
-      "total": 60
+      "total": 61
     },
     "End-to-End": {
-      "passed": 14,
+      "passed": 18,
       "failed": 0,
       "skipped": 0,
-      "total": 14
+      "total": 18
     }
   },
   "live_postgresql_verified": true,
   "live_port": 5433,
-  "database_tested": "real_estate_test_db",
+  "database_tested": "ephemeral_isolated_db (real_estate_qa_e2e_<uuid>)",
   "tests_detail": [
     {
       "nodeid": "tests/test_analyze_results.py::test_load_benchmark_csv",
@@ -56,6 +56,21 @@
     },
     {
       "nodeid": "tests/test_benchmark_evidence.py::test_raw_manifest_completeness",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_evidence.py::test_tamper_detection_negative",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_evidence.py::test_corrupted_plan_syntax_negative",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_evidence.py::test_sort_node_injection_negative",
       "category": "End-to-End",
       "status": "PASSED"
     },
@@ -975,6 +990,11 @@
       "status": "PASSED"
     },
     {
+      "nodeid": "tests/test_live_postgresql_e2e.py::test_preexisting_databases_preserved",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
       "nodeid": "tests/test_pipeline.py::test_step_build_datasets_skips_when_files_present",
       "category": "End-to-End",
       "status": "PASSED"
@@ -1016,6 +1036,11 @@
     },
     {
       "nodeid": "tests/test_report_statistics_consistency.py::test_report_markdown_no_stale_statistics",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_report_statistics_consistency.py::test_report_no_stale_checksums",
       "category": "End-to-End",
       "status": "PASSED"
     }

@@ -26,16 +26,16 @@ Ma trận chứng tích này thiết lập mối liên kết truy vết khoa h�
 1. **Bộ dữ liệu chuẩn hóa (Local Artifacts & Manifest):**
    - Lưu trữ cục bộ tại data/processed/ (được đưa vào .gitignore do tổng dung lượng ~147 MB; kiểm toán chi tiết tại [
 eport/dataset_manifest.json](report/dataset_manifest.json)):
-     * data/processed/properties_50000.csv (9 thuộc tính, 50.000 dòng, 9.803.441 bytes, SHA-256: 11bc4fe13aafbcbb8be177b94dbba221199a4fe9963f2766dc8257ee7a89849b)
-     * data/processed/properties_200000.csv (9 thuộc tính, 200.000 dòng, 39.311.466 bytes, SHA-256: 84eabf931d8d87d00fef07e60fa0d6a2f8c5b3c59cf6b8f52fe6305a41755106)
-     * data/processed/properties_500000.csv (9 thuộc tính, 500.000 dòng, 98.442.479 bytes, SHA-256: 9ba1afe8ce7edbf6f6df615822be88dd33fca401a4e1564aa6a56e0767e3a89e)
+     * data/processed/properties_50000.csv (9 thuộc tính, 50.000 dòng, 9.803.441 bytes, SHA-256: 11bc4fe13aafbcbb7e8802e82b8262d157821bf52f44b1436dd6aea918da2f8b)
+     * data/processed/properties_200000.csv (9 thuộc tính, 200.000 dòng, 39.311.466 bytes, SHA-256: 84eabf931d8d87d0df1e3d0387d2a4e22f90599415abe93daddcd8400951ce19)
+     * data/processed/properties_500000.csv (9 thuộc tính, 500.000 dòng, 98.442.479 bytes, SHA-256: 9ba1afe8ce7edbf66e8c35f193e7ee955ccd85e5b24544e6eed3ea86418e789c)
    - Báo cáo thu thập và làm sạch: [
-esults/build_report_500000.json](results/build_report_500000.json) (SHA-256: 945cb5ce56b627931f6d33a69622d1df9ee3a7e584ec6be99499ad11e54917a1)
+esults/build_report_500000.json](results/build_report_500000.json) (SHA-256: 3710732705f1a1b5d6a64c45fe64f3badfd4db02689fcda046c910cfae8d55bb)
    - Quy trình tái lập: thực thi python scripts/build_large_dataset.py từ kho nguồn Hugging Face Phuscca/vietnam-real-estates.
 
 2. **Bằng chứng Benchmark PostgreSQL (600 tệp JSON kế hoạch thực thi thô):**
    - Vị trí lưu trữ cục bộ: 
-esults/benchmark/raw/{scale}/{scale}_{config_id}_run_{run_index}.json
+esults/benchmark/raw/{scale}_{config_id}_run{run_index:02d}.json
    - Đóng gói bằng chứng độc lập: [
 esults/benchmark/benchmark_raw_plans.zip](results/benchmark/benchmark_raw_plans.zip) (504.366 bytes, SHA-256: 262ed49431c0a4c758ad638dd253726273119acf27a23ca20997cec477677753)
    - Bảng kê toàn vẹn: [

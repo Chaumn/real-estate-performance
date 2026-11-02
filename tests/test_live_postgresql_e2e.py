@@ -31,11 +31,12 @@ if str(PROJECT_ROOT) not in sys.path:
 from scripts.cleaning import clean_dataframe
 from scripts.feature_engineering import compute_features
 
+import uuid
 PG_HOST = "127.0.0.1"
 PG_PORT = 5433
 PG_USER = "postgres"
 ADMIN_DB = "postgres"
-TEST_DB = "real_estate_test_db"
+TEST_DB = f"real_estate_qa_e2e_{uuid.uuid4().hex[:8]}"
 CSV_50K = PROJECT_ROOT / "data" / "processed" / "properties_50000.csv"
 SCHEMA_SQL_PATH = PROJECT_ROOT / "sql" / "schema.sql"
 
@@ -56,19 +57,17 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.fixture(scope="module")
 def setup_test_database():
-    """Create isolated test database and tear down after tests."""
-    # Connect to admin db to create test db
+    """Create isolated ephemeral test database without dropping any pre-existing databases."""
     admin_conn = psycopg.connect(
         host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=ADMIN_DB, autocommit=True
     )
     with admin_conn.cursor() as cur:
-        # Terminate existing connections to test db if any
-        cur.execute(sql.SQL("""
-            SELECT pg_terminate_backend(pid)
-            FROM pg_stat_activity
-            WHERE datname = {} AND pid <> pg_backend_pid()
-        """).format(sql.Literal(TEST_DB)))
-        cur.execute(sql.SQL("DROP DATABASE IF EXISTS {}").format(sql.Identifier(TEST_DB)))
+        # Safety check: ensure we do NOT drop or overwrite any pre-existing database
+        cur.execute("SELECT 1 FROM pg_database WHERE datname = %s", (TEST_DB,))
+        if cur.fetchone():
+            raise RuntimeError(f"Database {TEST_DB} already exists! Refusing to overwrite existing database.")
+        
+        # Create fresh ephemeral test database
         cur.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(TEST_DB)))
     admin_conn.close()
 
@@ -84,7 +83,7 @@ def setup_test_database():
 
     yield TEST_DB
 
-    # Teardown: drop test database
+    # Teardown: ONLY drop the ephemeral test database created in this session
     try:
         admin_conn = psycopg.connect(
             host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=ADMIN_DB, autocommit=True
@@ -98,7 +97,7 @@ def setup_test_database():
             cur.execute(sql.SQL("DROP DATABASE IF EXISTS {}").format(sql.Identifier(TEST_DB)))
         admin_conn.close()
     except Exception as e:
-        print(f"Warning during test db teardown: {e}")
+        print(f"Warning during ephemeral test db teardown: {e}")
 
 
 def test_live_postgres_version(setup_test_database):
@@ -310,3 +309,14 @@ def test_end_to_end_smoke_pipeline():
     assert enriched.loc[0, "price_per_m2"] == 15000000000 / 85.5
     assert pd.isna(enriched.loc[1, "price_per_m2"])
     assert enriched.loc[1, "price_segment"] == "Thỏa thuận"
+
+
+def test_preexisting_databases_preserved(setup_test_database):
+    """Verify that existing system databases are preserved and never dropped."""
+    with psycopg.connect(host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=ADMIN_DB) as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT datname FROM pg_database;")
+            dbs = [row[0] for row in cur.fetchall()]
+            assert "postgres" in dbs, "Default 'postgres' database must exist"
+            assert setup_test_database in dbs, "Ephemeral test database must exist during test"
+

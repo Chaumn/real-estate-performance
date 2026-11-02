@@ -30,7 +30,8 @@
     "all_600_valid_json": true,
     "q2_baseline_has_sort": true,
     "q2_indexed_sort_eliminated": true,
-    "all_sha256_match_manifest": true
+    "all_sha256_match_manifest": true,
+    "negative_tests_passed": true
   },
   "plans": {
     "200000_Q1_baseline_run01.json": {
