@@ -15,10 +15,10 @@
 
 <br><br><br>
 
-**Sinh viên thực hiện:** Daniel Chau & Nhóm nghiên cứu  
-**Mã sinh viên:** B21DCDT...  
+**Sinh viên thực hiện:** [Cần điền: Họ và tên sinh viên thực hiện]  
+**Mã sinh viên:** [Cần điền: Mã sinh viên / Lớp chuyên ngành]  
 **Chuyên ngành:** Khoa học Dữ liệu & Hệ thống Thông tin  
-**Giảng viên hướng dẫn:** TS. Giảng viên phụ trách môn học  
+**Giảng viên hướng dẫn:** [Cần điền: Học hàm, học vị và Họ tên Giảng viên hướng dẫn]  
 
 <br><br><br>
 
@@ -470,7 +470,7 @@ Bộ dữ liệu thực nghiệm được thu thập từ kho lưu trữ mã ngu
 ### 3.1.2. Tính xác định và Giới hạn của Dataset Revision
 Trong các nghiên cứu thực nghiệm khoa học dữ liệu, tính tái lập là một tiêu chí then chốt. Quy trình nạp luồng của đề tài được cố định với giá trị `seed = 42`, `buffer_size = 10,000` và `batch_size = 2,000`. 
 
-Tuy nhiên, về mặt phương pháp luận, cần làm rõ một giới hạn quan trọng: trong báo cáo trích xuất thực tế ([`results/build_report_500000.json`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/build_report_500000.json)), trường `revision` được ghi nhận ở trạng thái `null` do thư viện nạp từ commit mặc định của kho lưu trữ nguồn tại thời điểm chạy. Do đó, tính tái lập hoàn toàn của tập dữ liệu phụ thuộc vào giả định rằng kho dữ liệu upstream `Phuscca/vietnam-real-estates` trên Hugging Face không bị chỉnh sửa hoặc ghi đè lịch sử commit. Để đảm bảo tính độc lập và khả năng tái lập trong tương lai, toàn bộ ba tập dữ liệu CSV chuẩn hóa đã trích xuất (50K, 200K, 500K) được lưu trữ trực tiếp trong repository kèm mã băm SHA-256 đối soát.
+Tuy nhiên, về mặt phương pháp luận, cần làm rõ một giới hạn quan trọng: trong báo cáo trích xuất thực tế ([`results/build_report_500000.json`](results/build_report_500000.json)), trường `revision` được ghi nhận ở trạng thái `null` do thư viện nạp từ commit mặc định của kho lưu trữ nguồn tại thời điểm chạy. Do đó, tính tái lập hoàn toàn của tập dữ liệu phụ thuộc vào giả định rằng kho dữ liệu upstream `Phuscca/vietnam-real-estates` trên Hugging Face không bị chỉnh sửa hoặc ghi đè lịch sử commit. Để đảm bảo tính minh bạch và khả năng tái lập trong tương lai, toàn bộ ba tập dữ liệu CSV chuẩn hóa đã trích xuất (50K, 200K, 500K) được lưu trữ cục bộ trong thư mục `data/processed/` (được đưa vào `.gitignore` để tránh phình kích thước kho lưu trữ Git do tổng dung lượng vượt quá 147 MB). Danh mục kiểm toán định danh, số dòng, kích thước byte chính xác và mã băm SHA-256 đối soát của cả ba tập dữ liệu được công bố chi tiết tại tệp [`report/dataset_manifest.json`](report/dataset_manifest.json). Nghiên cứu cung cấp quy trình tái lập hoàn toàn tự động thông qua script `scripts/build_large_dataset.py`, cho phép người dùng độc lập tái tạo chính xác ba tập dữ liệu từ nguồn và kiểm tra đối soát mã băm.
 
 ---
 
@@ -505,7 +505,7 @@ Bảng 3.1 tổng hợp hợp đồng 9 thuộc tính chuẩn hóa cuối cùng 
 
 ## 3.3. Lược đồ cơ sở dữ liệu quan hệ trên PostgreSQL
 
-Cấu trúc bảng lưu trữ trong cơ sở dữ liệu PostgreSQL (`real_estate_db`) được thiết lập theo đúng tệp đặc tả chuẩn [`sql/schema.sql`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/sql/schema.sql):
+Cấu trúc bảng lưu trữ trong cơ sở dữ liệu PostgreSQL (`real_estate_db`) được thiết lập theo đúng tệp đặc tả chuẩn [`sql/schema.sql`](sql/schema.sql):
 
 ```sql
 CREATE TABLE IF NOT EXISTS public.properties (
@@ -537,7 +537,7 @@ Dữ liệu được nạp vào cơ sở dữ liệu thông qua giao thức truy
 > Các nội dung và số liệu trình bày trong Mục 3.4 này là kết quả kiểm toán hồ sơ dữ liệu (Data Profiling) và phân tích khám phá (Exploratory Data Analysis - EDA) trên tập dữ liệu chuẩn hóa 500.000 bản ghi nhằm đánh giá chất lượng và đặc trưng phân phối dữ liệu đầu vào (phục vụ RQ1). Đây hoàn toàn **không phải là kết quả đo đạc benchmark hiệu năng hệ thống** (kết quả benchmark hiệu năng nạp, xử lý DataFrame và truy vấn PostgreSQL được trình bày riêng tại Chương 5).
 
 ### 3.4.1. Thống kê khuyết thiếu và Kiểm toán nạp dòng
-Quá trình trích xuất và lọc dòng trên tập quy mô 500.000 bản ghi được ghi nhận chi tiết tại tệp [`results/build_report_500000.json`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/build_report_500000.json) và tổng hợp tại Bảng 3.2.
+Quá trình trích xuất và lọc dòng trên tập quy mô 500.000 bản ghi được ghi nhận chi tiết tại tệp [`results/build_report_500000.json`](results/build_report_500000.json) và tổng hợp tại Bảng 3.2.
 
 **Bảng 3.2: Kết quả kiểm toán quá trình thu thập và lọc dòng dữ liệu (500K)**
 
@@ -552,13 +552,13 @@ Quá trình trích xuất và lọc dòng trên tập quy mô 500.000 bản ghi 
 | **Số dòng hợp lệ dư dôi (`valid_rows_not_exported`)** | **1.797** | 0.36% | Dòng nằm trong batch cuối cùng sau khi đã đủ 500K |
 | **Tổng số bản ghi thực xuất (`exported_rows`)** | **500.000** | 99.60% | Tập dữ liệu chuẩn hóa phục vụ thực nghiệm |
 
-Kết quả phân tích kiểm toán chất lượng dữ liệu ([`results/quality/data_quality_report_500000.json`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/quality/data_quality_report_500000.json)) ghi nhận các tỷ lệ khuyết thiếu thực tế:
+Kết quả phân tích kiểm toán chất lượng dữ liệu ([`results/quality/data_quality_report_500000.json`](results/quality/data_quality_report_500000.json)) ghi nhận các tỷ lệ khuyết thiếu thực tế:
 - Sáu trường thông tin bắt buộc (`id`, `name`, `property_type_name`, `province_name`, `area`, `published_at`) đạt độ đầy đủ **100,00%** (0 bản ghi khuyết thiếu).
 - Trường `district_name` thiếu đúng **14.235 bản ghi** (chiếm **2,85%** tổng số hàng).
 - Trường `ward_name` thiếu đúng **72.150 bản ghi** (chiếm **14,43%** tổng số hàng).
 - Trường giá chào bán (`price`) thiếu đúng **39.061 bản ghi** (chiếm **7,81%** tổng số hàng), tương ứng với 460.939 tin đăng có giá bán cụ thể.
 
-![Tỷ lệ dữ liệu khuyết thiếu trên các thuộc tính bất động sản](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/eda/missing_values_bar.png)
+![Tỷ lệ dữ liệu khuyết thiếu trên các thuộc tính bất động sản](results/eda/missing_values_bar.png)
 *Hình 3.1: Tỷ lệ dữ liệu khuyết thiếu trên các thuộc tính bất động sản (500K bản ghi)*
 
 ### 3.4.2. Phân bố loại hình bất động sản và Địa bàn hành chính
@@ -569,7 +569,7 @@ Tập dữ liệu chuẩn hóa 500.000 bản ghi bao phủ 5 danh mục loại h
 4. **Biệt thự/Nhà liền kề:** 36.611 tin đăng (chiếm **7,32%**).
 5. **Shophouse:** 8.294 tin đăng (chiếm **1,66%**).
 
-![Phân bố số lượng tin đăng theo loại hình bất động sản](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/eda/property_type_count.png)
+![Phân bố số lượng tin đăng theo loại hình bất động sản](results/eda/property_type_count.png)
 *Hình 3.2: Phân bố số lượng tin đăng theo loại hình bất động sản*
 
 Về mặt phân bố địa lý hành chính, tập dữ liệu bao phủ toàn bộ 63 tỉnh/thành phố, 588 quận/huyện và 3.370 phường/xã trên toàn quốc. Các địa bàn có mật độ tin đăng tập trung lớn nhất:
@@ -586,7 +586,7 @@ Về mặt phân bố địa lý hành chính, tập dữ liệu bao phủ toàn
 
 Hai đại đô thị Hà Nội và TP. Hồ Chí Minh chiếm tổng cộng 71,37% toàn bộ tin đăng trong tập dữ liệu. Thành phố Hải Phòng có đúng 10.422 tin đăng (2,08%), tạo nên một tập con có độ chọn lọc vừa phải (selectivity $\approx 2,08\%$) để kiểm thử bài toán lọc đơn cột Q1. Quận Cầu Giấy (Hà Nội) là một trong những địa bàn có mật độ giao dịch dày đặc, được lựa chọn làm điều kiện lọc cho bài toán Q2.
 
-![Top các tỉnh/thành phố có mật độ tin đăng lớn nhất Việt Nam](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/eda/province_distribution.png)
+![Top các tỉnh/thành phố có mật độ tin đăng lớn nhất Việt Nam](results/eda/province_distribution.png)
 *Hình 3.3: Top các tỉnh/thành phố có mật độ tin đăng lớn nhất Việt Nam*
 
 ### 3.4.3. Thống kê mô tả định lượng vững (Robust Statistics)
@@ -611,25 +611,25 @@ Kết quả profiling chỉ ra rằng:
 - Trung vị giá chào bán là **7,40 tỷ VNĐ**, trong khi giá trị trung bình lên tới 20,78 tỷ VNĐ (lớn gấp 2,8 lần trung vị do sự xuất hiện của các ngoại lệ cực lớn). Khoảng tứ phân vị của giá bán dao động từ **4,10 tỷ VNĐ ($Q_1$) đến 14,30 tỷ VNĐ ($Q_3$)**, với $IQR = 10,20$ tỷ VNĐ.
 - Khoảng giá $Q_1 \rightarrow Q_3$ (4,10 tỷ đến 14,30 tỷ VNĐ) phản ánh phân khúc nhà ở giao dịch phổ biến nhất của thị trường, và đây chính là căn cứ thực nghiệm để thiết lập khoảng lọc giá `price BETWEEN 4100000000 AND 14300000000` trong bài toán benchmark Q2.
 
-![Phân bố giá chào bán bất động sản (Thang đo Logarithmic)](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/eda/price_distribution.png)
+![Phân bố giá chào bán bất động sản (Thang đo Logarithmic)](results/eda/price_distribution.png)
 *Hình 3.4: Phân bố giá chào bán bất động sản (Thang đo Logarithmic)*
 
-![Phân bố diện tích bất động sản (Thang đo Logarithmic)](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/eda/area_distribution.png)
+![Phân bố diện tích bất động sản (Thang đo Logarithmic)](results/eda/area_distribution.png)
 *Hình 3.5: Phân bố diện tích bất động sản (Thang đo Logarithmic)*
 
-![Phân bố giá chào bán theo từng loại hình bất động sản (Boxplot)](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/eda/price_by_property_type_boxplot.png)
+![Phân bố giá chào bán theo từng loại hình bất động sản (Boxplot)](results/eda/price_by_property_type_boxplot.png)
 *Hình 3.6: Phân bố giá chào bán theo từng loại hình bất động sản (Boxplot)*
 
-![Đơn giá chào bán trung vị (Triệu/m²) tại các địa phương trọng điểm](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/eda/price_per_m2_by_province.png)
+![Đơn giá chào bán trung vị (Triệu/m²) tại các địa phương trọng điểm](results/eda/price_per_m2_by_province.png)
 *Hình 3.7: Đơn giá chào bán trung vị (Triệu/m²) tại các địa phương trọng điểm*
 
-![Mật độ tương quan giữa giá và diện tích bất động sản (Hexbin Plot)](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/eda/price_vs_area_scatter.png)
+![Mật độ tương quan giữa giá và diện tích bất động sản (Hexbin Plot)](results/eda/price_vs_area_scatter.png)
 *Hình 3.8: Mật độ tương quan giữa giá và diện tích bất động sản (Hexbin Plot)*
 
 ### 3.4.4. Xu hướng thời gian và Phân tích tương quan Spearman
 Hình 3.9 khảo sát sự biến thiên của mật độ tin đăng theo trục thời gian `published_at`. Dòng dữ liệu trải dài liên tục từ năm 2023 đến hết năm 2025, phản ánh tính liên tục của các đợt cập nhật thông tin niêm yết trên thị trường.
 
-![Xu hướng số lượng tin đăng bất động sản theo thời gian đăng tin](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/eda/monthly_listings_trend.png)
+![Xu hướng số lượng tin đăng bất động sản theo thời gian đăng tin](results/eda/monthly_listings_trend.png)
 *Hình 3.9: Xu hướng số lượng tin đăng bất động sản theo thời gian đăng tin*
 
 Để đánh giá mức độ phụ thuộc giữa các biến số định lượng mà không bị chi phối bởi các ngoại lệ cực trị, nghiên cứu tính toán hệ số tương quan hạng Spearman ($\rho$):
@@ -637,7 +637,7 @@ Hình 3.9 khảo sát sự biến thiên của mật độ tin đăng theo trụ
 - Tương quan giữa Giá chào bán (`price`) và Đơn giá (`price_per_m2`): $\rho = 0,621$ (tương quan thuận khá chặt chẽ).
 - Tương quan giữa Diện tích (`area`) và Đơn giá (`price_per_m2`): $\rho = -0,182$ (tương quan nghịch nhẹ, phù hợp với quy luật kinh tế: bất động sản diện tích lớn thường có đơn giá trên mỗi mét vuông giảm nhẹ so với các bất động sản diện tích nhỏ).
 
-![Ma trận hệ số tương quan phi tuyến Spearman giữa các biến định lượng](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/eda/numeric_correlation_heatmap.png)
+![Ma trận hệ số tương quan phi tuyến Spearman giữa các biến định lượng](results/eda/numeric_correlation_heatmap.png)
 *Hình 3.10: Ma trận hệ số tương quan phi tuyến Spearman giữa các biến định lượng*
 
 ### 3.4.5. Kiểm toán bản ghi trùng lặp
@@ -857,7 +857,7 @@ Từ các kết quả kiểm toán hồ sơ dữ liệu (Data Profiling) và ph�
 
 ## 5.2. Hiệu năng xử lý dữ liệu với Pandas, Polars, CSV, Parquet và Chunked Processing (Trả lời RQ2)
 
-Bảng 5.1 tổng hợp số liệu đo đạc thực nghiệm từ tệp [`results/processing_benchmark/processing_benchmark.csv`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/processing_benchmark/processing_benchmark.csv) ghi nhận thời gian thực thi (trung vị, trung bình, độ lệch chuẩn) và tài nguyên bộ nhớ RAM (lấy mẫu RSS chu kỳ 1 ms) trên tập dữ liệu 500.000 bản ghi.
+Bảng 5.1 tổng hợp số liệu đo đạc thực nghiệm từ tệp [`results/processing_benchmark/processing_benchmark.csv`](results/processing_benchmark/processing_benchmark.csv) ghi nhận thời gian thực thi (trung vị, trung bình, độ lệch chuẩn) và tài nguyên bộ nhớ RAM (lấy mẫu RSS chu kỳ 1 ms) trên tập dữ liệu 500.000 bản ghi.
 
 **Bảng 5.1: Kết quả đo lường hiệu năng nạp và xử lý dữ liệu tiền kỳ (500.000 bản ghi)**
 
@@ -894,7 +894,7 @@ Polars đạt được hiệu năng này nhờ cơ chế thực thi song song t�
 ## 5.3. Đánh giá tối ưu hóa truy vấn PostgreSQL thông qua Q1 – Q4 (Trả lời RQ3)
 
 ### 5.3.1. Tổng quan bảng số liệu Benchmark qua 3 quy mô dữ liệu
-Quá trình đo đạc 600 lượt chạy trên PostgreSQL 18.3 đã thu thập đầy đủ số liệu kế hoạch thực thi. Bảng 5.2 trình bày kết quả trích xuất từ [`results/benchmark/benchmark_results.csv`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/benchmark_results.csv).
+Quá trình đo đạc 600 lượt chạy trên PostgreSQL 18.3 đã thu thập đầy đủ số liệu kế hoạch thực thi. Bảng 5.2 trình bày kết quả trích xuất từ [`results/benchmark/benchmark_results.csv`](results/benchmark/benchmark_results.csv).
 
 > [!NOTE]
 > Trong Bảng 5.2 và các phân tích tiếp theo, toàn bộ giá trị tại cột `Shared Hit Blocks` đại diện cho các lần truy cập trang dữ liệu (8 KB) được phục vụ trực tiếp từ vùng nhớ đệm **PostgreSQL Shared Buffers trong RAM** sau 3 lượt warm-up. Số lượng `Shared Read Blocks` (đọc vật lý từ đĩa) trong toàn bộ các phép đo chính thức đều ghi nhận bằng **0.0**, do kích thước dữ liệu ở cả ba quy mô đều nằm trọn vẹn trong vùng đệm của hệ quản trị cơ sở dữ liệu.
@@ -934,10 +934,10 @@ Quá trình đo đạc 600 lượt chạy trên PostgreSQL 18.3 đã thu thập 
 | 500.000 | `Q4_baseline` | Q4 | Seq Scan | Không | 0,00 MB | 63,278 ms | 3,097 ms | 60,540 ms | 142,209 ms | 12.824 blk | 1,00x |
 | 500.000 | `Q4_indexed` | Q4 | Seq Scan | `idx_properties_property_type` | 3,36 MB | 66,480 ms | 4,542 ms | 60,333 | 70,819 ms | 12.824 blk | 0,95x |
 
-![Thời gian thực thi trung vị theo quy mô dữ liệu của 4 bài toán truy vấn](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/analysis/execution_time_by_scale.png)
+![Thời gian thực thi trung vị theo quy mô dữ liệu của 4 bài toán truy vấn](results/benchmark/analysis/execution_time_by_scale.png)
 *Hình 5.1: Thời gian thực thi trung vị theo quy mô dữ liệu của 4 bài toán truy vấn*
 
-![So sánh hệ số tăng tốc (Speedup Factor) của các phương pháp tối ưu](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/analysis/speedup_comparison.png)
+![So sánh hệ số tăng tốc (Speedup Factor) của các phương pháp tối ưu](results/benchmark/analysis/speedup_comparison.png)
 *Hình 5.2: So sánh hệ số tăng tốc (Speedup Factor) của các phương pháp tối ưu*
 
 ### 5.3.2. Bài toán Q1: Hiệu quả của chỉ mục đơn cột và Chuyển đổi Bitmap Scan
@@ -1077,7 +1077,7 @@ Bảng 5.7 tổng hợp dung lượng vật lý thực tế của các chỉ m�
 | *Dung lượng bảng Heap dữ liệu gốc* | — | *9 thuộc tính bảng properties* | *~10,1 MB* | *~40,5 MB* | *~100,8 MB* | — |
 | **Tỷ lệ Tổng Index / Dung lượng Bảng Heap** | — | — | **46,3%** | **45,5%** | **45,6%** | — |
 
-![Chi phí phụ trội lưu trữ (Storage Overhead) của các chỉ mục B-tree](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/analysis/index_storage_overhead.png)
+![Chi phí phụ trội lưu trữ (Storage Overhead) của các chỉ mục B-tree](results/benchmark/analysis/index_storage_overhead.png)
 *Hình 5.3: Chi phí phụ trội lưu trữ (Storage Overhead) của các chỉ mục B-tree*
 
 > [!IMPORTANT]
@@ -1091,8 +1091,8 @@ Trong đó, chỉ mục Composite `(province_name, district_name, price, id)` ch
 ## 5.4. Tổng hợp đối chiếu và Ma trận chứng tích thực nghiệm
 
 Quá trình kiểm chứng đối chiếu khẳng định:
-1. **Kiểm toán 600 kế hoạch thực thi:** Toàn bộ 600 tệp JSON kế hoạch trong `results/benchmark/raw/` được tính toán mã băm SHA-256 lưu trữ tại [`results/benchmark/raw_manifest.json`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/raw_manifest.json). Script kiểm toán tự động [`scripts/verify_benchmark_evidence.py`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/scripts/verify_benchmark_evidence.py) xác nhận toàn bộ các tệp bằng chứng tồn tại đầy đủ, không bị can thiệp và khớp hoàn toàn với số liệu tổng hợp trong Bảng 5.2.
-2. **Kiểm thử tự động hồi quy:** Toàn bộ bộ kiểm thử gồm 182 test cases trong `tests/` vận hành ngoại tuyến và đạt trạng thái thông qua (181 passed, 1 skipped), đảm bảo tính toàn vẹn và tính nhất quán dữ liệu của toàn bộ nghiên cứu.
+1. **Kiểm toán 600 kế hoạch thực thi:** Toàn bộ 600 tệp JSON kế hoạch trong `results/benchmark/raw/` được tính toán mã băm SHA-256 lưu trữ tại [`results/benchmark/raw_manifest.json`](results/benchmark/raw_manifest.json). Script kiểm toán tự động [`scripts/verify_benchmark_evidence.py`](scripts/verify_benchmark_evidence.py) xác nhận toàn bộ các tệp bằng chứng tồn tại đầy đủ, không bị can thiệp và khớp hoàn toàn với số liệu tổng hợp trong Bảng 5.2.
+2. **Kiểm thử tự động hồi quy:** Toàn bộ bộ kiểm thử gồm 189 test cases trong `tests/` vận hành ngoại tuyến và đạt trạng thái thông qua (188 passed, 1 skipped), đảm bảo tính toàn vẹn và tính nhất quán dữ liệu của toàn bộ nghiên cứu.
 
 ---
 
@@ -1207,7 +1207,7 @@ Trong các giai đoạn nghiên cứu tiếp theo, đề tài có thể được
 
 ## Phụ lục A: Lược đồ DDL và Ràng buộc toàn vẹn cơ sở dữ liệu
 
-Tệp đặc tả cấu trúc bảng quan hệ [`sql/schema.sql`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/sql/schema.sql):
+Tệp đặc tả cấu trúc bảng quan hệ [`sql/schema.sql`](sql/schema.sql):
 
 ```sql
 CREATE TABLE IF NOT EXISTS public.properties (
@@ -1299,7 +1299,7 @@ ORDER BY total DESC;
 
 ## Phụ lục C: Bảng kê mã băm SHA-256 các tệp kế hoạch thực thi thô
 
-Toàn bộ 600 tệp JSON kế hoạch thực thi thô `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` được lưu trữ tại `results/benchmark/raw/{scale}/`. Bảng dưới đây trích dẫn một số mẫu mã băm SHA-256 từ tệp kiểm toán [`results/benchmark/raw_manifest.json`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/raw_manifest.json):
+Toàn bộ 600 tệp JSON kế hoạch thực thi thô `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` được lưu trữ tại `results/benchmark/raw/{scale}/`. Bảng dưới đây trích dẫn một số mẫu mã băm SHA-256 từ tệp kiểm toán [`results/benchmark/raw_manifest.json`](results/benchmark/raw_manifest.json):
 
 | Quy mô | Cấu hình | Lần chạy | Tên tệp kế hoạch JSON | Mã băm toàn vẹn SHA-256 (64 ký tự hex) |
 | :---: | :---: | :---: | :--- | :--- |

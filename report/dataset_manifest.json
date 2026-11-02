@@ -1,0 +1,135 @@
+{
+  "title": "Vietnam Real Estate Performance Benchmark Datasets",
+  "upstream_source": {
+    "repository": "https://huggingface.co/datasets/Phuscca/vietnam-real-estates",
+    "split": "train",
+    "streaming": true,
+    "revision": null,
+    "seed": 42,
+    "buffer_size": 10000,
+    "batch_size": 2000,
+    "license": "Apache-2.0 / CC-BY-4.0"
+  },
+  "storage_policy": {
+    "local_directory": "data/processed/",
+    "git_status": "gitignored via .gitignore (due to size > 140 MB)",
+    "reproducibility": "Deterministic generation via `python scripts/build_large_dataset.py`"
+  },
+  "nesting_property": "D_50K subset D_200K subset D_500K (exact row-level prefix match)",
+  "datasets": {
+    "50000": {
+      "scale": 50000,
+      "csv_filename": "properties_50000.csv",
+      "csv_size_bytes": 9803441,
+      "csv_sha256": "11bc4fe13aafbcbb7e8802e82b8262d157821bf52f44b1436dd6aea918da2f8b",
+      "parquet_filename": "properties_50000.parquet",
+      "parquet_size_bytes": 4513996,
+      "parquet_sha256": "a9ad29c2db3da83a2fe6e07c12a9d45705753d46c9f0b1fbd0db73534d2231bb",
+      "row_count": 50000,
+      "column_count": 9,
+      "columns": [
+        "id",
+        "name",
+        "property_type_name",
+        "province_name",
+        "district_name",
+        "ward_name",
+        "price",
+        "area",
+        "published_at"
+      ],
+      "id_min": 1,
+      "id_max": 50000,
+      "first_5_ids": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "last_5_ids": [
+        49996,
+        49997,
+        49998,
+        49999,
+        50000
+      ]
+    },
+    "200000": {
+      "scale": 200000,
+      "csv_filename": "properties_200000.csv",
+      "csv_size_bytes": 39311466,
+      "csv_sha256": "84eabf931d8d87d0df1e3d0387d2a4e22f90599415abe93daddcd8400951ce19",
+      "parquet_filename": "properties_200000.parquet",
+      "parquet_size_bytes": 17590006,
+      "parquet_sha256": "70f04d650cfbc51acaa56d53167169cb597d00106f4c913b75840f48270378d4",
+      "row_count": 200000,
+      "column_count": 9,
+      "columns": [
+        "id",
+        "name",
+        "property_type_name",
+        "province_name",
+        "district_name",
+        "ward_name",
+        "price",
+        "area",
+        "published_at"
+      ],
+      "id_min": 1,
+      "id_max": 200000,
+      "first_5_ids": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "last_5_ids": [
+        199996,
+        199997,
+        199998,
+        199999,
+        200000
+      ]
+    },
+    "500000": {
+      "scale": 500000,
+      "csv_filename": "properties_500000.csv",
+      "csv_size_bytes": 98442479,
+      "csv_sha256": "9ba1afe8ce7edbf66e8c35f193e7ee955ccd85e5b24544e6eed3ea86418e789c",
+      "parquet_filename": "properties_500000.parquet",
+      "parquet_size_bytes": 43430082,
+      "parquet_sha256": "e11cdf45597df9e728b307c96dd741a6c38622a2f2a1361d597e326b6887fc94",
+      "row_count": 500000,
+      "column_count": 9,
+      "columns": [
+        "id",
+        "name",
+        "property_type_name",
+        "province_name",
+        "district_name",
+        "ward_name",
+        "price",
+        "area",
+        "published_at"
+      ],
+      "id_min": 1,
+      "id_max": 500000,
+      "first_5_ids": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "last_5_ids": [
+        499996,
+        499997,
+        499998,
+        499999,
+        500000
+      ]
+    }
+  }
+}

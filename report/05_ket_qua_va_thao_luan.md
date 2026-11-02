@@ -23,7 +23,7 @@ Từ các kết quả kiểm toán hồ sơ dữ liệu (Data Profiling) và ph�
 
 ## 5.2. Hiệu năng xử lý dữ liệu với Pandas, Polars, CSV, Parquet và Chunked Processing (Trả lời RQ2)
 
-Bảng 5.1 tổng hợp số liệu đo đạc thực nghiệm từ tệp [`results/processing_benchmark/processing_benchmark.csv`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/processing_benchmark/processing_benchmark.csv) ghi nhận thời gian thực thi (trung vị, trung bình, độ lệch chuẩn) và tài nguyên bộ nhớ RAM (lấy mẫu RSS chu kỳ 1 ms) trên tập dữ liệu 500.000 bản ghi.
+Bảng 5.1 tổng hợp số liệu đo đạc thực nghiệm từ tệp [`results/processing_benchmark/processing_benchmark.csv`](results/processing_benchmark/processing_benchmark.csv) ghi nhận thời gian thực thi (trung vị, trung bình, độ lệch chuẩn) và tài nguyên bộ nhớ RAM (lấy mẫu RSS chu kỳ 1 ms) trên tập dữ liệu 500.000 bản ghi.
 
 **Bảng 5.1: Kết quả đo lường hiệu năng nạp và xử lý dữ liệu tiền kỳ (500.000 bản ghi)**
 
@@ -60,7 +60,7 @@ Polars đạt được hiệu năng này nhờ cơ chế thực thi song song t�
 ## 5.3. Đánh giá tối ưu hóa truy vấn PostgreSQL thông qua Q1 – Q4 (Trả lời RQ3)
 
 ### 5.3.1. Tổng quan bảng số liệu Benchmark qua 3 quy mô dữ liệu
-Quá trình đo đạc 600 lượt chạy trên PostgreSQL 18.3 đã thu thập đầy đủ số liệu kế hoạch thực thi. Bảng 5.2 trình bày kết quả trích xuất từ [`results/benchmark/benchmark_results.csv`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/benchmark_results.csv).
+Quá trình đo đạc 600 lượt chạy trên PostgreSQL 18.3 đã thu thập đầy đủ số liệu kế hoạch thực thi. Bảng 5.2 trình bày kết quả trích xuất từ [`results/benchmark/benchmark_results.csv`](results/benchmark/benchmark_results.csv).
 
 > [!NOTE]
 > Trong Bảng 5.2 và các phân tích tiếp theo, toàn bộ giá trị tại cột `Shared Hit Blocks` đại diện cho các lần truy cập trang dữ liệu (8 KB) được phục vụ trực tiếp từ vùng nhớ đệm **PostgreSQL Shared Buffers trong RAM** sau 3 lượt warm-up. Số lượng `Shared Read Blocks` (đọc vật lý từ đĩa) trong toàn bộ các phép đo chính thức đều ghi nhận bằng **0.0**, do kích thước dữ liệu ở cả ba quy mô đều nằm trọn vẹn trong vùng đệm của hệ quản trị cơ sở dữ liệu.
@@ -100,10 +100,10 @@ Quá trình đo đạc 600 lượt chạy trên PostgreSQL 18.3 đã thu thập 
 | 500.000 | `Q4_baseline` | Q4 | Seq Scan | Không | 0,00 MB | 63,278 ms | 3,097 ms | 60,540 ms | 142,209 ms | 12.824 blk | 1,00x |
 | 500.000 | `Q4_indexed` | Q4 | Seq Scan | `idx_properties_property_type` | 3,36 MB | 66,480 ms | 4,542 ms | 60,333 | 70,819 ms | 12.824 blk | 0,95x |
 
-![Thời gian thực thi trung vị theo quy mô dữ liệu của 4 bài toán truy vấn](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/analysis/execution_time_by_scale.png)
+![Thời gian thực thi trung vị theo quy mô dữ liệu của 4 bài toán truy vấn](results/benchmark/analysis/execution_time_by_scale.png)
 *Hình 5.1: Thời gian thực thi trung vị theo quy mô dữ liệu của 4 bài toán truy vấn*
 
-![So sánh hệ số tăng tốc (Speedup Factor) của các phương pháp tối ưu](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/analysis/speedup_comparison.png)
+![So sánh hệ số tăng tốc (Speedup Factor) của các phương pháp tối ưu](results/benchmark/analysis/speedup_comparison.png)
 *Hình 5.2: So sánh hệ số tăng tốc (Speedup Factor) của các phương pháp tối ưu*
 
 ### 5.3.2. Bài toán Q1: Hiệu quả của chỉ mục đơn cột và Chuyển đổi Bitmap Scan
@@ -243,7 +243,7 @@ Bảng 5.7 tổng hợp dung lượng vật lý thực tế của các chỉ m�
 | *Dung lượng bảng Heap dữ liệu gốc* | — | *9 thuộc tính bảng properties* | *~10,1 MB* | *~40,5 MB* | *~100,8 MB* | — |
 | **Tỷ lệ Tổng Index / Dung lượng Bảng Heap** | — | — | **46,3%** | **45,5%** | **45,6%** | — |
 
-![Chi phí phụ trội lưu trữ (Storage Overhead) của các chỉ mục B-tree](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/analysis/index_storage_overhead.png)
+![Chi phí phụ trội lưu trữ (Storage Overhead) của các chỉ mục B-tree](results/benchmark/analysis/index_storage_overhead.png)
 *Hình 5.3: Chi phí phụ trội lưu trữ (Storage Overhead) của các chỉ mục B-tree*
 
 > [!IMPORTANT]
@@ -257,6 +257,6 @@ Trong đó, chỉ mục Composite `(province_name, district_name, price, id)` ch
 ## 5.4. Tổng hợp đối chiếu và Ma trận chứng tích thực nghiệm
 
 Quá trình kiểm chứng đối chiếu khẳng định:
-1. **Kiểm toán 600 kế hoạch thực thi:** Toàn bộ 600 tệp JSON kế hoạch trong `results/benchmark/raw/` được tính toán mã băm SHA-256 lưu trữ tại [`results/benchmark/raw_manifest.json`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/raw_manifest.json). Script kiểm toán tự động [`scripts/verify_benchmark_evidence.py`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/scripts/verify_benchmark_evidence.py) xác nhận toàn bộ các tệp bằng chứng tồn tại đầy đủ, không bị can thiệp và khớp hoàn toàn với số liệu tổng hợp trong Bảng 5.2.
-2. **Kiểm thử tự động hồi quy:** Toàn bộ bộ kiểm thử gồm 182 test cases trong `tests/` vận hành ngoại tuyến và đạt trạng thái thông qua (181 passed, 1 skipped), đảm bảo tính toàn vẹn và tính nhất quán dữ liệu của toàn bộ nghiên cứu.
+1. **Kiểm toán 600 kế hoạch thực thi:** Toàn bộ 600 tệp JSON kế hoạch trong `results/benchmark/raw/` được tính toán mã băm SHA-256 lưu trữ tại [`results/benchmark/raw_manifest.json`](results/benchmark/raw_manifest.json). Script kiểm toán tự động [`scripts/verify_benchmark_evidence.py`](scripts/verify_benchmark_evidence.py) xác nhận toàn bộ các tệp bằng chứng tồn tại đầy đủ, không bị can thiệp và khớp hoàn toàn với số liệu tổng hợp trong Bảng 5.2.
+2. **Kiểm thử tự động hồi quy:** Toàn bộ bộ kiểm thử gồm 189 test cases trong `tests/` vận hành ngoại tuyến và đạt trạng thái thông qua (188 passed, 1 skipped), đảm bảo tính toàn vẹn và tính nhất quán dữ liệu của toàn bộ nghiên cứu.
 

@@ -2,7 +2,7 @@
 
 ## Phụ lục A: Lược đồ DDL và Ràng buộc toàn vẹn cơ sở dữ liệu
 
-Tệp đặc tả cấu trúc bảng quan hệ [`sql/schema.sql`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/sql/schema.sql):
+Tệp đặc tả cấu trúc bảng quan hệ [`sql/schema.sql`](sql/schema.sql):
 
 ```sql
 CREATE TABLE IF NOT EXISTS public.properties (
@@ -94,7 +94,7 @@ ORDER BY total DESC;
 
 ## Phụ lục C: Bảng kê mã băm SHA-256 các tệp kế hoạch thực thi thô
 
-Toàn bộ 600 tệp JSON kế hoạch thực thi thô `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` được lưu trữ tại `results/benchmark/raw/{scale}/`. Bảng dưới đây trích dẫn một số mẫu mã băm SHA-256 từ tệp kiểm toán [`results/benchmark/raw_manifest.json`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/results/benchmark/raw_manifest.json):
+Toàn bộ 600 tệp JSON kế hoạch thực thi thô `EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)` được lưu trữ tại `results/benchmark/raw/{scale}/`. Bảng dưới đây trích dẫn một số mẫu mã băm SHA-256 từ tệp kiểm toán [`results/benchmark/raw_manifest.json`](results/benchmark/raw_manifest.json):
 
 | Quy mô | Cấu hình | Lần chạy | Tên tệp kế hoạch JSON | Mã băm toàn vẹn SHA-256 (64 ký tự hex) |
 | :---: | :---: | :---: | :--- | :--- |

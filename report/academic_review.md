@@ -74,11 +74,11 @@ Tác giả đã làm rõ phương pháp luận: Con số **46,02 MB** (chiếm 4
 
 ### PHẦN 3: THẨM ĐỊNH CHẤT LƯỢNG XUẤT BẢN WORD (.DOCX)
 
-Script xuất bản [`report/export_docx.py`](file:///d:/Documents/PTIT%20DOC/IDS/real-estate-performance/report/export_docx.py) đã được nâng cấp toàn diện:
+Script xuất bản [`report/export_docx.py`](report/export_docx.py) đã được nâng cấp toàn diện:
 1. **Word Heading Styles thực sự:** Sử dụng các style chuẩn (`Heading 1`, `Heading 2`, `Heading 3`, `Heading 4`) giúp tài liệu tương thích hoàn toàn với tính năng Navigation Pane và cho phép mục lục (TOC) tự động cập nhật được trong Microsoft Word.
 2. **Chèn hình ảnh thực tế:** Toàn bộ 13 biểu đồ được trích dẫn trong văn bản (10 hình tại Chương 3 và 3 hình tại Chương 5) đều được đọc trực tiếp từ tệp ảnh nguồn trong repository và chèn vào văn bản với chú thích hình ảnh đặt ở phía dưới căn giữa.
 3. **Bố cục bảng biểu:** Tiêu đề bảng được đặt ở phía trên bảng; bảng được định dạng viền kẻ rõ ràng, lặp lại hàng tiêu đề khi ngắt trang, tô màu thanh lịch và không bị tràn lề A4.
-4. **Chuẩn hóa công thức toán học và làm sạch văn bản:** Toàn bộ cú pháp KaTeX (`$...$`, `$$...$$`, `\text{...}`) được chuyển đổi sang định dạng ký hiệu toán học sạch sẽ; loại bỏ hoàn toàn các thẻ HTML `<br>`, các liên kết cục bộ `file:///d:/...` trong tệp Word xuất ra.
+4. **Chuẩn hóa công thức toán học và làm sạch văn bản:** Toàn bộ cú pháp KaTeX (`$...$`, `$$...$$`, `\text{...}`) được chuyển đổi sang định dạng ký hiệu toán học sạch sẽ; loại bỏ hoàn toàn các thẻ HTML `<br>`, các liên kết cục bộ `...` trong tệp Word xuất ra.
 5. **Trang bìa và Thông tin học thuật:** Bố cục trang bìa học thuật chuẩn theo quy chuẩn Học viện Công nghệ Bưu chính Viễn thông; thông tin sinh viên và giảng viên được giữ ở dạng định danh trang trọng, không bịa đặt tùy tiện.
 
 ---

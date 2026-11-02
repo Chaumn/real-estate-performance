@@ -15,10 +15,10 @@
 
 <br><br><br>
 
-**Sinh viên thực hiện:** Daniel Chau & Nhóm nghiên cứu  
-**Mã sinh viên:** B21DCDT...  
+**Sinh viên thực hiện:** [Cần điền: Họ và tên sinh viên thực hiện]  
+**Mã sinh viên:** [Cần điền: Mã sinh viên / Lớp chuyên ngành]  
 **Chuyên ngành:** Khoa học Dữ liệu & Hệ thống Thông tin  
-**Giảng viên hướng dẫn:** TS. Giảng viên phụ trách môn học  
+**Giảng viên hướng dẫn:** [Cần điền: Học hàm, học vị và Họ tên Giảng viên hướng dẫn]  
 
 <br><br><br>
 
