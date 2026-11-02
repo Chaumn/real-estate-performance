@@ -8,62 +8,72 @@
 
 ## 1. Tổng Quan & Cấu Trúc Khuyết Thiếu
 
-Bộ dữ liệu chứa 500,000 bản ghi bất động sản thực tế tại Việt Nam với 9 trường thông tin cốt lõi:
+Bộ dữ liệu chứa 500,000 bản ghi tin đăng bất động sản tại Việt Nam với 9 trường thông tin:
 
-| Thuộc Tính | Số Bản Ghi Hợp Lệ | Số Lượng Thiếu | Tỷ Lệ Thiếu (%) | Nhận Định Khoa Học Dữ Liệu |
+| Thuộc Tính | Số Bản Ghi Đầy Đủ | Số Lượng Thiếu | Tỷ Lệ Thiếu (%) | Nhận Định Dữ Liệu Thực Tế |
 |---|---:|---:|---:|---|
-| `id` | 500,000 | 0 | 0.00% | Định danh đơn điệu tăng (1 đến 500,000) |
-| `name` | 500,000 | 0 | 0.00% | Tiêu đề tin đăng nguyên vẹn, giữ dấu tiếng Việt |
-| `property_type_name` | 500,000 | 0 | 0.00% | Phân loại bất động sản chuẩn hóa 100% |
-| `province_name` | 500,000 | 0 | 0.00% | Địa phương cấp tỉnh/thành, không có giá trị khuyết |
-| `district_name` | 485,765 | 14,235 | 2.85% | Khuyết nhẹ do tin đăng chỉ ghi chung tỉnh |
-| `ward_name` | 427,850 | 72,150 | 14.43% | Tỷ lệ thiếu tự nhiên ở khu vực ngoại thành/tỉnh xa |
-| `price` | 460,939 | 39,061 | 7.81% | Tin đăng "Giá thỏa thuận" |
-| `area` | 500,000 | 0 | 0.00% | 100% diện tích > 0 m² |
+| `id` | 500,000 | 0 | 0.00% | Mã định danh đơn điệu tăng từ 1 đến 500,000 |
+| `name` | 500,000 | 0 | 0.00% | Tiêu đề tin đăng nguyên bản, bảo toàn byte tiếng Việt |
+| `property_type_name` | 500,000 | 0 | 0.00% | 5 loại hình: Nhà, Đất, Căn hộ chung cư, Biệt thự/Nhà liền kề, Shophouse |
+| `province_name` | 500,000 | 0 | 0.00% | Địa phương cấp tỉnh/thành phố, 100% bản ghi có giá trị |
+| `district_name` | 485,765 | 14,235 | 2.85% | Khuyết thiếu do một số tin đăng chỉ ghi nhận địa giới cấp tỉnh |
+| `ward_name` | 427,850 | 72,150 | 14.43% | Tỷ lệ khuyết thiếu tự nhiên ở khu vực ngoại thành hoặc chưa phân định |
+| `price` | 460,939 | 39,061 | 7.81% | Giá niêm yết (asking price); bản ghi thiếu tương ứng tin đăng "Giá thỏa thuận" |
+| `area` | 500,000 | 0 | 0.00% | Diện tích bắt buộc dương ($> 0\text{ m}^2$) |
 | `published_at` | 500,000 | 0 | 0.00% | Mốc thời gian ISO8601 chuẩn xác |
 
 ![Biểu đồ tỷ lệ dữ liệu khuyết thiếu](../results/eda/missing_values_bar.png)
+
+> [!NOTE]
+> Giá trị cột `price` phản ánh **giá chào bán niêm yết** của người đăng tin, không đồng nhất với giá trị giao dịch thực tế đã công chứng. Khoảng 7.81% tin đăng để trống giá (thỏa thuận) được giữ nguyên dạng `NULL` để phục vụ các truy vấn kiểm tra điều kiện lọc.
 
 ---
 
 ## 2. Phân Tích Đơn Biến (Univariate Analysis)
 
-### 2.1. Phân Bố Giá Bán (`price`)
-- **Tứ phân vị & Trung vị:** $Q_1 = 4.1$ tỷ VNĐ, Trung vị ($P_{50}$) = $7.4$ tỷ VNĐ, $Q_3 = 14.3$ tỷ VNĐ.
-- **Giá trị ngoại vi:** Phân vị $P_{95} = 47.0$ tỷ VNĐ, $P_{99} = 130.0$ tỷ VNĐ. Giá trị trung bình đạt $20.78$ tỷ VNĐ.
-- **Hình dạng phân phối:** Phân phối lệch phải cực mạnh (Extreme Right-skewed Distribution) với hiện tượng đuôi dài (Fat Tail). Sự chênh lệch lớn giữa Trung vị (7.4 tỷ) và Trung bình (20.78 tỷ) khẳng định ảnh hưởng của một nhóm nhỏ bất động sản thương mại, tòa văn phòng và biệt thự nghỉ dưỡng có giá trị hàng trăm đến hàng nghìn tỷ đồng.
-- Khi chuyển đổi sang không gian $\log_{10}(\text{price})$, phân phối tiệm cận dạng phân phối chuẩn (log-normal distribution), rất lý tưởng cho các mô hình học máy và phân vùng khoảng giá (Range Partitioning).
+### 2.1. Phân Bố Giá Chào Bán (`price`)
+- **Tứ phân vị & Trung vị:** $Q_1 = 4.10$ tỷ VNĐ, Trung vị ($P_{50}$) = $7.40$ tỷ VNĐ, $Q_3 = 14.30$ tỷ VNĐ.
+- **Khoảng tứ phân vị ($IQR$):** $IQR = Q_3 - Q_1 = 10.20$ tỷ VNĐ.
+- **Giá trị ngoại vi:** $P_{95} = 47.00$ tỷ VNĐ, $P_{99} = 130.00$ tỷ VNĐ. Giá trị trung bình đạt $20.78$ tỷ VNĐ.
+- **Hình dạng phân phối:** Phân phối lệch phải rõ rệt (Right-skewed). Khoảng cách giữa Trung vị ($7.4$ tỷ) và Trung bình ($20.78$ tỷ) phản ánh sự xuất hiện của các bất động sản giá trị cao (tòa nhà văn phòng, biệt thự dự án lớn, lô đất quy mô lớn) kéo dài về phía đuôi phải.
+- Biểu đồ thang đo $\log_{10}(\text{price})$ thể hiện hình thái tiệm cận phân phối chuẩn log-normal.
 
 ![Phân bố giá bán](../results/eda/price_distribution.png)
 
 ### 2.2. Phân Bố Diện Tích (`area`)
-- **Tứ phân vị & Trung vị:** $Q_1 = 55.9$ m², Trung vị ($P_{50}$) = $80.0$ m², $Q_3 = 120.0$ m².
-- **Giá trị ngoại vi:** $P_{95} = 388.0$ m², $P_{99} = 2,229.0$ m².
-- **Hình dạng phân phối:** Tập trung mật độ cao nhất trong phân khúc nhà ở đô thị từ $40\text{ m}^2$ đến $100\text{ m}^2$. Các bản ghi diện tích lớn ($> 1,000\text{ m}^2$) chủ yếu là đất trang trại, đất nuôi trồng thủy sản, hoặc đất dự án khu công nghiệp.
+- **Tứ phân vị & Trung vị:** $Q_1 = 55.90\text{ m}^2$, Trung vị ($P_{50}$) = $80.00\text{ m}^2$, $Q_3 = 120.00\text{ m}^2$.
+- **Khoảng tứ phân vị ($IQR$):** $IQR = 64.10\text{ m}^2$.
+- **Giá trị ngoại vi:** $P_{95} = 388.00\text{ m}^2$, $P_{99} = 2,229.01\text{ m}^2$.
+- **Hình dạng phân phối:** Mật độ tập trung cao nhất nằm trong khoảng $40 - 120\text{ m}^2$ (phù hợp với quy mô nhà ở dân dụng phổ thông). Các diện tích lớn ($> 1,000\text{ m}^2$) chủ yếu là đất trang trại hoặc đất dự án.
 
 ![Phân bố diện tích](../results/eda/area_distribution.png)
 
 ### 2.3. Cơ Cấu Phân Loại Bất Động Sản (`property_type_name`)
-- **Nhà riêng:** Chiếm tỷ trọng áp đảo với $218,063$ tin đăng (~43.6%).
-- **Đất:** Đứng thứ hai với $109,624$ tin đăng (~21.9%).
-- **Căn hộ chung cư:** Đạt $92,971$ tin đăng (~18.6%).
-- **Biệt thự / Nhà liền kề:** Chiếm $33,056$ tin đăng (~6.6%).
-- **Shophouse và các loại khác:** Chiếm tỷ trọng còn lại.
+Tổng thể 500,000 bản ghi gồm 5 nhóm loại hình:
+
+| Loại Bất Động Sản | Tổng Số Tin Đăng | Tỷ Trọng (%) | Số Tin Có Giá Cụ Thể | Số Tin Giá Thỏa Thuận (NULL) |
+|---|---:|---:|---:|---:|
+| **Nhà** | 230,412 | 46.08% | 218,063 | 12,349 |
+| **Đất** | 120,576 | 24.12% | 109,624 | 10,952 |
+| **Căn hộ chung cư** | 104,107 | 20.82% | 92,971 | 11,136 |
+| **Biệt thự/Nhà liền kề** | 36,611 | 7.32% | 33,056 | 3,555 |
+| **Shophouse** | 8,294 | 1.66% | 7,225 | 1,069 |
+| **Tổng cộng** | **500,000** | **100.00%** | **460,939** | **39,061** |
 
 ![Cơ cấu loại bất động sản](../results/eda/property_type_count.png)
 
 ### 2.4. Phân Bố Địa Bàn Hành Chính (`province_name`)
-- Thị trường bất động sản Việt Nam tập trung mật độ cực lớn tại hai đầu tàu kinh tế:
-  1. **Thành phố Hà Nội:** Đứng đầu về lượng tin đăng.
-  2. **Thành phố Hồ Chí Minh:** Đứng thứ hai.
-  3. Các tỉnh thành lân cận và đô thị vệ tinh: Đà Nẵng, Bình Dương, Đồng Nai, Hải Phòng, Khánh Hòa, Bà Rịa - Vũng Tàu.
-- **Ý nghĩa kỹ thuật hệ thống:** Tỷ lệ lọc (selectivity) của bộ lọc `province_name = 'Thành phố Hà Nội'` hoặc `'Thành phố Hồ Chí Minh'` thường trả về từ 20% đến 35% toàn bảng. Do đó, chỉ mục đơn cột B-tree trên `province_name` sẽ quyết định giữa `Index Scan` và `Bitmap Index Scan`, minh chứng trực tiếp cho bài toán thực nghiệm Q1.
+- Hai địa phương chiếm khối lượng tin đăng lớn nhất:
+  1. **Hồ Chí Minh:** 186,698 tin đăng (37.34%).
+  2. **Hà Nội:** 170,167 tin đăng (34.03%).
+  3. Các địa phương tiếp theo: Đà Nẵng (25,772 tin), Bình Dương (21,399 tin), Khánh Hòa (13,893 tin), Hải Phòng (10,422 tin - chiếm 2.08%).
+- **Ý nghĩa với Benchmark SQL:** Lọc `province_name = 'Hải Phòng'` trong bài toán Q1 có độ chọn lọc $\approx 2.08\%$, là tỷ lệ chọn lọc thấp điển hình nơi B-tree đơn cột thể hiện rõ ưu thế so với quét toàn bảng (Sequential Scan).
 
 ![Top 15 tỉnh thành](../results/eda/province_distribution.png)
 
 ### 2.5. Xu Hướng Tin Đăng Theo Thời Gian (`published_at`)
-- Số lượng tin đăng duy trì liên tục qua các tháng, với các nhịp tăng trưởng rõ nét vào giai đoạn giữa năm và cuối năm (chu kỳ giao dịch bất động sản truyền thống).
-- Định dạng thời gian đạt chuẩn ISO8601 giúp truy vấn sắp xếp `ORDER BY published_at DESC LIMIT 50` hoạt động hiệu quả khi kết hợp trong Composite Index (bài toán Q2).
+- Chuỗi thời gian đăng tin trải đều qua các tháng thu thập với dữ liệu chuẩn định dạng ISO8601.
+- Mốc thời gian này được sử dụng trực tiếp trong bài toán Q3 để đánh giá ảnh hưởng của việc viết lại truy vấn lọc ngày sargable.
 
 ![Xu hướng tin đăng theo tháng](../results/eda/monthly_listings_trend.png)
 
@@ -71,45 +81,46 @@ Bộ dữ liệu chứa 500,000 bản ghi bất động sản thực tế tại 
 
 ## 3. Phân Tích Hai Biến & Đa Biến (Bivariate & Multivariate Analysis)
 
-### 3.1. Quan Hệ Giữa Diện Tích và Giá Bán
-- Biểu đồ mật độ Hexbin (Log Density) cho thấy cụm tập trung dày đặc nhất ở khu vực diện tích $40 - 120\text{ m}^2$ và khoảng giá $3 - 15$ tỷ VNĐ.
-- Đường hồi quy tuyến tính xác nhận mối quan hệ tương quan đồng biến: diện tích càng lớn, giá trị tổng thể càng tăng. Tuy nhiên, góc nghiêng của đường hồi quy phẳng dần ở các diện tích siêu lớn ($> 500\text{ m}^2$) do các bất động sản này thường là đất nông nghiệp/vùng ven với đơn giá trên m² thấp hơn nhiều so với nhà phố trung tâm.
+### 3.1. Mối Quan Hệ Giữa Diện Tích và Giá Chào Bán
+- Biểu đồ mật độ Hexbin thể hiện cụm tập trung dày đặc nhất ở khu vực diện tích $40 - 120\text{ m}^2$ với giá từ $3 - 15$ tỷ VNĐ.
+- Xu hướng tương quan đồng biến: bất động sản có diện tích lớn hơn nhìn chung có giá chào bán cao hơn, tuy nhiên độ phân tán tăng dần ở các quy mô diện tích lớn do vị trí địa lý khác nhau.
 
 ![Mối quan hệ diện tích và giá](../results/eda/price_vs_area_scatter.png)
 
-### 3.2. So Sánh Mức Giá Theo Loại Hình Bất Động Sản
-- **Biệt thự / Nhà liền kề:** Có mức trung vị giá cao nhất thị trường (~19.5 tỷ VNĐ), biên độ dao động rộng.
-- **Shophouse:** Trung vị ~9.5 tỷ VNĐ, phản ánh giá trị thương mại cao tại các trục phố lớn hoặc khu đô thị mới.
-- **Nhà riêng:** Trung vị ~8.9 tỷ VNĐ.
-- **Căn hộ chung cư:** Mức giá có độ phân tán hẹp hơn nhiều (Trung vị ~4.85 tỷ VNĐ), phản ánh phân khúc sản phẩm chuẩn hóa của các dự án thương mại.
-- **Đất:** Trung vị ~4.45 tỷ VNĐ, nhưng độ trải IQR rộng nhất do đất nội đô giá rất cao trong khi đất vùng ven giá rẻ.
+### 3.2. Mức Giá Theo Từng Loại Hình Bất Động Sản
+Dựa trên 460,939 bản ghi có giá cụ thể:
+- **Biệt thự/Nhà liền kề:** Trung vị giá cao nhất (~19.5 tỷ VNĐ), biên độ dao động rộng.
+- **Shophouse:** Trung vị ~9.5 tỷ VNĐ.
+- **Nhà:** Trung vị ~8.9 tỷ VNĐ.
+- **Căn hộ chung cư:** Trung vị ~4.85 tỷ VNĐ, phân bố tập trung tương đối ổn định.
+- **Đất:** Trung vị ~4.45 tỷ VNĐ, độ trải IQR lớn giữa đất đô thị và đất ngoại thành.
 
 ![Boxplot giá theo loại bất động sản](../results/eda/price_by_property_type_boxplot.png)
 
-### 3.3. Xếp Hạng Đơn Giá (Triệu VNĐ/m²) Theo Tỉnh Thành
-- **Hà Nội & TP. Hồ Chí Minh:** Dẫn đầu về đơn giá trung vị trên mét vuông (dao động từ $90 - 150$ triệu VNĐ/m² đối với các khu vực trung tâm).
-- **Đà Nẵng & Khánh Hòa (Nha Trang):** Tiếp theo trong phân khúc đô thị du lịch biển ($45 - 75$ triệu VNĐ/m²).
-- **Bình Dương & Đồng Nai:** Phân khúc công nghiệp - đô thị vệ tinh giữ mức đơn giá cân bằng ($25 - 45$ triệu VNĐ/m²).
+### 3.3. Trung Vị Đơn Giá (Triệu VNĐ/m²) Theo Tỉnh Thành
+- **Hà Nội & Hồ Chí Minh:** Giữ mức trung vị đơn giá trên mỗi mét vuông cao nhất trong nhóm khảo sát.
+- **Đà Nẵng & Khánh Hòa:** Giữ vị trí tiếp theo trong nhóm các tỉnh thành đô thị - du lịch ven biển.
+- **Bình Dương & Đồng Nai:** Phân khúc đô thị vệ tinh - công nghiệp với đơn giá bình quân phù hợp mức thu nhập lao động.
 
 ![Đơn giá trung vị theo tỉnh thành](../results/eda/price_per_m2_by_province.png)
 
-### 3.4. Ma Trận Tương Quan Thứ Hạng (Spearman Rank Correlation)
-- Sử dụng tương quan hạng Spearman để loại bỏ tác động nhiễu của ngoại lệ cực trị:
-  - $\text{corr}(\text{area}, \text{price}) = +0.58$: Tương quan thuận mạnh mẽ.
-  - $\text{corr}(\text{area}, \text{price\_per\_m2}) = -0.32$: Tương quan nghịch nhẹ (hiện tượng diện tích càng lớn thì đơn giá mỗi m² có xu hướng thấp đi, phổ biến trong kinh tế học đất đai).
-  - Tương quan giữa giá và các thành phần thời gian (`month`, `year`) ở mức tiệm cận 0, chứng minh tập dữ liệu phân bố đều đặn và không bị thiên lệch theo ngày tháng thu thập.
+### 3.4. Ma Trận Tương Quan Thứ Hạng Spearman
+- Sử dụng hệ số tương quan thứ hạng Spearman nhằm hạn chế ảnh hưởng của giá trị cực trị:
+  - $\text{corr}(\text{area}, \text{price}) = +0.58$: Tương quan thuận ở mức vừa phải (không khẳng định quan hệ nhân quả duy nhất).
+  - $\text{corr}(\text{area}, \text{price\_per\_m2}) = -0.32$: Tương quan nghịch nhẹ (các bất động sản diện tích rất lớn như trang trại thường có đơn giá mỗi mét vuông thấp hơn đất nhà phố nội đô).
+  - Tương quan giữa giá và các thành phần thời gian (`published_month`, `published_year`) tiệm cận 0.
 
 ![Ma trận tương quan Spearman](../results/eda/numeric_correlation_heatmap.png)
 
 ---
 
-## 4. Tác Động Của Kết Quả EDA Tới Thiết Kế Tối Ưu PostgreSQL
+## 4. Đối Chiếu Kết Quả EDA Với Thiết Kế Benchmark SQL
 
-1. **Thiết kế Composite Index cho Q2:**
-   - Bộ lọc địa phương `province_name = 'Thành phố Hà Nội'` kết hợp lọc khoảng giá `price BETWEEN 2000000000 AND 5000000000` và sắp xếp thời gian `ORDER BY published_at DESC LIMIT 50`.
-   - Kết quả EDA cho thấy khoảng giá 2 - 5 tỷ chiếm ~25% thị phần và Hà Nội chiếm ~35% thị phần. Một Composite Index `(province_name, price, published_at)` sẽ cho phép PostgreSQL thực hiện **Index Condition Pushdown** và loại bỏ toàn bộ bước `Sort` trên đĩa (Top-N heapsort).
-2. **Kỹ thuật Query Rewriting cho Q3:**
-   - Bất động sản có diện tích $50 - 100\text{ m}^2$ chiếm hơn 60% dữ liệu. Việc tối ưu truy vấn đếm và trích xuất danh sách phân trang qua Query Rewriting phân biệt rõ ràng giữa việc quét Sequential Scan và sử dụng Index Scan.
-3. **Hiện tượng suy hao hiệu năng của Index trong Q4 (Aggregation Control):**
-   - Với phép tính tổng hợp `AVG(price)` và `COUNT(*)` trên toàn bộ một nhóm danh mục bất động sản, việc quét tuần tự qua bảng (Sequential Scan) tận dụng cơ chế đọc song song (Parallel Sequential Scan) của PostgreSQL thường **nhanh hơn đáng kể** so với việc truy xuất ngẫu nhiên hàng chục nghìn trang qua Index Scan. Kết quả EDA khẳng định tính quy luật khoa học của hiện tượng này.
+Bảng đối chiếu giữa hiện trạng phân bố dữ liệu và cấu hình thực tế của 4 bài toán benchmark:
 
+| Bài Toán | Truy Vấn SQL Nghiệm Thu Thực Tế | Chỉ Mục Tương Ứng | Đối Chiếu Với Phân Bố Dữ Liệu |
+|---|---|---|---|
+| **Q1 — Single-column Index** | `WHERE province_name = 'Hải Phòng'` | `ON properties USING btree (province_name)` | Hải Phòng có 10,422 dòng (selectivity 2.08%). B-Tree index giúp PostgreSQL quét trực tiếp 2.08% dữ liệu thay vì Sequential Scan toàn bảng 500K dòng. |
+| **Q2 — Composite Index** | `WHERE province_name = 'Hà Nội' AND district_name = 'Cầu Giấy' AND price BETWEEN 4100000000 AND 14300000000 ORDER BY price ASC, id ASC LIMIT 20` | `ON properties USING btree (province_name, district_name, price, id)` | Khoảng giá 4.1 – 14.3 tỷ đúng bằng $Q_1 \rightarrow Q_3$ (50% dữ liệu có giá). Index composite khớp thứ tự sắp xếp và bộ lọc, cho phép cơ chế **Early-stopping với LIMIT 20** mà không cần qua bước Top-N Heap Sort. |
+| **Q3 — Query Rewriting + Index** | So sánh `WHERE published_at::date = DATE '2025-10-15'` (A & C) với `WHERE published_at >= TIMESTAMP '...' AND published_at < TIMESTAMP '...'` (B & D) | `ON properties USING btree (published_at)` | Hàm bọc cột `::date` vô hiệu hóa chỉ mục B-tree thông thường (buộc quét toàn bảng). Khi viết lại thành khoảng giá trị sargable, PostgreSQL khai thác được B-tree index để tìm kiếm phạm vi thời gian. |
+| **Q4 — Aggregation Control** | `SELECT property_type_name, COUNT(*), ROUND(AVG(price), 0) FROM properties GROUP BY property_type_name ORDER BY total DESC` | `ON properties USING btree (property_type_name)` | Phép tổng hợp cần duyệt qua toàn bộ dữ liệu bảng để gom nhóm và tính trung bình. Bộ lập lịch PostgreSQL ưu tiên `Parallel Seq Scan` vì chi phí đọc ngẫu nhiên qua Index Scan trên 100% dòng dữ liệu không mang lại cải thiện. |

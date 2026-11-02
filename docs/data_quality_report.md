@@ -81,7 +81,7 @@ Công thức phát hiện điểm dị biệt:
 
 Khi phân nhóm theo loại bất động sản (`property_type_name`), ngưỡng IQR biến thiên theo đặc thù sản phẩm:
 
-| Loại Bất Động Sản | Mẫu Khảo Sát | Trung Vị Giá (đ) | Cận Trên Giá (IQR) | Số Ngoại Lệ | Tỷ Lệ Dị Biệt (%) |
+| Loại Bất Động Sản | Số Tin Có Giá | Trung Vị Giá (đ) | Cận Trên Giá (IQR) | Số Ngoại Lệ | Tỷ Lệ Dị Biệt (%) |
 |---|---:|---:|---:|---:|---:|
 | Nhà | 218,063 | 8,900,000,000 | 32,250,000,000 | 21,072 | 9.66% |
 | Đất | 109,624 | 4,450,000,000 | 22,000,000,000 | 11,931 | 10.88% |
@@ -89,8 +89,8 @@ Khi phân nhóm theo loại bất động sản (`property_type_name`), ngưỡn
 | Biệt thự/Nhà liền kề | 33,056 | 19,500,000,000 | 72,535,375,000 | 2,356 | 7.13% |
 | Shophouse | 7,225 | 9,500,000,000 | 34,825,000,000 | 593 | 8.21% |
 
-> [!IMPORTANT]
-> **Quy Tắc Quản Trị Ngoại Lệ:** Toàn bộ các giá trị vượt ngưỡng IQR được khẳng định là **ngoại lệ có giá trị nghiệp vụ thực tế** (Long-tail legitimate distribution), không phải lỗi nhập liệu. Do đó, theo nguyên tắc benchmark đã cam kết, **hệ thống KHÔNG tự ý xóa bỏ các dòng này**, đảm bảo kiểm thử toàn diện hiệu năng của các truy vấn biên và thứ tự sắp xếp trong B-Tree Index.
+> [!NOTE]
+> **Quản Trị Ngoại Lệ:** Các giá trị vượt ngưỡng IQR có thể bao gồm bất động sản cao cấp, dự án thương mại hoặc sai sót trong nhập liệu từ người đăng tin. Nhằm phản ánh trung thực hiện trạng dữ liệu và bảo toàn phân phối thực tế cho các phép đo chỉ mục B-Tree, hệ thống không tự ý xóa bỏ các dòng này khỏi bộ dữ liệu benchmark.
 
 ---
 
@@ -98,11 +98,11 @@ Khi phân nhóm theo loại bất động sản (`property_type_name`), ngưỡn
 
 | Tiêu Chí Đánh Giá Trùng Lặp | Định Nghĩa Kỹ Thuật | Số Lượng (500K) | Tỷ Lệ (%) | Hướng Xử Lý |
 |---|---|---:|---:|---|
-| **Trùng khóa chính (`id`)** | Cột `id` có giá trị trùng lặp | 0 | 0.00% | Đảm bảo 100% Unique Primary Key |
+| **Trùng khóa chính (`id`)** | Cột `id` có giá trị trùng lặp | 0 | 0.00% | Khóa chính duy nhất |
 | **Trùng toàn bộ nội dung (Excl. ID)** | Tất cả 8 cột nội dung giống nhau 100% | 2 | 0.0% | Giữ nguyên theo thiết kế benchmark |
-| **Nghi ngờ trùng tin (Suspected Listings)** | Cùng loại, tỉnh, quận, giá, diện tích và tiêu đề tương đồng | 57,808 | 11.56% | Cắm cờ phân tích, bảo toàn cho benchmark |
+| **Nghi ngờ trùng tin (Suspected Listings)** | Cùng loại, tỉnh, quận, giá, diện tích và tiêu đề tương đồng | 57,808 | 11.56% | Gắn cờ thống kê, bảo toàn cho benchmark |
 
-### Mẫu Tin Đăng Nghi Ngờ Trùng Lặp (Môi Giới Đăng Tin Đa Kênh):
+### Mẫu Tin Đăng Nghi Ngờ Trùng Lặp (Trùng Thuộc Tính & Tiêu Đề Tương Đồng):
 
 ```json
 [
@@ -151,8 +151,8 @@ Khi phân nhóm theo loại bất động sản (`property_type_name`), ngưỡn
 
 ---
 
-## 6. Kết Luận Nghiệm Thu Chất Lượng Dữ Liệu
+## 6. Kết Luận Chất Lượng Dữ Liệu
 
-1. **Tính hoàn bị (Completeness):** 100% các cột bắt buộc (`id`, `name`, `property_type_name`, `province_name`, `area`, `published_at`) không có bất kỳ giá trị khuyết thiếu nào.
+1. **Tính hoàn bị (Completeness):** Các cột bắt buộc (`id`, `name`, `property_type_name`, `province_name`, `area`, `published_at`) đều không có giá trị khuyết thiếu trong tập đã làm sạch.
 2. **Tính hợp lệ (Validity):** Không tồn tại diện tích âm hoặc bằng 0; không tồn tại giá trị âm. Thời gian tuân thủ chuẩn ISO8601.
-3. **Tính nhất quán đa quy mô (Multi-scale Consistency):** Tỷ lệ thiếu và phân bố tứ phân vị đồng nhất xuyên suốt 3 quy mô 50K -> 200K -> 500K, khẳng định quy trình shuffle & sampling hoàn toàn đại diện và không bị thiên lệch (unbiased).
+3. **Tính nhất quán đa quy mô (Multi-scale Consistency):** Tỷ lệ thiếu và phân bố tứ phân vị đồng nhất xuyên suốt 3 quy mô 50K -> 200K -> 500K, khẳng định quy trình lấy mẫu đại diện và không bị thiên lệch.

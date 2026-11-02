@@ -2,7 +2,7 @@
 
 **Đề tài:** Xây dựng bộ dữ liệu về bất động sản, thực hiện các phương pháp tối ưu hiệu năng cho hệ thống khi dữ liệu quá lớn  
 **Sinh viên thực hiện:** Đồ án Tốt nghiệp / Nghiên cứu thực nghiệm CSDL  
-**Hệ quản trị CSDL:** PostgreSQL 17 / 18  
+**Hệ quản trị CSDL:** PostgreSQL 18.3 on x86_64-windows (MSVC 64-bit)  
 **Ngôn ngữ thực nghiệm:** Python 3.13 + Psycopg 3 + Pytest + Matplotlib  
 
 ---
@@ -112,7 +112,7 @@ LIMIT 20;
     2. Cột kiểm tra khoảng (`BETWEEN`) và sắp xếp (`ORDER BY price ASC, id ASC`) đặt ở sau.
   - **Cơ chế Index Scan trực tiếp:** B-tree đã được sắp sẵn theo `price ASC, id ASC`. PostgreSQL không cần quét toàn bảng, không cần tạo bitmap và **hoàn toàn loại bỏ thao tác Sort**!
   - **Early Exit:** Nhờ mệnh đề `LIMIT 20`, con trỏ duyệt B-tree dừng lại ngay lập tức khi vừa lấy đủ 20 bản ghi đầu tiên!
-  - **Hiệu năng:** Speedup đạt từ **30x đến trên 100x**, thời gian thực thi giảm từ hàng chục miligiây xuống mức sub-millisecond (< 0.5 ms), gần như không bị ảnh hưởng bởi việc dữ liệu tăng từ 50K lên 500K.
+  - **Hiệu năng:** Speedup đạt từ **170.8x tại 50K**, **718.4x tại 200K**, lên đến **942.4x tại 500K**. Thời gian thực thi giảm từ ~48.06 ms (Baseline quét 12,898 block) xuống chỉ còn 0.051 ms (Indexed chỉ đọc 23 block). Hệ số tăng tốc rất cao này mang tính đặc thù của kỹ thuật Short-circuiting trên tập dữ liệu được sắp sẵn: khi quy mô dữ liệu toàn bảng tăng gấp 10 lần, chi phí quét toàn bảng của baseline tăng tuyến tính, trong khi truy vấn có index chỉ cần đọc đúng số block tối thiểu để lấy đủ 20 dòng đầu tiên ($O(1)$ block I/O). Do đó, speedup này phản ánh tối ưu hóa riêng cho mẫu truy vấn Top-N với điều kiện lọc kết hợp thứ tự sắp xếp, không đại diện cho hiệu năng tổng thể của mọi loại truy vấn trong hệ thống.
 
 ---
 

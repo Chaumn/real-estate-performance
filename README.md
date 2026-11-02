@@ -135,8 +135,9 @@ target, di chuyển các kết quả cũ sang nơi lưu trữ khác. Không ch�
 nhiều lượt có đường dẫn đầu ra trùng nhau. Các thư mục `data/raw/` và
 `data/processed/` được Git bỏ qua theo cấu hình hiện tại.
 
-## Import CSV vào PostgreSQL 17
+## Import CSV vào PostgreSQL
 
+Môi trường kiểm thử thực tế được vận hành trên PostgreSQL 18.3 (x86_64-windows), tương thích chuẩn với PostgreSQL 17+.
 Database `real_estate_db` và bảng `public.properties` phải được tạo trước
 theo `sql/schema.sql`. Importer không tạo database, bảng hoặc index.
 
@@ -258,7 +259,7 @@ real-estate-performance/
 │   ├── analyze_results.py         # Phân tích kết quả, sinh biểu đồ và báo cáo Markdown
 │   ├── dashboard.py               # Web Dashboard trực quan hóa kế hoạch và số liệu đo
 │   └── pipeline.py            # Điều phối toàn bộ quy trình từ A đến Z
-├── tests/                         # 178 unit test kiểm thử toàn diện (177 passed, 1 skipped)
+├── tests/                         # 182 unit test kiểm thử toàn diện (181 passed, 1 skipped)
 └── results/
     ├── quality/                   # Báo cáo chất lượng dữ liệu JSON (50K, 200K, 500K)
     ├── eda/                       # 10 biểu đồ trực quan hóa dữ liệu EDA (.png)
@@ -269,7 +270,7 @@ real-estate-performance/
 
 ### 1. Kiểm thử Toàn bộ Hệ thống (Unit Tests)
 
-Toàn bộ 178 unit tests chạy hoàn toàn offline, độc lập không cần kết nối internet hay database thật:
+Toàn bộ 182 unit tests chạy hoàn toàn offline, độc lập không cần kết nối internet hay database thật:
 
 `powershell
 python -m pytest

@@ -75,7 +75,7 @@ def generate_markdown_report(records: List[Dict[str, Any]], output_path: Path) -
         "",
         "## 1. Tổng quan thí nghiệm",
         "",
-        "- **Hệ quản trị CSDL:** PostgreSQL 17/18",
+        "- **Hệ quản trị CSDL:** PostgreSQL 18.3 (x86_64-windows)",
         f"- **Quy mô dữ liệu kiểm thử:** {', '.join(f'{s:,}' for s in scales)} bản ghi",
         "- **Chính sách đo lường:** Warm-up 3 lần + 20 lần đo tuần tự, lấy **Median Execution Time** làm chỉ số trọng tâm.",
         "- **Số cấu hình kiểm thử:** 10 cấu hình độc lập (Q1: 2, Q2: 2, Q3: 4, Q4: 2).",

@@ -19,10 +19,10 @@ def tiny_csv(tmp_path):
     df = pd.DataFrame({
         "id": list(range(1, 101)),
         "name": [f"Bất động sản {i}" for i in range(1, 101)],
-        "property_type_name": ["Nhà riêng", "Căn hộ chung cư"] * 50,
-        "province_name": ["Thành phố Hà Nội", "Thành phố Hồ Chí Minh"] * 50,
-        "district_name": ["Quận Ba Đình", "Quận 1"] * 50,
-        "ward_name": ["Kim Mã", "Bến Nghé"] * 50,
+        "property_type_name": ["Nhà", "Căn hộ chung cư"] * 50,
+        "province_name": ["Hà Nội", "Hồ Chí Minh"] * 50,
+        "district_name": ["Cầu Giấy", "Quận 1"] * 50,
+        "ward_name": ["Dịch Vọng", "Bến Nghé"] * 50,
         "price": [float(i * 100_000_000) for i in range(1, 101)],
         "area": [float(40 + i) for i in range(1, 101)],
         "published_at": ["2025-05-01 10:00:00.000"] * 100,
@@ -39,14 +39,20 @@ def test_get_current_process_memory_mb():
 
 def test_measure_execution():
     def dummy_task():
-        return sum(range(1000))
+        # Allocate some memory and compute
+        data = [i ** 2 for i in range(50000)]
+        return sum(data)
 
     metrics = measure_execution(dummy_task, warmups=1, iterations=3)
     assert "median_ms" in metrics
     assert "mean_ms" in metrics
     assert "std_ms" in metrics
+    assert "baseline_ram_mb" in metrics
+    assert "peak_ram_mb" in metrics
+    assert "delta_ram_mb" in metrics
     assert metrics["runs"] == 3
     assert metrics["median_ms"] >= 0.0
+    assert metrics["peak_ram_mb"] >= metrics["baseline_ram_mb"]
 
 
 def test_ensure_parquet_file(tiny_csv, tmp_path):
@@ -65,12 +71,21 @@ def test_run_benchmark_for_scale(tiny_csv, tmp_path):
         warmups=1,
         iterations=2,
     )
-    assert len(results) == 7
+    assert len(results) == 8
     operations = [r["operation"] for r in results]
     assert "Pandas read_csv" in operations
     assert "Polars read_csv" in operations
     assert "Pandas read_parquet" in operations
     assert "Polars read_parquet" in operations
+    assert "Pandas Chunked read_csv (10k)" in operations
+    assert "Pandas Chunked aggregate (10k)" in operations
+    assert "Pandas Filter + GroupBy" in operations
+    assert "Polars Filter + GroupBy" in operations
+    for r in results:
+        assert "baseline_ram_mb" in r
+        assert "peak_ram_mb" in r
+        assert "delta_ram_mb" in r
+        assert r["peak_ram_mb"] >= r["baseline_ram_mb"]
 
 
 def test_generate_processing_markdown_report(tiny_csv, tmp_path):
@@ -86,4 +101,5 @@ def test_generate_processing_markdown_report(tiny_csv, tmp_path):
     assert "# Báo Cáo Đo Lường Hiệu Năng Xử Lý Dữ Liệu" in md
     assert "Pandas vs. Polars" in md
     assert "CSV vs. Parquet" in md
-
+    assert "Baseline RSS" in md
+    assert "Peak RSS" in md

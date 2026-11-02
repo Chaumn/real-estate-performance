@@ -137,3 +137,27 @@ def test_whitespace_and_tab_stripping_on_all_text_columns():
     assert row["province_name"] == "Đà Nẵng"
     assert pd.isna(row["district_name"])
     assert pd.isna(row["ward_name"])
+
+
+def test_build_report_500000_consistency():
+    """Verify that build_report_500000.json metrics are mathematically consistent."""
+    import json
+    report_file = Path("results/build_report_500000.json")
+    if not report_file.exists():
+        pytest.skip("results/build_report_500000.json does not exist on disk")
+
+    with open(report_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    assert data["source_rows_read"] == 502000
+    assert data["invalid_rows"] == 203
+    assert data["invalid_by_reason"]["invalid_required"] == 202
+    assert data["invalid_by_reason"]["invalid_area"] == 1
+    assert data["invalid_by_reason"]["invalid_date"] == 0
+    assert data["exported_rows"] == 500000
+    assert data["source_rows_read"] - data["invalid_rows"] == data["valid_rows_seen"]
+    assert data["valid_rows_seen"] - data["valid_rows_not_exported"] == data["exported_rows"]
+    assert data["null_counts"]["price"] == 39061
+    assert data["null_counts"]["district_name"] == 14235
+    assert data["null_counts"]["ward_name"] == 72150
+

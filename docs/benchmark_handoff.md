@@ -2,7 +2,7 @@
 
 ## Phạm vi và đầu vào
 
-TV2 thực hiện benchmark trên PostgreSQL 17, database `real_estate_db`,
+TV2 thực hiện benchmark trên PostgreSQL 17/18 (thực tế vận hành kiểm thử trên PostgreSQL 18.3 x86_64), database `real_estate_db`,
 bảng `public.properties`. Bộ bàn giao chỉ có SQL và hướng dẫn, không có
 runner benchmark Python. Các lệnh trong tài liệu chưa được chạy trên
 database thật trong bước bàn giao.

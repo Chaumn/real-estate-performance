@@ -1,6 +1,20 @@
-datasets
-pandas
-pyarrow
-pytest
-psycopg[binary]
-python-dotenv
+# Core Data Processing & Formats
+datasets>=5.1.0
+pandas>=3.0.2
+polars>=1.43.1
+pyarrow>=26.0.0
+
+# Database Driver & Configuration
+psycopg[binary]>=3.3.6
+python-dotenv>=1.0.0
+
+# Visualization & Statistics
+matplotlib>=3.10.8
+seaborn>=0.13.2
+scipy>=1.17.1
+
+# Performance & Hardware Monitoring
+psutil>=7.2.2
+
+# Testing
+pytest>=8.4.2
