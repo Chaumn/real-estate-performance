@@ -1,0 +1,554 @@
+{
+  "scale": 50000,
+  "filename": "properties_50000.csv",
+  "file_size_bytes": 9803441,
+  "sha256": "11bc4fe13aafbcbb7e8802e82b8262d157821bf52f44b1436dd6aea918da2f8b",
+  "shape": {
+    "rows": 50000,
+    "columns": 9
+  },
+  "columns": [
+    "id",
+    "name",
+    "property_type_name",
+    "province_name",
+    "district_name",
+    "ward_name",
+    "price",
+    "area",
+    "published_at"
+  ],
+  "columns_order_correct": true,
+  "id_integrity": {
+    "min_id": 1,
+    "max_id": 50000,
+    "distinct_ids": 50000,
+    "is_unique": true,
+    "is_contiguous_1_to_n": true
+  },
+  "missing_values": {
+    "counts": {
+      "id": 0,
+      "name": 0,
+      "property_type_name": 0,
+      "province_name": 0,
+      "district_name": 1507,
+      "ward_name": 7277,
+      "price": 3993,
+      "area": 0,
+      "published_at": 0
+    },
+    "percentages": {
+      "id": 0.0,
+      "name": 0.0,
+      "property_type_name": 0.0,
+      "province_name": 0.0,
+      "district_name": 3.014,
+      "ward_name": 14.554,
+      "price": 7.986,
+      "area": 0.0,
+      "published_at": 0.0
+    }
+  },
+  "data_hygiene": {
+    "invalid_area_le_zero_or_nan": 0,
+    "invalid_price_le_zero": 0,
+    "invalid_dates": 0,
+    "whitespace_issues": {
+      "name": 0,
+      "property_type_name": 0,
+      "province_name": 0,
+      "district_name": 0,
+      "ward_name": 0
+    }
+  },
+  "duplicates": {
+    "total_rows": 50000,
+    "id_duplicates": 0,
+    "exact_duplicates_excl_id": 0,
+    "exact_duplicate_pct": 0.0,
+    "suspected_duplicates": 579,
+    "suspected_duplicate_pct": 1.16,
+    "sample_suspected_duplicates": [
+      [
+        {
+          "id": 12637,
+          "name": "Bán căn nhà phố ở Thăng Long Central City, 3,1 tỷ, 105,8m2",
+          "property_type_name": "Biệt thự/Nhà liền kề",
+          "province_name": "Bình Dương",
+          "price": 3100000000.0,
+          "area": 105.8,
+          "published_at": "2025-09-24 02:15:36.723000"
+        },
+        {
+          "id": 27803,
+          "name": "Bán căn nhà phố ở Thăng Long Central City, 3,1 tỷ, 105,8m2",
+          "property_type_name": "Biệt thự/Nhà liền kề",
+          "province_name": "Bình Dương",
+          "price": 3100000000.0,
+          "area": 105.8,
+          "published_at": "2025-09-24 08:32:11.041000"
+        }
+      ],
+      [
+        {
+          "id": 22374,
+          "name": "TT AVIO - thanh toán 9 triệu/tháng hoặc trả 0% lãi suất 30 tháng đầu, chỉ dành cho khách mua ngay",
+          "property_type_name": "Căn hộ chung cư",
+          "province_name": "Bình Dương",
+          "price": 1230000000.0,
+          "area": 40.0,
+          "published_at": "2025-08-20 16:25:24.951000"
+        },
+        {
+          "id": 24293,
+          "name": "TT AVIO - thanh toán 9 triệu/tháng hoặc trả 0% lãi suất 30 tháng đầu, chỉ dành cho khách mua ngay",
+          "property_type_name": "Căn hộ chung cư",
+          "province_name": "Bình Dương",
+          "price": 1230000000.0,
+          "area": 40.0,
+          "published_at": "2025-08-22 15:42:55.143000"
+        }
+      ],
+      [
+        {
+          "id": 17634,
+          "name": "1,39 tỷ/căn Hàng Hiếm Thuận An Emerald Garden View - CĐT Lê Phong - Liền kề Ga Metro",
+          "property_type_name": "Căn hộ chung cư",
+          "province_name": "Bình Dương",
+          "price": 1390000000.0,
+          "area": 38.0,
+          "published_at": "2025-11-29 15:19:04.431000"
+        },
+        {
+          "id": 36351,
+          "name": "1,39 tỷ/căn Hàng Hiếm Thuận An Emerald Garden View - CĐT Lê Phong - Liền kề Ga Metro",
+          "property_type_name": "Căn hộ chung cư",
+          "province_name": "Bình Dương",
+          "price": 1390000000.0,
+          "area": 38.0,
+          "published_at": "2025-11-29 10:16:39.924000"
+        }
+      ],
+      [
+        {
+          "id": 9221,
+          "name": "Sáp nhập vào TP. HCM, mua căn Bcons Green View 2PN 2WC, 56m2, mức giá phù hợp người LĐ, bao phí",
+          "property_type_name": "Căn hộ chung cư",
+          "province_name": "Bình Dương",
+          "price": 1930000000.0,
+          "area": 56.0,
+          "published_at": "2025-07-10 02:56:41.147000"
+        },
+        {
+          "id": 26123,
+          "name": "Sáp nhập vào TP. HCM, mua căn Bcons Green View 2PN 2WC, 56m2, mức giá phù hợp người LĐ, bao phí",
+          "property_type_name": "Căn hộ chung cư",
+          "province_name": "Bình Dương",
+          "price": 1930000000.0,
+          "area": 56.0,
+          "published_at": "2025-07-07 17:06:49.612000"
+        }
+      ],
+      [
+        {
+          "id": 10285,
+          "name": "Bán căn hộ Setia Edenia chỉ 2tỷ4/căn - 52m2, ký HĐ 15%, CĐT CK 9%, hỗ trợ 0% LS đến khi nhận nhà",
+          "property_type_name": "Căn hộ chung cư",
+          "province_name": "Bình Dương",
+          "price": 2400000000.0,
+          "area": 52.0,
+          "published_at": "2025-12-09 08:33:31.650000"
+        },
+        {
+          "id": 11205,
+          "name": "Bán căn hộ Setia Edenia chỉ 2tỷ4/căn - 52m2, ký HĐ 15%, CĐT CK 9%, hỗ trợ 0% LS đến khi nhận nhà",
+          "property_type_name": "Căn hộ chung cư",
+          "province_name": "Bình Dương",
+          "price": 2400000000.0,
+          "area": 52.0,
+          "published_at": "2025-11-21 13:35:31.696000"
+        }
+      ],
+      [
+        {
+          "id": 24981,
+          "name": "Căn hộ 3 phòng ngủ tại The Ten - Trải nghiệm đẳng cấp vượt trộ, giá chỉ từ 58tr/m2, trần 3,5m",
+          "property_type_name": "Căn hộ chung cư",
+          "province_name": "Bình Dương",
+          "price": 5900000000.0,
+          "area": 100.0,
+          "published_at": "2025-08-23 11:40:39.906000"
+        },
+        {
+          "id": 31888,
+          "name": "Căn hộ 3 phòng ngủ tại The Ten - Trải nghiệm đẳng cấp vượt trộ, giá chỉ từ 58tr/m2, trần 3,5m",
+          "property_type_name": "Căn hộ chung cư",
+          "province_name": "Bình Dương",
+          "price": 5900000000.0,
+          "area": 100.0,
+          "published_at": "2025-09-10 03:52:54.891000"
+        }
+      ],
+      [
+        {
+          "id": 40320,
+          "name": "Cần bán nhà phường Tương Bình Hiệp gần ngã tư Lò Lu giá 1.890 tỷ",
+          "property_type_name": "Nhà",
+          "province_name": "Bình Dương",
+          "price": 1890000000.0,
+          "area": 100.0,
+          "published_at": "2025-07-25 09:53:13.245000"
+        },
+        {
+          "id": 46252,
+          "name": "Cần bán nhà phường Tương Bình Hiệp gần ngã tư Lò Lu giá 1.890 tỷ",
+          "property_type_name": "Nhà",
+          "province_name": "Bình Dương",
+          "price": 1890000000.0,
+          "area": 100.0,
+          "published_at": "2025-07-25 11:18:33.130000"
+        }
+      ],
+      [
+        {
+          "id": 13579,
+          "name": "Nhà 3 lầu gần ngã tư Chiêu Liêu đường 8m giá rẻ 4 tỷ 350 triệu",
+          "property_type_name": "Nhà",
+          "province_name": "Bình Dương",
+          "price": 4350000000.0,
+          "area": 63.0,
+          "published_at": "2025-09-28 11:19:32.612000"
+        },
+        {
+          "id": 18971,
+          "name": "Nhà 3 lầu gần ngã tư Chiêu Liêu đường 8m giá rẻ 4 tỷ 350 triệu",
+          "property_type_name": "Nhà",
+          "province_name": "Bình Dương",
+          "price": 4350000000.0,
+          "area": 63.0,
+          "published_at": "2025-08-26 17:50:52.253000"
+        }
+      ],
+      [
+        {
+          "id": 18047,
+          "name": "Bán đất KDC Đại Khánh Bình Tân Uyên Bình Dương - 75m2 + SHR + full thổ cư gần KCN VSIP 3",
+          "property_type_name": "Đất",
+          "province_name": "Bình Dương",
+          "price": 1650000000.0,
+          "area": 75.0,
+          "published_at": "2025-09-26 12:34:40.435000"
+        },
+        {
+          "id": 37217,
+          "name": "Bán đất KDC Đại Khánh Bình Tân Uyên Bình Dương - 75m2 + SHR + full thổ cư gần KCN VSIP 3",
+          "property_type_name": "Đất",
+          "province_name": "Bình Dương",
+          "price": 1650000000.0,
+          "area": 75.0,
+          "published_at": "2025-09-26 09:10:21.043000"
+        }
+      ],
+      [
+        {
+          "id": 9883,
+          "name": "Đất vị trí siêu đẹp ngay cổng chào Bình Dương cũ - cạnh bệnh viện Hạnh Phúc - cách Quốc Lộ 13 100m",
+          "property_type_name": "Đất",
+          "province_name": "Bình Dương",
+          "price": 2550000000.0,
+          "area": 76.0,
+          "published_at": "2025-08-20 01:55:55.010000"
+        },
+        {
+          "id": 49357,
+          "name": "Đất vị trí siêu đẹp ngay cổng chào Bình Dương cũ - cạnh bệnh viện Hạnh Phúc - cách quốc Lộ 13 100m",
+          "property_type_name": "Đất",
+          "province_name": "Bình Dương",
+          "price": 2550000000.0,
+          "area": 76.0,
+          "published_at": "2025-08-06 16:17:30.373000"
+        }
+      ]
+    ]
+  },
+  "numeric_stats": {
+    "price": {
+      "name": "price",
+      "count": 46007,
+      "missing_count": 3993,
+      "missing_pct": 7.99,
+      "min": 1100000.0,
+      "max": 23350000000000.0,
+      "mean": 15801406057.63,
+      "std": 123239112210.11,
+      "p1": 579000000.0,
+      "p5": 1430000000.0,
+      "q1": 4150000000.0,
+      "median": 7400000000.0,
+      "q3": 14300000000.0,
+      "p95": 48000000000.0,
+      "p99": 128000000000.0,
+      "iqr": 10150000000.0,
+      "lower_bound": 0.0,
+      "upper_bound": 29525000000.0,
+      "outlier_count_low": 0,
+      "outlier_count_high": 4536,
+      "outlier_count_total": 4536,
+      "outlier_pct": 9.86
+    },
+    "area": {
+      "name": "area",
+      "count": 50000,
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "min": 3.4,
+      "max": 440000.0,
+      "mean": 258.81,
+      "std": 3586.76,
+      "p1": 25.0,
+      "p5": 35.0,
+      "q1": 56.0,
+      "median": 80.0,
+      "q3": 120.0,
+      "p95": 383.0,
+      "p99": 2167.3,
+      "iqr": 64.0,
+      "lower_bound": 0.0,
+      "upper_bound": 216.0,
+      "outlier_count_low": 0,
+      "outlier_count_high": 5250,
+      "outlier_count_total": 5250,
+      "outlier_pct": 10.5
+    },
+    "price_per_m2": {
+      "name": "price_per_m2",
+      "count": 46007,
+      "missing_count": 3993,
+      "missing_pct": 7.99,
+      "min": 454.54545454545456,
+      "max": 252159827213.8229,
+      "mean": 146171859.76,
+      "std": 1323586956.12,
+      "p1": 1815882.35,
+      "p5": 9498967.55,
+      "q1": 52027027.03,
+      "median": 97365406.64,
+      "q3": 188000000.0,
+      "p95": 362868016.9,
+      "p99": 591126017.54,
+      "iqr": 135972972.97,
+      "lower_bound": 0.0,
+      "upper_bound": 391959459.46,
+      "outlier_count_low": 0,
+      "outlier_count_high": 1783,
+      "outlier_count_total": 1783,
+      "outlier_pct": 3.88
+    }
+  },
+  "grouped_outliers": {
+    "price_by_property_type": {
+      "Biệt thự/Nhà liền kề": {
+        "sample_size": 3350,
+        "median": 19145000000.0,
+        "q1": 10500000000.0,
+        "q3": 35975000000.0,
+        "iqr": 25475000000.0,
+        "lower_bound": 0.0,
+        "upper_bound": 74187500000.0,
+        "outlier_count": 228,
+        "outlier_pct": 6.81
+      },
+      "Căn hộ chung cư": {
+        "sample_size": 9378,
+        "median": 4899999965.0,
+        "q1": 3150000000.0,
+        "q3": 7700000000.0,
+        "iqr": 4550000000.0,
+        "lower_bound": 0.0,
+        "upper_bound": 14525000000.0,
+        "outlier_count": 553,
+        "outlier_pct": 5.9
+      },
+      "Nhà": {
+        "sample_size": 21761,
+        "median": 8900000000.0,
+        "q1": 6000000000.0,
+        "q3": 16500000000.0,
+        "iqr": 10500000000.0,
+        "lower_bound": 0.0,
+        "upper_bound": 32250000000.0,
+        "outlier_count": 2174,
+        "outlier_pct": 9.99
+      },
+      "Shophouse": {
+        "sample_size": 730,
+        "median": 9300000000.0,
+        "q1": 6017500000.0,
+        "q3": 17500000000.0,
+        "iqr": 11482500000.0,
+        "lower_bound": 0.0,
+        "upper_bound": 34723750000.0,
+        "outlier_count": 53,
+        "outlier_pct": 7.26
+      },
+      "Đất": {
+        "sample_size": 10788,
+        "median": 4450000000.0,
+        "q1": 2000000000.0,
+        "q3": 10000000000.0,
+        "iqr": 8000000000.0,
+        "lower_bound": 0.0,
+        "upper_bound": 22000000000.0,
+        "outlier_count": 1162,
+        "outlier_pct": 10.77
+      }
+    },
+    "area_by_property_type": {
+      "Biệt thự/Nhà liền kề": {
+        "sample_size": 3707,
+        "median": 130.0,
+        "q1": 90.0,
+        "q3": 210.0,
+        "iqr": 120.0,
+        "lower_bound": 0.0,
+        "upper_bound": 390.0,
+        "outlier_count": 241,
+        "outlier_pct": 6.5
+      },
+      "Căn hộ chung cư": {
+        "sample_size": 10522,
+        "median": 73.3,
+        "q1": 60.0,
+        "q3": 95.0,
+        "iqr": 35.0,
+        "lower_bound": 7.5,
+        "upper_bound": 147.5,
+        "outlier_count": 463,
+        "outlier_pct": 4.4
+      },
+      "Nhà": {
+        "sample_size": 23046,
+        "median": 63.0,
+        "q1": 45.0,
+        "q3": 90.2,
+        "iqr": 45.2,
+        "lower_bound": 0.0,
+        "upper_bound": 158.0,
+        "outlier_count": 2095,
+        "outlier_pct": 9.09
+      },
+      "Shophouse": {
+        "sample_size": 849,
+        "median": 100.0,
+        "q1": 80.0,
+        "q3": 125.0,
+        "iqr": 45.0,
+        "lower_bound": 12.5,
+        "upper_bound": 192.5,
+        "outlier_count": 60,
+        "outlier_pct": 7.07
+      },
+      "Đất": {
+        "sample_size": 11876,
+        "median": 112.5,
+        "q1": 82.5,
+        "q3": 220.0,
+        "iqr": 137.5,
+        "lower_bound": 0.0,
+        "upper_bound": 426.25,
+        "outlier_count": 1655,
+        "outlier_pct": 13.94
+      }
+    }
+  },
+  "categorical_distributions": {
+    "property_type_distribution": {
+      "Nhà": {
+        "count": 23046,
+        "pct": 46.09
+      },
+      "Đất": {
+        "count": 11876,
+        "pct": 23.75
+      },
+      "Căn hộ chung cư": {
+        "count": 10522,
+        "pct": 21.04
+      },
+      "Biệt thự/Nhà liền kề": {
+        "count": 3707,
+        "pct": 7.41
+      },
+      "Shophouse": {
+        "count": 849,
+        "pct": 1.7
+      }
+    },
+    "top_provinces": {
+      "Hồ Chí Minh": {
+        "count": 18800,
+        "pct": 37.6
+      },
+      "Hà Nội": {
+        "count": 16920,
+        "pct": 33.84
+      },
+      "Đà Nẵng": {
+        "count": 2566,
+        "pct": 5.13
+      },
+      "Bình Dương": {
+        "count": 2203,
+        "pct": 4.41
+      },
+      "Khánh Hòa": {
+        "count": 1358,
+        "pct": 2.72
+      },
+      "Hải Phòng": {
+        "count": 1018,
+        "pct": 2.04
+      },
+      "Hưng Yên": {
+        "count": 888,
+        "pct": 1.78
+      },
+      "Đồng Nai": {
+        "count": 826,
+        "pct": 1.65
+      },
+      "Long An": {
+        "count": 692,
+        "pct": 1.38
+      },
+      "Bà Rịa - Vũng Tàu": {
+        "count": 684,
+        "pct": 1.37
+      },
+      "Lâm Đồng": {
+        "count": 373,
+        "pct": 0.75
+      },
+      "Bắc Ninh": {
+        "count": 332,
+        "pct": 0.66
+      },
+      "Quảng Nam": {
+        "count": 279,
+        "pct": 0.56
+      },
+      "Quảng Ninh": {
+        "count": 276,
+        "pct": 0.55
+      },
+      "Hòa Bình": {
+        "count": 218,
+        "pct": 0.44
+      }
+    },
+    "total_unique_provinces": 62,
+    "total_unique_districts": 442,
+    "total_unique_wards": 1873
+  }
+}

@@ -37,8 +37,8 @@ Tất cả các tệp trong gói giao nộp đều được tính toán mã băm
 
 | Tệp bàn giao (Artifact) | Dung lượng (Bytes) | Dung lượng (MB) | Mã băm SHA-256 (Checksum) |
 | :--- | :---: | :---: | :--- |
-| `submission/TieuLuan_BatDongSan.docx` | 2.940.600 | 2,80 MB | `ffb1de767c1b128c72ab8badd0dbe902318b591e721920e2cc053a520762a990` |
-| `submission/TieuLuan_BatDongSan.pdf` | 6.142.851 | 5,86 MB | `4c7d489e2c9dbe192ed6cea74d9cac3e7269a6571cb680e0372eee8a5b992c41` |
+| `submission/TieuLuan_BatDongSan.docx` | 2.943.576 | 2,81 MB | `750fb5a347b580977648694fb302be60ba665811f16532f6d5d35aadb90b507b` |
+| `submission/TieuLuan_BatDongSan.pdf` | 6.222.013 | 5,93 MB | `baab85fefc175d2e50b913ec05b57e754d70f3470b25373aee5861c297c3883d` |
 | `submission/evidence/dataset_manifest.json` | 3.529 | 0,003 MB | `5bcea1bfa797edd804dba4c533d4a8861ce6eaaa0ac1b74bc9f167a7824f3ec4` |
 | `submission/evidence/benchmark_manifest.json` | 94.180 | 0,09 MB | `b6f032cfb82af0216f08b6b85dedc341c903b3e00b372ba7c7f54a279570c63b` |
 | `submission/evidence/benchmark_raw_plans.zip` | 504.366 | 0,48 MB | `262ed49431c0a4c758ad638dd253726273119acf27a23ca20997cec477677753` |

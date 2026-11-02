@@ -641,10 +641,24 @@ Hình 3.9 khảo sát sự biến thiên của mật độ tin đăng theo trụ
 *Hình 3.10: Ma trận hệ số tương quan phi tuyến Spearman giữa các biến định lượng*
 
 ### 3.4.5. Kiểm toán bản ghi trùng lặp
-Module phân tích chất lượng dữ liệu ghi nhận:
-- Không tồn tại bất kỳ bản ghi nào trùng lặp khóa chính `id` (0 bản ghi).
-- Trùng lặp hoàn toàn trên toàn bộ 8 thuộc tính còn lại (ngoại trừ `id`): chỉ có đúng **2 bản ghi** (tỷ lệ xấp xỉ 0,00%).
-- Trùng lặp nghi ngờ nội dung tin đăng: có **57.808 bản ghi** (chiếm **11,56%**). Hiện tượng này xảy ra do cùng một bất động sản được nhiều đại lý/môi giới đăng tin nhiều lần ở các thời điểm khác nhau với nội dung tiêu đề và thông số cơ bản giống nhau. Việc giữ nguyên các bản ghi này bảo đảm tính trung thực lịch sử của dòng dữ liệu thu thập từ thị trường niêm yết thực tế.
+Module phân tích chất lượng dữ liệu và kiểm toán độc lập ghi nhận:
+- Không tồn tại bất kỳ bản ghi nào trùng lặp khóa chính `id` (0 bản ghi, tính duy nhất 100%).
+- Trùng lặp hoàn toàn trên toàn bộ 8 thuộc tính còn lại (ngoại trừ `id`): chỉ có đúng **2 bản ghi dư thừa** (gồm 3 bản ghi mang mã `id = 101427`, `248997` và `340047` có mọi thuộc tính giống hệt nhau kể cả thời điểm đăng tin `2025-09-09 04:44:23.873000`). Tỷ lệ này là $0,0004\%$, hoàn toàn không gây sai lệch dữ liệu.
+- Trùng lặp nghi ngờ nội dung tin đăng: có **57.808 bản ghi** (chiếm **11,56%** trên tổng 500.000 dòng). Kiểm toán chi tiết tại `results/validation/quality_deep_investigation_500000.json` khẳng định **100,0% các nhóm nghi trùng có thời điểm đăng tin `published_at` khác nhau** (hoặc khác phường/xã). Hiện tượng này xảy ra do các môi giới bất động sản đăng lại (re-post) tin đăng để duy trì vị trí hiển thị ưu tiên qua thời gian, hoặc nhiều môi giới cùng chào bán một bất động sản. Việc giữ nguyên các bản ghi này bảo đảm tính trung thực lịch sử của dòng dữ liệu thu thập từ thị trường niêm yết thực tế.
+
+---
+
+## 3.5. Kỹ thuật tạo đặc trưng và Dữ liệu làm giàu (Feature Engineering)
+
+Nhằm mở rộng tiềm năng phân tích từ hợp đồng 9 thuộc tính ban đầu, quy trình tạo đặc trưng (`scripts/feature_engineering.py`) đã xây dựng **15 biến dẫn xuất mới** (nâng tổng số thuộc tính lên **24 cột**), bảo tồn nguyên vẹn 9 cột gốc:
+1. **Chỉ số kinh tế:** `price_per_m2` ($price / area$, đơn vị VNĐ/m²; bảo toàn chuẩn SQL NULL đối với 39.061 tin đăng giá thỏa thuận).
+2. **Đặc trưng chuỗi thời gian:** Trích xuất 6 biến định lượng và phân loại gồm `published_year`, `published_month`, `published_day`, `published_quarter`, `published_day_of_week` và cờ nhị phân `is_weekend` (ghi nhận 134.402 tin đăng vào thứ 7 và Chủ Nhật, chiếm 26,88%).
+3. **Phân khúc thị trường rời rạc hóa:** `area_segment` (5 khoảng diện tích) và `price_segment` (5 khoảng giá bán và nhóm "Thỏa thuận").
+4. **Chỉ báo toàn vẹn không gian:** Cờ nhị phân `has_district` (97,15% có quận/huyện) và `has_ward` (85,57% có phường/xã).
+5. **Cờ nhận diện ngoại lệ IQR:** `is_price_outlier` (đánh dấu đúng 44.860 bản ghi giá cao hơn 29,60 tỷ VNĐ) và `is_area_outlier` (đánh dấu đúng 52.634 bản ghi diện tích lớn hơn 176,15 m²), khớp hoàn toàn 100% với kết quả kiểm toán hồ sơ chất lượng dữ liệu.
+6. **Đặc trưng độ dài văn bản:** `name_length` (trung vị 76 ký tự) và `name_word_count` (trung vị 14 từ).
+
+Tập dữ liệu làm giàu được xuất bản dưới định dạng nhị phân Parquet nén Snappy tại [`results/features/properties_500000_enriched.parquet`](results/features/properties_500000_enriched.parquet) (dung lượng 45,22 MB, mã băm SHA-256: `c75e5ea6e74612853f468950c63de9761262fd179fa871a0a448ca21d5d7d3d3`), vượt qua toàn bộ 10/10 tiêu chí kiểm định đọc lại và bảo toàn kiểu dữ liệu tại `scripts/validate_features.py`.
 
 ---
 
@@ -1092,7 +1106,7 @@ Trong đó, chỉ mục Composite `(province_name, district_name, price, id)` ch
 
 Quá trình kiểm chứng đối chiếu khẳng định:
 1. **Kiểm toán 600 kế hoạch thực thi:** Toàn bộ 600 tệp JSON kế hoạch trong `results/benchmark/raw/` được tính toán mã băm SHA-256 lưu trữ tại [`results/benchmark/raw_manifest.json`](results/benchmark/raw_manifest.json). Script kiểm toán tự động [`scripts/verify_benchmark_evidence.py`](scripts/verify_benchmark_evidence.py) xác nhận toàn bộ các tệp bằng chứng tồn tại đầy đủ, không bị can thiệp và khớp hoàn toàn với số liệu tổng hợp trong Bảng 5.2.
-2. **Kiểm thử tự động hồi quy:** Toàn bộ bộ kiểm thử gồm 189 test cases trong `tests/` vận hành ngoại tuyến và đạt trạng thái thông qua (188 passed, 1 skipped), đảm bảo tính toàn vẹn và tính nhất quán dữ liệu của toàn bộ nghiên cứu.
+2. **Kiểm thử tự động phân tầng và Tích hợp PostgreSQL trực tiếp:** Hệ thống kiểm thử tự động gồm **198 test cases** (vượt qua 197 passed, 1 skipped) được phân định nghiêm ngặt thành 3 tầng: Tầng Unit (124 tests), Tầng Integration (60 tests với kiểm thử trực tiếp trên PostgreSQL 18.3 thật ở port 5433 và các thao tác COPY/Rollback/Query) và Tầng End-to-End (14 tests kiểm toán luồng dữ liệu và tính nhất quán số liệu), được tổng hợp chi tiết tại [`report/test_validation.md`](report/test_validation.md) và [`results/validation/test_execution_summary.json`](results/validation/test_execution_summary.json).
 
 ---
 

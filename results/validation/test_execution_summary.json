@@ -1,0 +1,1023 @@
+{
+  "timestamp": "2026-11-03T00:43:27.992772",
+  "total_collected": 198,
+  "overall_status": "ALL_PASSED",
+  "total_passed": 197,
+  "total_failed": 0,
+  "total_skipped": 1,
+  "by_tier": {
+    "Unit": {
+      "passed": 123,
+      "failed": 0,
+      "skipped": 1,
+      "total": 124
+    },
+    "Integration": {
+      "passed": 60,
+      "failed": 0,
+      "skipped": 0,
+      "total": 60
+    },
+    "End-to-End": {
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "total": 14
+    }
+  },
+  "live_postgresql_verified": true,
+  "live_port": 5433,
+  "database_tested": "real_estate_test_db",
+  "tests_detail": [
+    {
+      "nodeid": "tests/test_analyze_results.py::test_load_benchmark_csv",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_analyze_results.py::test_generate_markdown_report",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_analyze_results.py::test_generate_plots",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_evidence.py::test_compute_sha256",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_evidence.py::test_extract_plan_metrics",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_evidence.py::test_raw_manifest_completeness",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_mock_integration.py::test_full_benchmark_to_analysis_pipeline",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_processing.py::test_get_current_process_memory_mb",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_processing.py::test_measure_execution",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_processing.py::test_ensure_parquet_file",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_processing.py::test_run_benchmark_for_scale",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_processing.py::test_generate_processing_markdown_report",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_runner.py::test_configuration_matrix_completeness",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_runner.py::test_compute_statistics_odd_even_counts",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_runner.py::test_extract_plan_metrics_seq_scan",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_runner.py::test_extract_plan_metrics_index_scan",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_runner.py::test_extract_plan_metrics_bitmap_scan",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_runner.py::test_extract_plan_metrics_parallel_workers",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_runner.py::test_compute_statistics_edge_cases",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_pure_select_matches_accepted_queries[q1.sql-q1_single_column_index.sql-True]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_pure_select_matches_accepted_queries[q2.sql-q2_composite_index.sql-True]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_pure_select_matches_accepted_queries[q3_original.sql-q3_query_rewriting.sql-True]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_pure_select_matches_accepted_queries[q3_rewritten.sql-q3_query_rewriting.sql-False]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_pure_select_matches_accepted_queries[q4.sql-q4_aggregation_control.sql-True]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_index_is_single_accepted_btree_without_other_commands[q1_province_name.sql-idx_properties_province_name-columns0-q1_single_column_index.sql]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_index_is_single_accepted_btree_without_other_commands[q2_location_price.sql-idx_properties_location_price-columns1-q2_composite_index.sql]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_index_is_single_accepted_btree_without_other_commands[q3_published_at.sql-idx_properties_published_at-columns2-q3_query_rewriting.sql]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_index_is_single_accepted_btree_without_other_commands[q4_property_type.sql-idx_properties_property_type-columns3-q4_aggregation_control.sql]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_reset_drops_exactly_four_named_indexes_without_cascade_or_primary_key",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_benchmark_sql.py::test_only_requested_query_and_index_files_are_present",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_iter_batches[0-2-expected0]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_iter_batches[1-2-expected1]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_iter_batches[5-2-expected2]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_iter_batches[4-2-expected3]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_iter_batches[3-1-expected4]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_batch_iterator_is_lazy_and_rejects_zero_size",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_nested_outputs_single_pass_shared_cleaner_and_report",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_continuous_ids_and_prefixes_across_batch_boundaries[1]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_continuous_ids_and_prefixes_across_batch_boundaries[2]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_continuous_ids_and_prefixes_across_batch_boundaries[4]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_continuous_ids_and_prefixes_across_batch_boundaries[20]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_empty_cleaned_batch_and_short_final_batch",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_failure_never_publishes_partial_results[empty]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_failure_never_publishes_partial_results[invalid]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_failure_never_publishes_partial_results[too_short]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_failure_never_publishes_partial_results[network_error]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_csv_write_failure_cleans_up",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_publication_failure_rolls_back_completed_csvs",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_existing_results_are_preserved_without_consuming_stream[csv]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_existing_results_are_preserved_without_consuming_stream[report]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_source_uses_streaming_and_shuffle_without_network[None]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_source_uses_streaming_and_shuffle_without_network[abc123]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_invalid_targets_fail_before_writing[targets0]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_invalid_targets_fail_before_writing[targets1]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_invalid_targets_fail_before_writing[targets2]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_invalid_targets_fail_before_writing[targets3]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_rejects_invalid_options[arguments0]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_rejects_invalid_options[arguments1]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_rejects_invalid_options[arguments2]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_rejects_invalid_options[arguments3]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_rejects_invalid_options[arguments4]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_rejects_invalid_options[arguments5]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_rejects_invalid_options[arguments6]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_rejects_invalid_options[arguments7]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_rejects_invalid_options[arguments8]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_rejects_invalid_options[arguments9]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_forwards_all_options_and_uses_one_source",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_reports_source_errors",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_defaults_without_network",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_ctrl_c_cleans_staged_csvs_and_exits_clearly",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_connection_message_precedes_hugging_face_initialization",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_progress_is_flushed_throttled_and_includes_invalid_batches",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_progress_interval_does_not_change_csv_data",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_stream_error_survives_permission_error_and_other_parts_are_cleaned[RuntimeError]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_stream_error_survives_permission_error_and_other_parts_are_cleaned[KeyboardInterrupt]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_cli_reports_stream_error_separately_from_cleanup_warning",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_build_large_dataset.py::test_rollback_cleanup_failure_does_not_stop_other_cleanup",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_mixed_iso8601_timestamps",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_price_becomes_null_without_removing_row[None-0]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_price_becomes_null_without_removing_row[nan-0]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_price_becomes_null_without_removing_row[price2-0]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_price_becomes_null_without_removing_row[bad-0]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_price_becomes_null_without_removing_row[0-1]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_price_becomes_null_without_removing_row[-1-1]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_price_becomes_null_without_removing_row[inf-1]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_price_becomes_null_without_removing_row[-inf-1]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_area_removes_row[None]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_area_removes_row[nan]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_area_removes_row[area2]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_area_removes_row[bad]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_area_removes_row[0]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_area_removes_row[-1]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_area_removes_row[inf]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_area_removes_row[-inf]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_nullable_numeric_area_removes_missing_values",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[None-name]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[None-property_type_name]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[None-province_name]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[value1-name]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[value1-property_type_name]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[value1-province_name]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[-name]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[-property_type_name]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[-province_name]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_required_text_removes_row[",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_optional_locations_remain_null[None]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_optional_locations_remain_null[value1]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_optional_locations_remain_null[]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_optional_locations_remain_null[",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_date_removes_row[None]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_date_removes_row[bad]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_invalid_date_removes_row[2026-02-30T03:04:05]",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_overlapping_invalid_reasons_remove_row_once",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_normalization_preserves_input_indices_duplicates_and_extreme_values",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_missing_columns_raise_clear_error",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_empty_dataframe",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_sample_script_preserves_source_ids_and_csv_format",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning.py::test_sample_5000_regression",
+      "category": "Unit",
+      "status": "SKIPPED"
+    },
+    {
+      "nodeid": "tests/test_cleaning_review.py::test_vietnamese_diacritics_preservation",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning_review.py::test_csv_quoting_with_newlines_and_quotes",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning_review.py::test_extreme_legitimate_values_retained",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning_review.py::test_zero_and_negative_price_coerced_without_dropping_row",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning_review.py::test_schema_columns_order_and_types",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning_review.py::test_iso8601_format_variations",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning_review.py::test_whitespace_and_tab_stripping_on_all_text_columns",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_cleaning_review.py::test_build_report_500000_consistency",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_dashboard.py::test_dashboard_html_contains_critical_components",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_dashboard.py::test_dashboard_handler_get_html",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_data_quality.py::test_compute_column_summary",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_data_quality.py::test_compute_numeric_stats",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_data_quality.py::test_compute_numeric_stats_empty",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_data_quality.py::test_compute_grouped_outliers",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_data_quality.py::test_compute_duplicate_stats",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_data_quality.py::test_normalize_text_for_dedup",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_data_quality.py::test_profile_dataset",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_data_quality.py::test_generate_markdown_report",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_eda.py::test_generate_all_eda_charts",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_eda.py::test_individual_plots_with_edge_empty_prices",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_feature_engineering.py::test_compute_features_derived_columns",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_feature_engineering.py::test_calculate_iqr_bounds",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_feature_engineering.py::test_summarize_features",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_feature_engineering.py::test_export_features",
+      "category": "Unit",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_copy_streams_bounded_blocks_preserves_utf8_and_nulls[True]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_copy_streams_bounded_blocks_preserves_utf8_and_nulls[False]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_missing_file_is_rejected_before_connecting",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_wrong_schema_rejected_before_connecting[header0]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_wrong_schema_rejected_before_connecting[header1]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_wrong_schema_rejected_before_connecting[header2]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_wrong_schema_rejected_before_connecting[header3]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_wrong_schema_rejected_before_connecting[header4]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_wrong_record_width_rejected_before_connecting[bad_row0]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_wrong_record_width_rejected_before_connecting[bad_row1]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_wrong_record_width_rejected_before_connecting[bad_row2]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_unreadable_or_malformed_csv_rejected[]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_unreadable_or_malformed_csv_rejected[\\xff]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_unreadable_or_malformed_csv_rejected[id,name\\n1,\"unterminated]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_header_only_csv_cannot_empty_a_table",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_existing_data_is_refused_by_default",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_replace_truncates_copies_and_validates_in_one_transaction",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_copy_failure_rolls_back_previous_data[write]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_copy_failure_rolls_back_previous_data[finish]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_post_copy_validation_failure_rolls_back_previous_data[stats0-So",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_post_copy_validation_failure_rolls_back_previous_data[stats1-ID",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_post_copy_validation_failure_rolls_back_previous_data[stats2-ID",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_post_copy_validation_failure_rolls_back_previous_data[stats3-ID",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_post_copy_validation_failure_rolls_back_previous_data[stats4-So",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_post_copy_validation_failure_rolls_back_previous_data[stats5-So",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_post_copy_validation_failure_rolls_back_previous_data[stats6-So",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_database_schema_mismatch_rolls_back_without_truncate",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_quoted_empty_nullable_fields_are_null",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_env_configuration_and_environment_override",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_missing_connection_configuration_lists_keys_only",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_invalid_port_does_not_expose_password[not-a-port]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_invalid_port_does_not_expose_password[0]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_invalid_port_does_not_expose_password[65536]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_cli_forwards_file_and_replace_without_database[False]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_cli_forwards_file_and_replace_without_database[True]",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_import_csv.py::test_cli_errors_never_print_raw_connection_secrets",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_live_postgresql_e2e.py::test_live_postgres_version",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_live_postgresql_e2e.py::test_transactional_copy_csv_into_test_db",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_live_postgresql_e2e.py::test_post_import_data_integrity",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_live_postgresql_e2e.py::test_controlled_transaction_rollback",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_live_postgresql_e2e.py::test_query_q1_execution",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_live_postgresql_e2e.py::test_query_q2_execution",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_live_postgresql_e2e.py::test_q3_original_vs_rewritten_equivalence",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_live_postgresql_e2e.py::test_query_q4_execution",
+      "category": "Integration",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_live_postgresql_e2e.py::test_end_to_end_smoke_pipeline",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_pipeline.py::test_step_build_datasets_skips_when_files_present",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_pipeline.py::test_step_analyze_fails_when_csv_missing",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_report_statistics_consistency.py::test_missing_values_ground_truth",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_report_statistics_consistency.py::test_numeric_medians_ground_truth",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_report_statistics_consistency.py::test_province_distribution_ground_truth",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_report_statistics_consistency.py::test_processing_benchmark_ground_truth",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_report_statistics_consistency.py::test_benchmark_index_sizes_ground_truth",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_report_statistics_consistency.py::test_sql_queries_ground_truth",
+      "category": "End-to-End",
+      "status": "PASSED"
+    },
+    {
+      "nodeid": "tests/test_report_statistics_consistency.py::test_report_markdown_no_stale_statistics",
+      "category": "End-to-End",
+      "status": "PASSED"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "d50k_is_prefix_of_d200k": true,
+  "d200k_is_prefix_of_d500k": true,
+  "d50k_rows": 50000,
+  "d200k_rows": 200000,
+  "d500k_rows": 500000
+}

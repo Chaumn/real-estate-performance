@@ -1,0 +1,515 @@
+{
+  "dataset": "properties_500000.csv",
+  "total_rows": 500000,
+  "exact_duplicates_excl_id": {
+    "redundant_rows_count": 2,
+    "total_matching_rows": 3,
+    "records": [
+      {
+        "id": 101427,
+        "name": "Cần bán gấp lô đất chính chủ tại Nhơn Trạch với diện tích 140m2 giá siêu hời chỉ 2,3 tỷ",
+        "property_type_name": "Đất",
+        "province_name": "Đồng Nai",
+        "district_name": "Nhơn Trạch",
+        "ward_name": "nan",
+        "price": 2300000000.0,
+        "area": 140.0,
+        "published_at": "2025-09-09 04:44:23.873000"
+      },
+      {
+        "id": 248997,
+        "name": "Cần bán gấp lô đất chính chủ tại Nhơn Trạch với diện tích 140m2 giá siêu hời chỉ 2,3 tỷ",
+        "property_type_name": "Đất",
+        "province_name": "Đồng Nai",
+        "district_name": "Nhơn Trạch",
+        "ward_name": "nan",
+        "price": 2300000000.0,
+        "area": 140.0,
+        "published_at": "2025-09-09 04:44:23.873000"
+      },
+      {
+        "id": 340047,
+        "name": "Cần bán gấp lô đất chính chủ tại Nhơn Trạch với diện tích 140m2 giá siêu hời chỉ 2,3 tỷ",
+        "property_type_name": "Đất",
+        "province_name": "Đồng Nai",
+        "district_name": "Nhơn Trạch",
+        "ward_name": "nan",
+        "price": 2300000000.0,
+        "area": 140.0,
+        "published_at": "2025-09-09 04:44:23.873000"
+      }
+    ]
+  },
+  "suspected_duplicates": {
+    "definition": "Matches on (normalized_title, property_type_name, province_name, district_name, price, area)",
+    "all_occurrences_count": 57808,
+    "all_occurrences_pct": 11.56,
+    "total_unique_groups": 25855,
+    "pct_groups_with_different_published_at": 99.99,
+    "pct_groups_with_different_wards": 3.54,
+    "academic_interpretation": "Suspected duplicates predominantly arise from multiple real estate brokers/agencies cross-posting the same property listing across different dates, or re-listing with updated timestamps. They are NOT database corruption or ETL flaws, but represent authentic multi-broker commercial listing behavior."
+  },
+  "extreme_outliers_audit": {
+    "max_price_vnd": 920000000000000.0,
+    "max_price_scientific": "9.20e+14",
+    "max_price_analysis": "The maximum price is 920,000,000,000,000 VND (920 trillion VND, ~36.8 billion USD). Inspection shows this listing represents a user typo / scale error (likely typing 920 billion or 920 million VND but adding extra zeros or typing phone numbers/arbitrary digits into the price field on the portal).",
+    "max_area_m2": 24000000.0,
+    "max_area_scientific": "2.40e+07",
+    "max_area_analysis": "The maximum area is 24,000,000 m2 (2,400 hectares). While large-scale agricultural, forestry or industrial zoning land plots exist, some extreme listings are unit typos (entering cm2 or m2 incorrectly).",
+    "top_10_prices": [
+      {
+        "id": 128721,
+        "name": "Đất nền ven sông Cần Thơ, view mát mẻ, liền kề Phi Yến",
+        "property_type_name": "Đất",
+        "province_name": "Cần Thơ",
+        "district_name": "Cái Răng",
+        "price": 920000000000000.0,
+        "area": 244.8,
+        "published_at": "2025-11-17 20:01:40.573000"
+      },
+      {
+        "id": 275446,
+        "name": "bán tòa nhà văn phòng mặt phố quận hai bà trưng 460m x 9 tầng x mt 15m giá chào 280 tỷ",
+        "property_type_name": "Nhà",
+        "province_name": "Hà Nội",
+        "district_name": "Hai Bà Trưng",
+        "price": 280280000000000.0,
+        "area": 460.0,
+        "published_at": "2025-12-08 23:48:49.098000"
+      },
+      {
+        "id": 263698,
+        "name": "Chính chủ cần tiền đại hạ giá, mảnh đất 2.4ha mặt Bãi Dài MT45m sát Xanh Villas giá chỉ 10tr/m2",
+        "property_type_name": "Đất",
+        "province_name": "Hà Nội",
+        "district_name": "Thạch Thất",
+        "price": 240000000000000.0,
+        "area": 24000000.0,
+        "published_at": "2025-11-11 12:05:04.283000"
+      },
+      {
+        "id": 129237,
+        "name": "Bán tòa nhà văn phòng 8 tầng xây mới mặt phố Ngô Gia Tự, Long Biên, Hà Nội, 315m2",
+        "property_type_name": "Nhà",
+        "province_name": "Hà Nội",
+        "district_name": "Long Biên",
+        "price": 150000000000000.0,
+        "area": 315.0,
+        "published_at": "2025-09-18 13:51:37.471000"
+      },
+      {
+        "id": 288041,
+        "name": "Bán khách sạn 4* mặt phố quận hai bà trưng 8 tầng 38 phòng full đầy đủ giấy phép giá 130 tỷ",
+        "property_type_name": "Nhà",
+        "province_name": "Hà Nội",
+        "district_name": "Hai Bà Trưng",
+        "price": 130130000000000.0,
+        "area": 176.0,
+        "published_at": "2025-12-08 23:54:47.247000"
+      },
+      {
+        "id": 420690,
+        "name": "Toà nhà MT Ngô Văn Năm - Lê Thánh Tôn, P.BN, Quận 1 - DT 6 x 30m - Hầm 8 Tầng - HĐT 500Tr - 105 Tỷ",
+        "property_type_name": "Nhà",
+        "province_name": "Hồ Chí Minh",
+        "district_name": "1",
+        "price": 105000000000000.0,
+        "area": 180.0,
+        "published_at": "2025-06-18 13:30:26.782000"
+      },
+      {
+        "id": 324786,
+        "name": "Bán nhà Trần Quang Diệu Đống Đa 100m2 5 tầng Măt Tiền 7m hơn 67 tỷ 2 Mặt tiền PhânLô ôtô tráh VỉaHè",
+        "property_type_name": "Nhà",
+        "province_name": "Hà Nội",
+        "district_name": "Đống Đa",
+        "price": 67999000000000.0,
+        "area": 100.0,
+        "published_at": "2025-12-28 19:52:05.181000"
+      },
+      {
+        "id": 432157,
+        "name": "Chính chủ gửi bán DEFINE 3 Phòng Ngủ 220m2 - tầng cao. Tặng full nội thất cao cấp có phòng Sauna.",
+        "property_type_name": "Căn hộ chung cư",
+        "province_name": "Hồ Chí Minh",
+        "district_name": "Thủ Đức",
+        "price": 61600000000000.0,
+        "area": 2200.0,
+        "published_at": "2025-09-10 17:24:50.249000"
+      },
+      {
+        "id": 265178,
+        "name": "Bán đất Nam Thuận Đức Hòa, Long An. Diện tích 3.000m², 4.000m², 5.000m², 10.000m²",
+        "property_type_name": "Đất",
+        "province_name": "Long An",
+        "district_name": "Đức Hòa",
+        "price": 55000000000000.0,
+        "area": 10000000.0,
+        "published_at": "2025-10-30 05:23:36.457000"
+      },
+      {
+        "id": 257438,
+        "name": "Bán Gấp 2,4hecta Đất Nông Nghiệp Mặt Kênh Nguyễn Văn Cừ xuân thới thượng Giá 2,2tr/1m",
+        "property_type_name": "Đất",
+        "province_name": "Hồ Chí Minh",
+        "district_name": "Hóc Môn",
+        "price": 52800000000000.0,
+        "area": 24000000.0,
+        "published_at": "2025-06-03 03:25:48.476000"
+      }
+    ],
+    "top_10_areas": [
+      {
+        "id": 257438,
+        "name": "Bán Gấp 2,4hecta Đất Nông Nghiệp Mặt Kênh Nguyễn Văn Cừ xuân thới thượng Giá 2,2tr/1m",
+        "property_type_name": "Đất",
+        "province_name": "Hồ Chí Minh",
+        "district_name": "Hóc Môn",
+        "price": 52800000000000.0,
+        "area": 24000000.0,
+        "published_at": "2025-06-03 03:25:48.476000"
+      },
+      {
+        "id": 263698,
+        "name": "Chính chủ cần tiền đại hạ giá, mảnh đất 2.4ha mặt Bãi Dài MT45m sát Xanh Villas giá chỉ 10tr/m2",
+        "property_type_name": "Đất",
+        "province_name": "Hà Nội",
+        "district_name": "Thạch Thất",
+        "price": 240000000000000.0,
+        "area": 24000000.0,
+        "published_at": "2025-11-11 12:05:04.283000"
+      },
+      {
+        "id": 56520,
+        "name": "Bán đất tại Đường 715, Xã Thiện Nghiệp, Phan Thiết, Bình Thuận, giá siêu hời 29,32 tỷ, 13.326 m2",
+        "property_type_name": "Đất",
+        "province_name": "Bình Thuận",
+        "district_name": "Phan Thiết",
+        "price": 29317200000000.0,
+        "area": 13326000.0,
+        "published_at": "2025-12-12 06:28:39.203000"
+      },
+      {
+        "id": 265178,
+        "name": "Bán đất Nam Thuận Đức Hòa, Long An. Diện tích 3.000m², 4.000m², 5.000m², 10.000m²",
+        "property_type_name": "Đất",
+        "province_name": "Long An",
+        "district_name": "Đức Hòa",
+        "price": 55000000000000.0,
+        "area": 10000000.0,
+        "published_at": "2025-10-30 05:23:36.457000"
+      },
+      {
+        "id": 377832,
+        "name": "Bán gấp 600 triệu/1 ha Định Quán, Đồng Nai, giấy tay, ký giáp ranh",
+        "property_type_name": "Đất",
+        "province_name": "Đồng Nai",
+        "district_name": "Định Quán",
+        "price": 600000000.0,
+        "area": 10000000.0,
+        "published_at": "2025-09-13 02:21:57.866000"
+      },
+      {
+        "id": 151610,
+        "name": "Đất Vip. Bình Phước - Bù Đăng. Tổng 453ha",
+        "property_type_name": "Đất",
+        "province_name": "Bình Phước",
+        "district_name": "Bù Đăng",
+        "price": 230000000000.0,
+        "area": 4530000.0,
+        "published_at": "2025-10-01 10:34:58.486000"
+      },
+      {
+        "id": 224753,
+        "name": "Bán đất 3 cụm công nghiệp Kim Động Đặng Lễ - Chính Nghĩa tại Hưng Yên",
+        "property_type_name": "Đất",
+        "province_name": "Hưng Yên",
+        "district_name": "Kim Động",
+        "price": 7722000000000.0,
+        "area": 2250000.0,
+        "published_at": "2025-09-12 09:54:34.254000"
+      },
+      {
+        "id": 116979,
+        "name": "Bán 179 héc ta đất nông nghiệp đã làm màu trồng tiêu, cau, cà phê tại Gia Lai. Giá 560 triệu 1 héc",
+        "property_type_name": "Đất",
+        "province_name": "Gia Lai",
+        "district_name": "Chư Sê",
+        "price": 100240000000.0,
+        "area": 1790000.0,
+        "published_at": "2025-10-16 08:38:46.728000"
+      },
+      {
+        "id": 258201,
+        "name": "Nhượng lại dự án đầu tư khu nhà ở Vĩnh Niệm, Lê Chân, Hải Phòng, giá tốt",
+        "property_type_name": "Đất",
+        "province_name": "Hải Phòng",
+        "district_name": "Lê Chân",
+        "price": 2000000000000.0,
+        "area": 1655579.0,
+        "published_at": "2025-07-14 09:58:29.116000"
+      },
+      {
+        "id": 351923,
+        "name": "Lô đất đẹp đường nhựa cách biển 1km, Tân Dân 2, xã Vạn Thắng - Khánh Hòa",
+        "property_type_name": "Đất",
+        "province_name": "Khánh Hòa",
+        "district_name": "Vạn Ninh",
+        "price": 3500000000000.0,
+        "area": 1000000.0,
+        "published_at": "2025-09-19 16:29:39.157000"
+      }
+    ],
+    "min_10_prices": [
+      {
+        "id": 461112,
+        "name": "Đất vàng Lương Sơn, 8227m² view núi, sẵn nhà, giá hời chỉ hơn 1 triệu/m²",
+        "property_type_name": "Đất",
+        "province_name": "Hòa Bình",
+        "district_name": "Lương Sơn",
+        "price": 1000.0,
+        "area": 8227.0,
+        "published_at": "2025-11-05 23:53:20.648000"
+      },
+      {
+        "id": 359659,
+        "name": "Tôi bán cho người nhà căn 90m2 thiết kế 3PN2WC Galia tầng đẹp giá 6.9 tỷ được chọn phương án tt",
+        "property_type_name": "Căn hộ chung cư",
+        "province_name": "Hà Nội",
+        "district_name": "Hoàng Mai",
+        "price": 6967.0,
+        "area": 90.0,
+        "published_at": "2025-12-04 15:26:31.260000"
+      },
+      {
+        "id": 383873,
+        "name": "Bán đảo Hòn Vang - Viên ngọc hoang sơ giữa quần đảo An Thới, Phú Quốc | 15.300m²",
+        "property_type_name": "Biệt thự/Nhà liền kề",
+        "province_name": "Kiên Giang",
+        "district_name": "Phú Quốc",
+        "price": 18000.0,
+        "area": 15300.0,
+        "published_at": "2025-11-20 09:56:22.101000"
+      },
+      {
+        "id": 83381,
+        "name": "Bán gấp đất Đăk Roan 1hecta thuộc thành phố Gia Nghĩa cũ",
+        "property_type_name": "Đất",
+        "province_name": "Đắk Nông",
+        "district_name": "Gia Nghĩa",
+        "price": 100000.0,
+        "area": 9913.0,
+        "published_at": "2025-11-08 11:48:34.842000"
+      },
+      {
+        "id": 385765,
+        "name": "Đất vuông vức 98.8m2, full thổ cư tại Hòa Trí, Ninh Hòa, giá chỉ 199 triệu",
+        "property_type_name": "Đất",
+        "province_name": "Khánh Hòa",
+        "district_name": "Ninh Hòa",
+        "price": 199000.0,
+        "area": 98.8,
+        "published_at": "2025-07-02 11:17:37.700000"
+      },
+      {
+        "id": 128429,
+        "name": "Bán đất thổ cư 82m2, ngõ ô tô tận đất, giá chỉ hơn 300 củ khoai tây tại Bình Lục - Hà Nam",
+        "property_type_name": "Đất",
+        "province_name": "Hà Nam",
+        "district_name": "Bình Lục",
+        "price": 300000.0,
+        "area": 82.0,
+        "published_at": "2025-06-04 09:49:11.283000"
+      },
+      {
+        "id": 413329,
+        "name": "Bán đất lúa trồng dừa 5071m2, mặt tiền 31m, An Giang",
+        "property_type_name": "Đất",
+        "province_name": "An Giang",
+        "district_name": "An Phú",
+        "price": 330000.0,
+        "area": 5071.0,
+        "published_at": "2025-11-08 19:46:32.406000"
+      },
+      {
+        "id": 283510,
+        "name": "700m2 đất nông nghiệp, sổ riêng, giá chỉ 399 triệu, gần chợ Buôn Thuột",
+        "property_type_name": "Đất",
+        "province_name": "Đắk Lắk",
+        "district_name": "Buôn Ma Thuột",
+        "price": 399000.0,
+        "area": 768.0,
+        "published_at": "2025-11-28 13:27:31.550000"
+      },
+      {
+        "id": 79156,
+        "name": "Đất thổ cư Hà Nam giá rẻ bất ngờ, chỉ 4xx triệu",
+        "property_type_name": "Đất",
+        "province_name": "Hà Nam",
+        "district_name": "Bình Lục",
+        "price": 400000.0,
+        "area": 60.0,
+        "published_at": "2025-08-23 08:31:31.010000"
+      },
+      {
+        "id": 391839,
+        "name": "Đất vàng Tân Học, diện tích khủng 110m2, nở hậu, ngõ ô tô thông",
+        "property_type_name": "Đất",
+        "province_name": "Thái Bình",
+        "district_name": "Thái Thụy",
+        "price": 500000.0,
+        "area": 110.0,
+        "published_at": "2025-11-10 19:07:55.018000"
+      }
+    ],
+    "min_10_areas": [
+      {
+        "id": 490857,
+        "name": "Chính chủ cần bán đất xã Thanh Phú, Bình Long, Bình Phước đang trồng cây cao su 1 tỷ 6 thương lượng",
+        "property_type_name": "Đất",
+        "province_name": "Bình Phước",
+        "district_name": "Bình Long",
+        "price": 1600000000.0,
+        "area": 3.156,
+        "published_at": "2025-06-10 13:39:20.947000"
+      },
+      {
+        "id": 156132,
+        "name": "Bán khuôn viên mộ đơn tiêu chuẩn 5 sao trọn gói đầy đủ bia mộ bằng đá và cảnh quan cây xanh",
+        "property_type_name": "Đất",
+        "province_name": "Phú Thọ",
+        "district_name": "Phù Ninh",
+        "price": 75000000.0,
+        "area": 3.339,
+        "published_at": "2025-07-31 16:17:37.927000"
+      },
+      {
+        "id": 16277,
+        "name": "Bán nhà ho tùng mậu - lô góc - mặt ngõ phân lô - vỉa hè - ô tô tránh - kinh doanh sầm uất - 5 tầng",
+        "property_type_name": "Nhà",
+        "province_name": "Hà Nội",
+        "district_name": "Bắc Từ Liêm",
+        "price": 15900000000.0,
+        "area": 3.4,
+        "published_at": "2025-12-07 03:16:32.134000"
+      },
+      {
+        "id": 420399,
+        "name": "Bán đất tại Hương Lộ 7, Bình Lợi, Vĩnh Cửu, Đồng Nai, 8 tỷ, 3.505 m2, giá ưu đãi",
+        "property_type_name": "Đất",
+        "province_name": "Đồng Nai",
+        "district_name": "Vĩnh Cửu",
+        "price": 8000000000.0,
+        "area": 3.505,
+        "published_at": "2025-09-10 01:35:31.057000"
+      },
+      {
+        "id": 116082,
+        "name": "Bán nhà trung tâm An Khánh, Hoài Đức, Hà Nội, vị trí đẹp, mặt đường lớn, kinh doanh sầm uất",
+        "property_type_name": "Nhà",
+        "province_name": "Hà Nội",
+        "district_name": "Hoài Đức",
+        "price": 11900000000.0,
+        "area": 3.7,
+        "published_at": "2025-08-05 06:10:14.960000"
+      },
+      {
+        "id": 268890,
+        "name": "Chính Chủ cần Bàn Nhà mặt tiền đường Hồ Học Lãm, Quận 8 - DT: 45x70m - (3.156m2) giá 179 tỷ",
+        "property_type_name": "Nhà",
+        "province_name": "Hồ Chí Minh",
+        "district_name": "8",
+        "price": 175000000000.0,
+        "area": 3.756,
+        "published_at": "2025-08-29 17:59:44.605000"
+      },
+      {
+        "id": 349828,
+        "name": "Bán căn 1PN TC3 45,8m2 ban công ĐN view nội khu bể bơi Masteri siêu đẹp giá chỉ 3,88 tỷ thu về.",
+        "property_type_name": "Căn hộ chung cư",
+        "province_name": "Hà Nội",
+        "district_name": "Nam Từ Liêm",
+        "price": 4120000000.0,
+        "area": 3.88,
+        "published_at": "2025-10-06 12:41:02.233000"
+      },
+      {
+        "id": 97619,
+        "name": "Nhà mới Hoàng Mai – Ngõ ô tô – Thiết kế hiện đại – Ở ngay",
+        "property_type_name": "Nhà",
+        "province_name": "Hà Nội",
+        "district_name": "Hoàng Mai",
+        "price": NaN,
+        "area": 4.0,
+        "published_at": "2025-12-07 11:53:43.997000"
+      },
+      {
+        "id": 325441,
+        "name": "Chính chủ bán gâp 10 lô nghĩa trang 5 sao sala garden",
+        "property_type_name": "Đất",
+        "province_name": "Đồng Nai",
+        "district_name": "Long Thành",
+        "price": 100000000.0,
+        "area": 4.0,
+        "published_at": "2025-08-27 09:29:43.145000"
+      },
+      {
+        "id": 396646,
+        "name": "Bán Hoa Viên 5 sao - Món quà an nghỉ dành cho người thân, giáp ranh Nhà Bè, sổ sẵn, hạ tầng đẹp",
+        "property_type_name": "Đất",
+        "province_name": "Long An",
+        "district_name": "Cần Giuộc",
+        "price": 99000000.0,
+        "area": 4.0,
+        "published_at": "2025-11-03 21:03:14.733000"
+      }
+    ]
+  },
+  "outlier_impact_analysis": {
+    "price": {
+      "with_outliers": {
+        "count": 460939,
+        "mean": 20780097428.5416,
+        "std": 1515006853762.0244,
+        "median": 7400000000.0,
+        "iqr": 10200000000.0,
+        "max": 920000000000000.0
+      },
+      "without_outliers": {
+        "count": 416079,
+        "mean": 8436975711.25405,
+        "std": 6338229320.596612,
+        "median": 6750000000.0,
+        "max": 29600000000.0
+      },
+      "mean_ratio_with_vs_without": 2.462979406331952,
+      "std_ratio_with_vs_without": 239.02682865053202
+    },
+    "area": {
+      "with_outliers": {
+        "count": 500000,
+        "mean": 444.3976490538832,
+        "std": 56043.83935440972,
+        "median": 80.0,
+        "iqr": 64.1,
+        "max": 24000000.0
+      },
+      "without_outliers": {
+        "count": 447366,
+        "mean": 82.45846337449302,
+        "std": 40.12268961336689,
+        "median": 74.0,
+        "max": 216.0
+      },
+      "mean_ratio_with_vs_without": 5.389351570082122,
+      "std_ratio_with_vs_without": 1396.8116268989777
+    },
+    "methodological_choice": "Retaining outliers in benchmark is essential because: 1) True database benchmarking must measure B-tree, HashAggregate, and Seq Scan performance on raw uncurated real-world data distributions; 2) Arbitrary heuristic outlier truncation would introduce synthetic selection bias; 3) Academic standard requires reporting robust non-parametric metrics (Median and IQR) rather than distorted parametric metrics (Mean and Std)."
+  },
+  "missing_price_analysis": {
+    "missing_count": 39061,
+    "missing_pct": 7.81,
+    "classification": "missing/invalid price normalized to SQL NULL",
+    "source_provenance": "In Vietnamese real estate listing portals, sellers frequently omit prices or specify 'Thương lượng' (negotiable) or 'Liên hệ'. In the ingestion pipeline, prices <= 0 or missing are mapped to NULL to preserve the row for spatial and area analyses rather than dropping authentic data."
+  }
+}

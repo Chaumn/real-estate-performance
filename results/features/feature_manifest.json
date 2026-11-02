@@ -1,0 +1,28 @@
+{
+  "artifact_name": "properties_500000_enriched.parquet",
+  "relative_path": "results/features/properties_500000_enriched.parquet",
+  "file_size_bytes": 47419711,
+  "file_size_mb": 45.22,
+  "sha256": "c75e5ea6e74612853f468950c63de9761262fd179fa871a0a448ca21d5d7d3d3",
+  "compression": "snappy",
+  "engine": "pyarrow",
+  "rows": 500000,
+  "columns": 24,
+  "derived_features": [
+    "price_per_m2",
+    "published_year",
+    "published_month",
+    "published_day",
+    "published_quarter",
+    "published_day_of_week",
+    "is_weekend",
+    "area_segment",
+    "price_segment",
+    "has_district",
+    "has_ward",
+    "is_price_outlier",
+    "is_area_outlier",
+    "name_length",
+    "name_word_count"
+  ]
+}
