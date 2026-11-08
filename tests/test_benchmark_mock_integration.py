@@ -50,7 +50,10 @@ def mock_db_environment():
     return mock_conn, mock_cursor
 
 
-def test_full_benchmark_to_analysis_pipeline(tmp_path):
+def test_full_benchmark_to_analysis_pipeline(tmp_path, monkeypatch):
+    monkeypatch.setattr('scripts.benchmark_validation.csv_fingerprint', lambda p: {'rows':50000,'content_sha256':'fixture'})
+    monkeypatch.setattr('scripts.benchmark_validation.database_fingerprint', lambda c: {'rows':50000,'content_sha256':'fixture'})
+    monkeypatch.setattr('scripts.benchmark_validation.result_digest', lambda *args: 'fixture-result')
     """Test running benchmark with mocked database, exporting results, and running analysis."""
     output_dir = tmp_path / "benchmark_out"
     analysis_dir = tmp_path / "analysis_out"

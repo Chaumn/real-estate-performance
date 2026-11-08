@@ -1,0 +1,212 @@
+{
+  "csv": {
+    "rows": 500000,
+    "content_sha256": "378250d507cbe23fc5d69c23fcc5df45cceb05295acbf44e56d97294b86abe36",
+    "csv_sha256": "9ba1afe8ce7edbf66e8c35f193e7ee955ccd85e5b24544e6eed3ea86418e789c"
+  },
+  "before": {
+    "rows": 500000,
+    "content_sha256": "378250d507cbe23fc5d69c23fcc5df45cceb05295acbf44e56d97294b86abe36"
+  },
+  "configurations": {
+    "Q1_baseline": {
+      "catalog": {
+        "supplemental_index_name": null,
+        "index_bytes": 0,
+        "active_indexes": [
+          {
+            "index_name": "properties_pkey",
+            "indisprimary": true,
+            "indisvalid": true,
+            "index_definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)",
+            "index_bytes": 11255808
+          }
+        ]
+      },
+      "equivalence": "PASSED"
+    },
+    "Q1_indexed": {
+      "catalog": {
+        "supplemental_index_name": "idx_properties_province_name",
+        "index_bytes": 3555328,
+        "active_indexes": [
+          {
+            "index_name": "idx_properties_province_name",
+            "indisprimary": false,
+            "indisvalid": true,
+            "index_definition": "CREATE INDEX idx_properties_province_name ON public.properties USING btree (province_name)",
+            "index_bytes": 3555328
+          },
+          {
+            "index_name": "properties_pkey",
+            "indisprimary": true,
+            "indisvalid": true,
+            "index_definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)",
+            "index_bytes": 11255808
+          }
+        ]
+      },
+      "equivalence": "PASSED"
+    },
+    "Q2_baseline": {
+      "catalog": {
+        "supplemental_index_name": null,
+        "index_bytes": 0,
+        "active_indexes": [
+          {
+            "index_name": "properties_pkey",
+            "indisprimary": true,
+            "indisvalid": true,
+            "index_definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)",
+            "index_bytes": 11255808
+          }
+        ]
+      },
+      "equivalence": "PASSED"
+    },
+    "Q2_indexed": {
+      "catalog": {
+        "supplemental_index_name": "idx_properties_location_price",
+        "index_bytes": 29917184,
+        "active_indexes": [
+          {
+            "index_name": "idx_properties_location_price",
+            "indisprimary": false,
+            "indisvalid": true,
+            "index_definition": "CREATE INDEX idx_properties_location_price ON public.properties USING btree (province_name, district_name, price, id)",
+            "index_bytes": 29917184
+          },
+          {
+            "index_name": "properties_pkey",
+            "indisprimary": true,
+            "indisvalid": true,
+            "index_definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)",
+            "index_bytes": 11255808
+          }
+        ]
+      },
+      "equivalence": "PASSED"
+    },
+    "Q3_A": {
+      "catalog": {
+        "supplemental_index_name": null,
+        "index_bytes": 0,
+        "active_indexes": [
+          {
+            "index_name": "properties_pkey",
+            "indisprimary": true,
+            "indisvalid": true,
+            "index_definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)",
+            "index_bytes": 11255808
+          }
+        ]
+      },
+      "equivalence": "PASSED"
+    },
+    "Q3_B": {
+      "catalog": {
+        "supplemental_index_name": null,
+        "index_bytes": 0,
+        "active_indexes": [
+          {
+            "index_name": "properties_pkey",
+            "indisprimary": true,
+            "indisvalid": true,
+            "index_definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)",
+            "index_bytes": 11255808
+          }
+        ]
+      },
+      "equivalence": "PASSED"
+    },
+    "Q3_C": {
+      "catalog": {
+        "supplemental_index_name": "idx_properties_published_at",
+        "index_bytes": 11255808,
+        "active_indexes": [
+          {
+            "index_name": "idx_properties_published_at",
+            "indisprimary": false,
+            "indisvalid": true,
+            "index_definition": "CREATE INDEX idx_properties_published_at ON public.properties USING btree (published_at)",
+            "index_bytes": 11255808
+          },
+          {
+            "index_name": "properties_pkey",
+            "indisprimary": true,
+            "indisvalid": true,
+            "index_definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)",
+            "index_bytes": 11255808
+          }
+        ]
+      },
+      "equivalence": "PASSED"
+    },
+    "Q3_D": {
+      "catalog": {
+        "supplemental_index_name": "idx_properties_published_at",
+        "index_bytes": 11255808,
+        "active_indexes": [
+          {
+            "index_name": "idx_properties_published_at",
+            "indisprimary": false,
+            "indisvalid": true,
+            "index_definition": "CREATE INDEX idx_properties_published_at ON public.properties USING btree (published_at)",
+            "index_bytes": 11255808
+          },
+          {
+            "index_name": "properties_pkey",
+            "indisprimary": true,
+            "indisvalid": true,
+            "index_definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)",
+            "index_bytes": 11255808
+          }
+        ]
+      },
+      "equivalence": "PASSED"
+    },
+    "Q4_baseline": {
+      "catalog": {
+        "supplemental_index_name": null,
+        "index_bytes": 0,
+        "active_indexes": [
+          {
+            "index_name": "properties_pkey",
+            "indisprimary": true,
+            "indisvalid": true,
+            "index_definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)",
+            "index_bytes": 11255808
+          }
+        ]
+      },
+      "equivalence": "PASSED"
+    },
+    "Q4_indexed": {
+      "catalog": {
+        "supplemental_index_name": "idx_properties_property_type",
+        "index_bytes": 3522560,
+        "active_indexes": [
+          {
+            "index_name": "idx_properties_property_type",
+            "indisprimary": false,
+            "indisvalid": true,
+            "index_definition": "CREATE INDEX idx_properties_property_type ON public.properties USING btree (property_type_name)",
+            "index_bytes": 3522560
+          },
+          {
+            "index_name": "properties_pkey",
+            "indisprimary": true,
+            "indisvalid": true,
+            "index_definition": "CREATE UNIQUE INDEX properties_pkey ON public.properties USING btree (id)",
+            "index_bytes": 11255808
+          }
+        ]
+      },
+      "equivalence": "PASSED"
+    }
+  },
+  "after": {
+    "rows": 500000,
+    "content_sha256": "378250d507cbe23fc5d69c23fcc5df45cceb05295acbf44e56d97294b86abe36"
+  }
+}

@@ -10,13 +10,25 @@ from scripts.benchmark_runner import compute_statistics, extract_plan_metrics
 
 ROOT = Path(__file__).resolve().parents[1]
 
-def build(output):
+def build(output, experiment=None):
     output.mkdir(parents=True, exist_ok=True)
     for directory in ('tables','figures','evidence','dashboard'):
         (output/directory).mkdir(exist_ok=True)
     source = ROOT/'results/benchmark/benchmark_raw_plans.zip'
     trusted = json.loads((ROOT/'report/benchmark_manifest.json').read_text(encoding='utf-8'))['plans']
-    summary = json.loads((ROOT/'results/benchmark/benchmark_summary.json').read_text(encoding='utf-8'))
+    source_dir = ROOT/'results/benchmark'
+    if experiment:
+        source_dir = Path(experiment).resolve()
+        meta = json.loads((source_dir/'experiment.json').read_text())
+        if meta['status']!='COMPLETED' or meta['official_runs']!=20 or meta['warmups']!=3:
+            raise ValueError('Experiment is incomplete')
+        source = source_dir/'benchmark_raw_plans.zip'
+        if not source.exists():
+            with zipfile.ZipFile(source,'x',zipfile.ZIP_DEFLATED) as archive:
+                for path in sorted((source_dir/'raw').glob('*.json')): archive.write(path,path.name)
+        trusted = {p.name:{'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in (source_dir/'raw').glob('*.json')}
+        for path in source_dir.glob('*.json'): shutil.copy2(path,output/'evidence'/path.name)
+    summary = json.loads((source_dir/'benchmark_summary.json').read_text(encoding='utf-8'))
     groups = defaultdict(list)
     with zipfile.ZipFile(source) as archive:
         names = archive.namelist()
@@ -61,37 +73,36 @@ def build(output):
         md+='| '+' | '.join(fields)+' |\n| '+' | '.join(['---']*len(fields))+' |\n'
         md+='\n'.join('| '+' | '.join(str(r[k]) for k in fields)+' |' for r in records)
         (output/'tables'/f'{name}.md').write_text(md,encoding='utf-8')
-    for name in ('benchmark_summary','execution_statistics','query_comparison','scaling_analysis','index_analysis'):
-        table(name,rows)
+    table('benchmark_summary', rows)
+    from scripts.benchmark_tables import analytical_tables
+    for name, records in analytical_tables(rows, groups, compute_statistics).items():
+        table(name, records)
     table('q3_factorial_analysis',[{'scale':scale,'comparison':a+'/'+b,'speedup':lookup[scale,a]['median_ms']/lookup[scale,b]['median_ms']} for scale in (50000,200000,500000) for a,b in [('Q3_A','Q3_B'),('Q3_C','Q3_D'),('Q3_A','Q3_C'),('Q3_B','Q3_D')]])
     shutil.copy2(source,output/'evidence'/source.name)
     if hashlib.sha256(source.read_bytes()).digest()!=hashlib.sha256((output/'evidence'/source.name).read_bytes()).digest(): raise ValueError('Copy mismatch')
     shutil.copy2(ROOT/'results/benchmark/environment_info.json',output/'evidence/environment_historical.json')
     limitations=['Historical evidence only; no new PostgreSQL execution','Dataset revision not proven','Historical hardware metadata inconsistent','Database immutability and equivalence not proven','Warm-up execution not independently proven']
     (output/'README.md').write_text('# TV2 — PARTIAL\n\nHistorical artifacts only. Open tables/*.md for verified recalculated timings.\n\n'+'\n'.join('- '+x for x in limitations),encoding='utf-8')
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    figure_specs = [
-        ('FIG01','Median Execution Time theo c?u h?nh','median_ms','Th?i gian (ms)'),
-        ('FIG02','Speedup so v?i baseline','speedup','Speedup (l?n)'),
-        ('FIG03','Th?i gian theo quy m? d? li?u','median_ms','Th?i gian (ms)'),
-        ('FIG04','Q3: Query Rewriting v? Index','median_ms','Th?i gian (ms)'),
-        ('FIG05','Q4: tr??ng h?p ??i ch?ng','median_ms','Th?i gian (ms)'),
-        ('FIG07','Dung l??ng index ? metadata l?ch s?','index_bytes_historical','Dung l??ng (byte)')]
-    for name,title,metric,ylabel in figure_specs:
-        fig,ax=plt.subplots(figsize=(12,6))
-        configs=sorted({r['configuration'] for r in rows if (name!='FIG04' or r['query']=='Q3') and (name!='FIG05' or r['query']=='Q4')})
-        for config in configs:
-            selected=sorted([r for r in rows if r['configuration']==config],key=lambda r:r['scale'])
-            ax.plot([r['scale'] for r in selected],[r[metric] for r in selected],marker='o',label=config)
-        ax.set(title=title+' (HISTORICAL)',xlabel='S? b?n ghi',ylabel=ylabel,ylim=(0,None))
-        ax.legend(fontsize=8);ax.grid(alpha=.2);fig.tight_layout()
-        fig.savefig(output/'figures'/f'{name}.png',dpi=300)
-        fig.savefig(output/'figures'/f'{name}.svg');plt.close(fig)
-    (output/'figures/README.md').write_text('Ngu?n: tables/benchmark_summary.csv, raw ZIP. FIG01/03/04/05: median 20 Execution Time; FIG02: median baseline / median c?u h?nh; FIG07: index_bytes t? summary l?ch s?, ch?a x?c minh catalog. FIG06 v? FIG08 ch?a t?o. Ch?a ki?m tra tr?c quan ?nh.',encoding='utf-8')
     from scripts.handoff_assets import complete_assets
-    complete_assets(output, rows, groups)
+    complete_assets(output, rows, groups, 'LIVE_MEASURED' if experiment else 'HISTORICAL')
+    if experiment:
+        status='LIVE_MEASURED — nghiệm thu provenance còn giới hạn'
+        # Presentation assets must clearly distinguish this experiment from history.
+        for path in list((output/'tables').glob('*'))+[output/'dashboard/index.html',output/'chapter5_handoff.md',output/'README.md']:
+            content=path.read_text(encoding='utf-8-sig').replace('HISTORICAL','LIVE_MEASURED')
+            path.write_text(content,encoding='utf-8')
+        (output/'evidence/source_status.json').write_text(json.dumps({'experiment_id':meta['experiment_id'],'status':'LIVE_MEASURED','source_revision':'UNPROVEN','official_plans':600,'warmups':90},indent=2),encoding='utf-8')
+        env=summary['environment']
+        narrative = '# Chương 5 — thí nghiệm mới LIVE_MEASURED\n\n'
+        narrative += '## 5.1 Môi trường thực nghiệm\n\n'+json.dumps(env,ensure_ascii=False,indent=2)+'\n\n'
+        narrative += '## 5.2 Vận hành hệ thống\n\nExperiment `'+meta['experiment_id']+'`: 3 quy mô, 10 cấu hình, 3 warm-up và 20 lượt chính thức. Importer production, kiểm tra rollback 50K và fingerprint được lưu trong evidence. Database real_estate_db độc lập; khóa SHARE trong mỗi quy mô chặn writer khác. Settings session đo và catalog/equivalence từng cấu hình có trong evidence.\n\n'
+        narrative += '## 5.3 Kết quả Q1–Q4\n\n'
+        for row in rows:
+            narrative += f"- {row['scale']} / {row['configuration']}: median {row['median_ms']} ms, IQR {row['iqr_ms']} ms, speedup {row['speedup']:.3f}.\n"
+        narrative += '\n## 5.4 Khả năng mở rộng\n\nXem [scaling_analysis](tables/scaling_analysis.md) và [FIG03](figures/FIG03.png). Tỷ lệ latency được tính so với 50K; ba tập là prefix nên không phải các mẫu độc lập.\n\n'
+        narrative += '## 5.5 Giải thích kết quả\n\nXem [Q3 factorial](tables/q3_factorial_analysis.md): A/B và C/D tách rewriting; A/C và B/D tách index. [FIG06](figures/FIG06.png) đếm node scan thực sự, không đếm truy vấn. Q4 là đối chứng, không giả định index luôn nhanh hơn. [index_analysis](tables/index_analysis.md) ghi index usage và dung lượng.\n\n'
+        narrative += '## 5.6 Hạn chế thực nghiệm\n\nRevision upstream chưa chứng minh; SHA CSV chỉ khóa đầu vào hiện tại. Thí nghiệm warm-cache, không cold-cache; EXPLAIN có overhead. Chưa kiểm soát toàn bộ tải nền, autovacuum và nhiễu hệ điều hành; IQR và min/max phải đi kèm median. Không trộn với 600 plan lịch sử. Chưa nghiệm thu browser/visual QA mới; không khẳng định tính tổng quát ngoài máy và workload này.\n'
+        (output/'chapter5_handoff.md').write_text(narrative,encoding='utf-8')
     artifacts=[]
     for p in sorted(output.rglob('*')):
         if p.is_file() and p.name not in ('manifest.json','SHA256SUMS.txt'): artifacts.append({'path':p.relative_to(output).as_posix(),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'status':'HISTORICAL','source_files':[str(source.relative_to(ROOT))]})
@@ -99,4 +110,8 @@ def build(output):
     (output/'SHA256SUMS.txt').write_text('\n'.join(f"{a['sha256']}  {a['path']}" for a in artifacts),encoding='utf-8')
 
 if __name__=='__main__':
-    build(ROOT/'deliverables/tv2')
+    import argparse
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--experiment',type=Path)
+    args=parser.parse_args()
+    build(ROOT/'deliverables/tv2',args.experiment)

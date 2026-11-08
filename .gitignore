@@ -18,6 +18,8 @@ data/processed/
 .pytest_cache/
 real-estate-performance/
 results/benchmark/raw/
+results/benchmark/experiments/
+results/benchmark/smoke/
 
 
 .pgdata/

@@ -1,0 +1,24 @@
+{
+  "database": "real_estate_db",
+  "import": {
+    "rows": 50000,
+    "min_id": 1,
+    "max_id": 50000,
+    "null_counts": {
+      "price": 3993,
+      "district_name": 1507,
+      "ward_name": 7277
+    },
+    "elapsed_seconds": 3.344640499999514
+  },
+  "csv": {
+    "rows": 50000,
+    "content_sha256": "753e1946043afe2133658dbedf17fe8b2711804ef999f99cc3416478953b0110",
+    "csv_sha256": "11bc4fe13aafbcbb7e8802e82b8262d157821bf52f44b1436dd6aea918da2f8b"
+  },
+  "database_fingerprint": {
+    "rows": 50000,
+    "content_sha256": "753e1946043afe2133658dbedf17fe8b2711804ef999f99cc3416478953b0110"
+  },
+  "rollback": "PASSED"
+}

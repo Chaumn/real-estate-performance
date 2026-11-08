@@ -30,37 +30,54 @@ if str(PROJECT_ROOT) not in sys.path:
 
 from scripts.cleaning import clean_dataframe
 from scripts.feature_engineering import compute_features
+from scripts.import_csv import load_connection_settings
 
 import uuid
-PG_HOST = "127.0.0.1"
-PG_PORT = 5433
-PG_USER = "postgres"
+
+try:
+    _pg_settings = load_connection_settings()
+except Exception:
+    _pg_settings = {}
+
+PG_HOST = _pg_settings.get("host", "127.0.0.1")
+PG_PORT = int(_pg_settings.get("port", 5432))
+PG_USER = _pg_settings.get("user", "postgres")
+PG_PASSWORD = _pg_settings.get("password")
 ADMIN_DB = "postgres"
 TEST_DB = f"real_estate_qa_e2e_{uuid.uuid4().hex[:8]}"
 CSV_50K = PROJECT_ROOT / "data" / "processed" / "properties_50000.csv"
 SCHEMA_SQL_PATH = PROJECT_ROOT / "sql" / "schema.sql"
 
+def get_conn(dbname, autocommit=False):
+    kwargs = {
+        "host": PG_HOST,
+        "port": PG_PORT,
+        "user": PG_USER,
+        "dbname": dbname,
+        "autocommit": autocommit,
+        "connect_timeout": 5,
+    }
+    if PG_PASSWORD is not None:
+        kwargs["password"] = PG_PASSWORD
+    return psycopg.connect(**kwargs)
+
 def is_postgres_running():
     try:
-        with psycopg.connect(
-            host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=ADMIN_DB, connect_timeout=3
-        ) as conn:
+        with get_conn(ADMIN_DB) as conn:
             return True
     except Exception:
         return False
 
 pytestmark = pytest.mark.skipif(
     not is_postgres_running(),
-    reason="PostgreSQL not running on port 5433"
+    reason=f"PostgreSQL not running on port {PG_PORT}"
 )
 
 
 @pytest.fixture(scope="module")
 def setup_test_database():
     """Create isolated ephemeral test database without dropping any pre-existing databases."""
-    admin_conn = psycopg.connect(
-        host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=ADMIN_DB, autocommit=True
-    )
+    admin_conn = get_conn(ADMIN_DB, autocommit=True)
     with admin_conn.cursor() as cur:
         # Safety check: ensure we do NOT drop or overwrite any pre-existing database
         cur.execute("SELECT 1 FROM pg_database WHERE datname = %s", (TEST_DB,))
@@ -72,9 +89,7 @@ def setup_test_database():
     admin_conn.close()
 
     # Connect to test db and apply schema
-    test_conn = psycopg.connect(
-        host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=TEST_DB, autocommit=True
-    )
+    test_conn = get_conn(TEST_DB, autocommit=True)
     with open(SCHEMA_SQL_PATH, "r", encoding="utf-8") as f:
         schema_sql = f.read()
     with test_conn.cursor() as cur:
@@ -85,9 +100,7 @@ def setup_test_database():
 
     # Teardown: ONLY drop the ephemeral test database created in this session
     try:
-        admin_conn = psycopg.connect(
-            host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=ADMIN_DB, autocommit=True
-        )
+        admin_conn = get_conn(ADMIN_DB, autocommit=True)
         with admin_conn.cursor() as cur:
             cur.execute(sql.SQL("""
                 SELECT pg_terminate_backend(pid)
@@ -102,7 +115,7 @@ def setup_test_database():
 
 def test_live_postgres_version(setup_test_database):
     """Verify live PostgreSQL version and cluster configuration."""
-    with psycopg.connect(host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=TEST_DB) as conn:
+    with get_conn(TEST_DB) as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT version();")
             ver = cur.fetchone()[0]
@@ -113,7 +126,7 @@ def test_transactional_copy_csv_into_test_db(setup_test_database):
     """Import 50,000 rows CSV via real transactional COPY."""
     assert CSV_50K.is_file(), f"Missing {CSV_50K}"
     
-    with psycopg.connect(host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=TEST_DB) as conn:
+    with get_conn(TEST_DB) as conn:
         with conn.cursor() as cur:
             # COPY FROM STDIN
             copy_sql = """
@@ -140,7 +153,7 @@ def test_transactional_copy_csv_into_test_db(setup_test_database):
 
 def test_post_import_data_integrity(setup_test_database):
     """Verify row count, NULL count, ID continuity after COPY."""
-    with psycopg.connect(host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=TEST_DB) as conn:
+    with get_conn(TEST_DB) as conn:
         with conn.cursor() as cur:
             cur.execute("""
                 SELECT 
@@ -168,7 +181,7 @@ def test_post_import_data_integrity(setup_test_database):
 
 def test_controlled_transaction_rollback(setup_test_database):
     """Verify ACID atomicity: controlled constraint violation rolls back cleanly."""
-    with psycopg.connect(host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=TEST_DB) as conn:
+    with get_conn(TEST_DB) as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT COUNT(*) FROM public.properties;")
             initial_count = cur.fetchone()[0]
@@ -203,7 +216,7 @@ def test_query_q1_execution(setup_test_database):
     with open(q1_path, "r", encoding="utf-8") as f:
         q1_sql = f.read()
 
-    with psycopg.connect(host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=TEST_DB) as conn:
+    with get_conn(TEST_DB) as conn:
         with conn.cursor() as cur:
             cur.execute(q1_sql)
             rows = cur.fetchall()
@@ -220,7 +233,7 @@ def test_query_q2_execution(setup_test_database):
     with open(q2_path, "r", encoding="utf-8") as f:
         q2_sql = f.read()
 
-    with psycopg.connect(host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=TEST_DB) as conn:
+    with get_conn(TEST_DB) as conn:
         with conn.cursor() as cur:
             cur.execute(q2_sql)
             rows = cur.fetchall()
@@ -242,7 +255,7 @@ def test_q3_original_vs_rewritten_equivalence(setup_test_database):
     with open(q3_rewr_path, "r", encoding="utf-8") as f:
         sql_rewr = f.read()
 
-    with psycopg.connect(host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=TEST_DB) as conn:
+    with get_conn(TEST_DB) as conn:
         with conn.cursor() as cur:
             cur.execute(sql_orig)
             orig_rows = cur.fetchall()
@@ -259,7 +272,7 @@ def test_query_q4_execution(setup_test_database):
     with open(q4_path, "r", encoding="utf-8") as f:
         q4_sql = f.read()
 
-    with psycopg.connect(host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=TEST_DB) as conn:
+    with get_conn(TEST_DB) as conn:
         with conn.cursor() as cur:
             cur.execute(q4_sql)
             rows = cur.fetchall()
@@ -313,10 +326,13 @@ def test_end_to_end_smoke_pipeline():
 
 def test_preexisting_databases_preserved(setup_test_database):
     """Verify that existing system databases are preserved and never dropped."""
-    with psycopg.connect(host=PG_HOST, port=PG_PORT, user=PG_USER, dbname=ADMIN_DB) as conn:
+    with get_conn(ADMIN_DB) as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT datname FROM pg_database;")
             dbs = [row[0] for row in cur.fetchall()]
             assert "postgres" in dbs, "Default 'postgres' database must exist"
+            assert "guardian_eye" in dbs, "Database 'guardian_eye' must be preserved"
+            assert "orderflow" in dbs, "Database 'orderflow' must be preserved"
+            assert "real_estate_db" in dbs, "Database 'real_estate_db' must be preserved"
             assert setup_test_database in dbs, "Ephemeral test database must exist during test"
 

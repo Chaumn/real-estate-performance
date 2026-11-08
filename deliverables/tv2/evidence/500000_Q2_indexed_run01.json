@@ -5,11 +5,11 @@
       "Parallel Aware": false,
       "Async Capable": false,
       "Startup Cost": 0.42,
-      "Total Cost": 70.95,
+      "Total Cost": 71.06,
       "Plan Rows": 20,
       "Plan Width": 129,
-      "Actual Startup Time": 0.018,
-      "Actual Total Time": 0.024,
+      "Actual Startup Time": 0.047,
+      "Actual Total Time": 0.066,
       "Actual Rows": 20.0,
       "Actual Loops": 1,
       "Disabled": false,
@@ -34,11 +34,11 @@
           "Relation Name": "properties",
           "Alias": "properties",
           "Startup Cost": 0.42,
-          "Total Cost": 9811.01,
-          "Plan Rows": 2782,
+          "Total Cost": 9744.84,
+          "Plan Rows": 2759,
           "Plan Width": 129,
-          "Actual Startup Time": 0.018,
-          "Actual Total Time": 0.023,
+          "Actual Startup Time": 0.046,
+          "Actual Total Time": 0.062,
           "Actual Rows": 20.0,
           "Actual Loops": 1,
           "Disabled": false,
@@ -70,8 +70,8 @@
       "Temp Read Blocks": 0,
       "Temp Written Blocks": 0
     },
-    "Planning Time": 0.05,
+    "Planning Time": 0.157,
     "Triggers": [],
-    "Execution Time": 0.029
+    "Execution Time": 0.085
   }
 ]

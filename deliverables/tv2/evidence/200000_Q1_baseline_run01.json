@@ -8,10 +8,10 @@
       "Alias": "properties",
       "Startup Cost": 0.0,
       "Total Cost": 7628.0,
-      "Plan Rows": 4153,
-      "Plan Width": 122,
-      "Actual Startup Time": 0.021,
-      "Actual Total Time": 17.397,
+      "Plan Rows": 4307,
+      "Plan Width": 121,
+      "Actual Startup Time": 0.051,
+      "Actual Total Time": 311.876,
       "Actual Rows": 4180.0,
       "Actual Loops": 1,
       "Disabled": false,
@@ -40,8 +40,8 @@
       "Temp Read Blocks": 0,
       "Temp Written Blocks": 0
     },
-    "Planning Time": 0.077,
+    "Planning Time": 0.138,
     "Triggers": [],
-    "Execution Time": 17.538
+    "Execution Time": 312.646
   }
 ]

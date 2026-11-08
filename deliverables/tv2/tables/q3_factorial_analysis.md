@@ -1,16 +1,16 @@
-Status: HISTORICAL. Source: evidence/benchmark_raw_plans.zip. Time: ms; storage: bytes. Speedup = baseline median / configuration median. IQR = median upper half - median lower half. Index size comes from historical summary, not EXPLAIN.
+Status: LIVE_MEASURED. Source: evidence/benchmark_raw_plans.zip. Time: ms; storage: bytes. Speedup = baseline median / configuration median. IQR = median upper half - median lower half. Index size comes from historical summary, not EXPLAIN.
 
 | scale | comparison | speedup |
 | --- | --- | --- |
-| 50000 | Q3_A/Q3_B | 1.1273563218390803 |
-| 50000 | Q3_C/Q3_D | 29.266932270916335 |
-| 50000 | Q3_A/Q3_C | 1.0013612850530902 |
-| 50000 | Q3_B/Q3_D | 25.99601593625498 |
-| 200000 | Q3_A/Q3_B | 0.8257167137827572 |
-| 200000 | Q3_C/Q3_D | 27.746567505720822 |
-| 200000 | Q3_A/Q3_C | 0.9816292447578401 |
-| 200000 | Q3_B/Q3_D | 32.985697940503435 |
-| 500000 | Q3_A/Q3_B | 1.0399387355113379 |
-| 500000 | Q3_C/Q3_D | 18.956268221574344 |
-| 500000 | Q3_A/Q3_C | 0.9478740269266263 |
-| 500000 | Q3_B/Q3_D | 17.278089257681096 |
+| 50000 | Q3_A/Q3_B | 0.8502127374451406 |
+| 50000 | Q3_C/Q3_D | 23.182012847965737 |
+| 50000 | Q3_A/Q3_C | 1.1720857195640124 |
+| 50000 | Q3_B/Q3_D | 31.958244111349035 |
+| 200000 | Q3_A/Q3_B | 0.9550774365526964 |
+| 200000 | Q3_C/Q3_D | 60.860512587888415 |
+| 200000 | Q3_A/Q3_C | 1.2925048633419542 |
+| 200000 | Q3_B/Q3_D | 82.36244046268996 |
+| 500000 | Q3_A/Q3_B | 2.5396197131808487 |
+| 500000 | Q3_C/Q3_D | 36.31508696238371 |
+| 500000 | Q3_A/Q3_C | 2.174906905167645 |
+| 500000 | Q3_B/Q3_D | 31.09990562221923 |

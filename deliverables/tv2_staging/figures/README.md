@@ -1,1 +1,0 @@
-Ngu?n: tables/benchmark_summary.csv, raw ZIP. FIG01/03/04/05: median 20 Execution Time; FIG02: median baseline / median c?u h?nh; FIG07: index_bytes t? summary l?ch s?, ch?a x?c minh catalog. FIG06 v? FIG08 ch?a t?o. Ch?a ki?m tra tr?c quan ?nh.

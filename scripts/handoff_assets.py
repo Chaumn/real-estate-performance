@@ -7,7 +7,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 
 
-def complete_assets(output, rows, groups):
+def complete_assets(output, rows, groups, status='HISTORICAL'):
     root = Path(__file__).resolve().parents[1]
     quality = json.loads((root/'results/build_report_500000.json').read_text())
     (output/'evidence/build_report.json').write_text(json.dumps(quality, indent=2), encoding='utf-8')
@@ -43,7 +43,7 @@ def complete_assets(output, rows, groups):
                 ax.plot([r['scale'] for r in records], [r[metric] for r in records], marker='o', label=config)
             ax.set(xlabel='Số bản ghi', ylabel='Speedup (lần)' if number==2 else 'Dung lượng (byte)' if number==7 else 'Median Execution Time (ms)')
             ax.legend(fontsize=8, ncol=2)
-        ax.set_title(f'FIG{number:02d} — {title}\nHISTORICAL — chưa nghiệm thu thực nghiệm chính thức')
+        ax.set_title(f'FIG{number:02d} — {title}\n{status} — xem giới hạn thực nghiệm trong bàn giao')
         ax.set_ylim(bottom=0); ax.grid(axis='y', alpha=.2); fig.tight_layout()
         for ext in ('png','svg'): fig.savefig(output/'figures'/f'FIG{number:02d}.{ext}', dpi=300)
         plt.close(fig)

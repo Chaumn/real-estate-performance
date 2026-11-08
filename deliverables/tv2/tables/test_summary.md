@@ -1,10 +1,10 @@
-- passed: 198
+- passed: 211
 - failed: 0
 - errors: 0
 - skipped: 1
-- scope: offline; live module excluded
-- live_status: NOT_RUN
+- scope: full regression suite including live PostgreSQL e2e
+- live_status: PASSED
 - python: 3.13.7
-- commit: eb1c2dbebe824f1bdf72e95636352d28fd9b34fc
-- command: python -B -m pytest -q -rs -p no:cacheprovider --ignore=tests/test_live_postgresql_e2e.py --junitxml=deliverables/tv2/evidence/offline_tests.xml
-- source: evidence/offline_tests.xml
+- commit: c51b2c2690e676416189fdea2c0eedc72fd20677
+- command: py -m pytest -v --junitxml=deliverables/tv2/evidence/regression_current.xml
+- source: evidence/regression_current.xml

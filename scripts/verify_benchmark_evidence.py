@@ -54,6 +54,7 @@ def extract_plan_metrics(raw_json: Any) -> tuple[float | None, float | None, str
 def audit_raw_evidence(
     raw_dir: Path = Path("results/benchmark/raw"),
     manifest_out: Path = Path("results/benchmark/raw_manifest.json"),
+    trusted_manifest: Path | None = None,
 ) -> dict[str, Any]:
     """Audit all raw explain json files and export cryptographic manifest."""
     if not raw_dir.exists():
@@ -68,6 +69,7 @@ def audit_raw_evidence(
     configs = ['Q1_baseline','Q1_indexed','Q2_baseline','Q2_indexed','Q3_A','Q3_B','Q3_C','Q3_D','Q4_baseline','Q4_indexed']
     expected = {f'{scale}_{config}_run{run:02d}.json' for scale in (50000,200000,500000) for config in configs for run in range(1,21)}
     errors = []
+    trusted = json.loads(trusted_manifest.read_text(encoding='utf-8'))['plans'] if trusted_manifest else None
     if {f.name for f in files} != expected:
         errors.append('Run matrix does not match expected scale/configuration/run identities')
 
@@ -90,6 +92,8 @@ def audit_raw_evidence(
         configs_found.add(config)
 
         checksum = compute_sha256(fpath)
+        if trusted is not None and checksum != trusted.get(fpath.name, {}).get('sha256'):
+            errors.append(f'SHA mismatch: {fpath.name}')
 
         try:
             with open(fpath, "r", encoding="utf-8") as f:
@@ -118,7 +122,9 @@ def audit_raw_evidence(
     summary = {
         "status": "STRUCTURE_VERIFIED" if not errors else "INVALID",
         "errors": errors,
-        "limitations": ["Hashes computed, not compared against trusted manifest; filename identities do not prove execution provenance"],
+        "hash_verification": 'MATCHED' if trusted is not None and not errors else 'NOT_VERIFIED',
+        "live_experiment_verified": False,
+        "limitations": ["Filename identities and matching hashes do not prove live execution provenance"],
         "total_files": len(files),
         "expected_files": 600,
         "scales_audited": sorted(scales_found),

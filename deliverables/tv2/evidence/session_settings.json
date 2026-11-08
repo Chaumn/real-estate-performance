@@ -1,0 +1,101 @@
+{
+  "experiment_id": "62ea434decd44713b3752af152f81de8",
+  "settings": [
+    {
+      "name": "default_statistics_target",
+      "setting": "100",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "effective_cache_size",
+      "setting": "524288",
+      "unit": "8kB",
+      "source": "default"
+    },
+    {
+      "name": "effective_io_concurrency",
+      "setting": "16",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "enable_bitmapscan",
+      "setting": "on",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "enable_indexonlyscan",
+      "setting": "on",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "enable_indexscan",
+      "setting": "on",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "enable_seqscan",
+      "setting": "on",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "jit",
+      "setting": "on",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "maintenance_work_mem",
+      "setting": "65536",
+      "unit": "kB",
+      "source": "default"
+    },
+    {
+      "name": "max_parallel_workers",
+      "setting": "8",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "max_parallel_workers_per_gather",
+      "setting": "2",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "random_page_cost",
+      "setting": "4",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "seq_page_cost",
+      "setting": "1",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "shared_buffers",
+      "setting": "16384",
+      "unit": "8kB",
+      "source": "configuration file"
+    },
+    {
+      "name": "track_io_timing",
+      "setting": "off",
+      "unit": null,
+      "source": "default"
+    },
+    {
+      "name": "work_mem",
+      "setting": "4096",
+      "unit": "kB",
+      "source": "default"
+    }
+  ]
+}

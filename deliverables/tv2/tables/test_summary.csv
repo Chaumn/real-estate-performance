@@ -1,2 +1,2 @@
 ﻿passed,failed,errors,skipped,scope,live_status,python,commit,command,source
-198,0,0,1,offline; live module excluded,NOT_RUN,3.13.7,eb1c2dbebe824f1bdf72e95636352d28fd9b34fc,python -B -m pytest -q -rs -p no:cacheprovider --ignore=tests/test_live_postgresql_e2e.py --junitxml=deliverables/tv2/evidence/offline_tests.xml,evidence/offline_tests.xml
+211,0,0,1,full regression suite including live PostgreSQL e2e,PASSED,3.13.7,c51b2c2690e676416189fdea2c0eedc72fd20677,py -m pytest -v --junitxml=deliverables/tv2/evidence/regression_current.xml,evidence/regression_current.xml

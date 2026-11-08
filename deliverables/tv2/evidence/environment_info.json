@@ -1,0 +1,101 @@
+{
+  "timestamp": "2026-11-08T12:47:48.523744",
+  "os": "Windows 11 (build 10.0.26200)",
+  "machine": "AMD64",
+  "processor": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel",
+  "cpu_logical_cores": 14,
+  "python_version": "3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]",
+  "psycopg_version": "3.3.6",
+  "postgresql_version": "PostgreSQL 18.3 on x86_64-windows, compiled by msvc-19.44.35225, 64-bit",
+  "server_version_num": "180003",
+  "database": "real_estate_db",
+  "user": "postgres",
+  "client_encoding": "UTF8",
+  "timezone": "Asia/Bangkok",
+  "collation": {
+    "datcollate": "English_United States.1252",
+    "datctype": "English_United States.1252"
+  },
+  "pg_settings": {
+    "default_statistics_target": {
+      "setting": "100",
+      "unit": null,
+      "source": "default"
+    },
+    "effective_cache_size": {
+      "setting": "524288",
+      "unit": "8kB",
+      "source": "default"
+    },
+    "effective_io_concurrency": {
+      "setting": "16",
+      "unit": null,
+      "source": "default"
+    },
+    "enable_bitmapscan": {
+      "setting": "on",
+      "unit": null,
+      "source": "default"
+    },
+    "enable_indexonlyscan": {
+      "setting": "on",
+      "unit": null,
+      "source": "default"
+    },
+    "enable_indexscan": {
+      "setting": "on",
+      "unit": null,
+      "source": "default"
+    },
+    "enable_seqscan": {
+      "setting": "on",
+      "unit": null,
+      "source": "default"
+    },
+    "jit": {
+      "setting": "on",
+      "unit": null,
+      "source": "default"
+    },
+    "maintenance_work_mem": {
+      "setting": "65536",
+      "unit": "kB",
+      "source": "default"
+    },
+    "max_parallel_workers": {
+      "setting": "8",
+      "unit": null,
+      "source": "default"
+    },
+    "max_parallel_workers_per_gather": {
+      "setting": "2",
+      "unit": null,
+      "source": "default"
+    },
+    "random_page_cost": {
+      "setting": "4",
+      "unit": null,
+      "source": "default"
+    },
+    "seq_page_cost": {
+      "setting": "1",
+      "unit": null,
+      "source": "default"
+    },
+    "shared_buffers": {
+      "setting": "16384",
+      "unit": "8kB",
+      "source": "configuration file"
+    },
+    "track_io_timing": {
+      "setting": "off",
+      "unit": null,
+      "source": "default"
+    },
+    "work_mem": {
+      "setting": "4096",
+      "unit": "kB",
+      "source": "default"
+    }
+  }
+}

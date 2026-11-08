@@ -384,6 +384,8 @@ class BenchmarkRunner:
             indexes = cur.fetchall()
 
         # Check index isolation: only primary key + at most the expected supplemental index
+        from scripts.benchmark_validation import validate_catalog
+        validate_catalog(indexes, supplemental_index_name)
         index_names = [idx["index_name"] for idx in indexes]
         for idx in indexes:
             if idx["indisprimary"]:
@@ -457,8 +459,12 @@ class BenchmarkRunner:
         output_dir: Path = DEFAULT_OUTPUT_DIR,
         check_equivalence: bool = True,
         auto_import: bool = False,
+        dedicated_database: bool = False,
     ) -> Dict[str, Any]:
         """Execute the full benchmark suite across scales and configurations."""
+        if auto_import and (not dedicated_database or self.settings.get('dbname') != 'real_estate_db'):
+            raise ValueError('Auto-import requires explicit dedicated real_estate_db authorization')
+        from scripts.benchmark_validation import csv_fingerprint, database_fingerprint, result_digest
         experiment_id = uuid.uuid4().hex
         output_dir = output_dir / experiment_id
         raw_output_dir = output_dir / "raw"
@@ -482,6 +488,10 @@ class BenchmarkRunner:
         step = 0
 
         with self.get_connection() as conn:
+            with conn.cursor(row_factory=dict_row) as session_cursor:
+                session_cursor.execute(SETTINGS_INSPECTION_SQL)
+                session_settings = session_cursor.fetchall()
+            (output_dir/'session_settings.json').write_text(json.dumps({'experiment_id':experiment_id,'settings':session_settings},default=str,indent=2),encoding='utf-8')
             for scale in scales:
                 # 1. Verify table row count matches current scale
                 with conn.cursor() as cur:
@@ -517,6 +527,20 @@ class BenchmarkRunner:
                     print(f"[+] Q3 Equivalence Check PASSED: 0 dong sai khac.", flush=True)
 
                 scale_medians: Dict[str, float] = {}
+                # Hold a table lock for the complete scale: concurrent writers
+                # must not alter rows between equivalence checks and timings.
+                conn.execute('BEGIN')
+                conn.execute('LOCK TABLE public.properties IN SHARE MODE')
+                csv_path = PROJECT_ROOT / 'data' / 'processed' / f'properties_{scale}.csv'
+                expected = csv_fingerprint(csv_path)
+                before = database_fingerprint(conn)
+                if before != {k:expected[k] for k in before}:
+                    raise ValueError('Database content differs from CSV')
+                evidence = {'csv':expected,'before':before,'configurations':{}}
+                references = {}
+                self.reset_indexes(conn)
+                for query_id, filename in [('Q1','q1.sql'),('Q2','q2.sql'),('Q3','q3_original.sql'),('Q4','q4.sql')]:
+                    references[query_id] = result_digest(conn, read_sql_file(Path('queries')/filename), query_id=='Q2')
 
                 for config in selected_configs:
                     step += 1
@@ -528,6 +552,12 @@ class BenchmarkRunner:
                     # Setup isolated index and analyze
                     prep_info = self.prepare_configuration(conn, config)
                     query_sql = read_sql_file(Path("queries") / config["query_file"])
+                    if database_fingerprint(conn) != before:
+                        raise ValueError('Data changed before configuration')
+                    if result_digest(conn, query_sql, qid=='Q2') != references[qid]:
+                        raise ValueError('Query result equivalence failed')
+                    if qid == 'Q3': self.verify_query_equivalence(conn, 'Q3')
+                    evidence['configurations'][cid] = {'catalog':prep_info,'equivalence':'PASSED'}
                     index_bytes = prep_info["index_bytes"]
                     index_size_mb = round(index_bytes / (1024 * 1024), 2)
                     print(f"    Index dung luong: {index_size_mb} MB ({index_bytes:,} bytes)", flush=True)
@@ -613,12 +643,18 @@ class BenchmarkRunner:
                     all_results.append(result_record)
                     summary_by_scale[scale][cid] = result_record
 
+                evidence['after'] = database_fingerprint(conn)
+                if evidence['after'] != before: raise ValueError('Data changed during scale')
+                (output_dir/f'{scale}_validation.json').write_text(json.dumps(evidence,default=str,indent=2),encoding='utf-8')
+                conn.execute('COMMIT')
+
         # Final cleanup: reset supplemental indexes
         with self.get_connection() as conn:
             self.reset_indexes(conn)
 
         # 5. Export summary files
         self.export_results(all_results, summary_by_scale, env_info, output_dir)
+        (output_dir/'experiment.json').write_text(json.dumps({'experiment_id':experiment_id,'status':'COMPLETED','warmups':warmup_runs,'official_runs':official_runs,'scales':scales,'configurations':[c['config_id'] for c in selected_configs]},indent=2),encoding='utf-8')
         return {
             "results": all_results,
             "summary_by_scale": summary_by_scale,
@@ -667,6 +703,7 @@ class BenchmarkRunner:
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--dedicated-database', action='store_true', help='Confirm real_estate_db is dedicated and may be replaced by auto-import')
     parser.add_argument(
         "--scales",
         default="50000,200000,500000",
@@ -745,6 +782,7 @@ def main(argv=None):
         output_dir=args.output_dir,
         check_equivalence=not args.skip_equivalence,
         auto_import=args.auto_import,
+        dedicated_database=args.dedicated_database,
     )
 
 

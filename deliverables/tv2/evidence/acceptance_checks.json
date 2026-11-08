@@ -1,0 +1,13 @@
+{
+  "experiment_id": "62ea434decd44713b3752af152f81de8",
+  "official_plans": 600,
+  "warmups": 90,
+  "median_iqr_groups_matched": 30,
+  "fingerprint_scales_matched": 3,
+  "catalog_equivalence_configurations": 30,
+  "status": "LIVE_MEASURED",
+  "limitations": [
+    "Uncontrolled background load; large dispersion",
+    "Upstream revision not proven"
+  ]
+}
