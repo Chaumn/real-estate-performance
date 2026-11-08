@@ -1,6 +1,6 @@
-Status: LIVE_MEASURED. Source: evidence/benchmark_raw_plans.zip. Time: ms; storage: bytes. Speedup = baseline median / configuration median. IQR = median upper half - median lower half. Index size comes from historical summary, not EXPLAIN.
+Status: LIVE_MEASURED. Source: evidence/benchmark_raw_plans.zip. Time: ms; storage: bytes. Speedup = baseline median / configuration median. IQR = median upper half - median lower half. Index size is verified against per-scale PostgreSQL catalog validation; not derived from EXPLAIN.
 
-| scale | query | configuration | runs | median_ms | iqr_ms | min_ms | max_ms | index_bytes_historical | status | scan | representative_plan | speedup |
+| scale | query | configuration | runs | median_ms | iqr_ms | min_ms | max_ms | index_bytes | status | scan | representative_plan | speedup |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 50000 | Q1 | Q1_baseline | 20 | 21.7635 | 20.156 | 6.705 | 105.665 | 0 | LIVE_MEASURED | Seq Scan | 50000_Q1_baseline_run01.json | 1.0 |
 | 50000 | Q1 | Q1_indexed | 20 | 1.406 | 0.544 | 1.085 | 5.931 | 376832 | LIVE_MEASURED | Bitmap Heap Scan,Bitmap Index Scan | 50000_Q1_indexed_run01.json | 15.479018492176388 |

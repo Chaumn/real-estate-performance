@@ -151,4 +151,11 @@ Xem [Q3 factorial](tables/q3_factorial_analysis.md): A/B và C/D tách rewriting
 
 ## 5.6 Hạn chế thực nghiệm
 
-Revision upstream chưa chứng minh; SHA CSV chỉ khóa đầu vào hiện tại. Thí nghiệm warm-cache, không cold-cache; EXPLAIN có overhead. Chưa kiểm soát toàn bộ tải nền, autovacuum và nhiễu hệ điều hành; IQR và min/max phải đi kèm median. Không trộn với 600 plan lịch sử. Chưa nghiệm thu browser/visual QA mới; không khẳng định tính tổng quát ngoài máy và workload này.
+Revision upstream chưa chứng minh; SHA CSV chỉ khóa đầu vào hiện tại. Thí nghiệm warm-cache, không cold-cache; EXPLAIN có overhead. Chưa kiểm soát toàn bộ tải nền, autovacuum và nhiễu hệ điều hành; IQR và min/max phải đi kèm median. Không trộn với 600 plan lịch sử. QA được báo cáo trước đây: PASS cho Chrome headless DOM và contact sheet (nhãn tiếng Việt, không thấy clipping), xem evidence/prior_validation.json. Chưa có bằng chứng tái hiện tương tác CDP; CDP interaction: NOT_VERIFIED. Lần này không chạy lại browser, visual QA, PostgreSQL hoặc benchmark.; không khẳng định tính tổng quát ngoài máy và workload này.
+
+
+## Nguồn và phạm vi nghiệm thu
+
+Full regression: 211 PASS, 0 FAIL, 1 SKIP tại c51b2c2; bàn giao ban đầu tại c7a93a7. Không gắn kết quả test cũ cho commit mới. environment_historical.json là tham chiếu lịch sử với collation C; environment_info.json của experiment mới dùng English_United States.1252. Chưa chứng minh hai môi trường tương đương. Trạng thái hiện tại: EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE / PACKAGE_INTEGRITY_VERIFIED.
+
+FIG08 lấy từ báo cáo chất lượng/build dataset; không phải phép đo PostgreSQL. Regression mới loại trừ module live để không thay đổi database.

@@ -1,34 +1,34 @@
-Status: LIVE_MEASURED. Source: evidence/benchmark_raw_plans.zip. Time: ms; storage: bytes. Speedup = baseline median / configuration median. IQR = median upper half - median lower half. Index size comes from historical summary, not EXPLAIN.
+Status: LIVE_MEASURED. Source: evidence/benchmark_raw_plans.zip. Time: ms; storage: bytes. Speedup = baseline median / configuration median. IQR = median upper half - median lower half. Index size is verified against per-scale PostgreSQL catalog validation; not derived from EXPLAIN.
 
 | scale | configuration | status | index_bytes | bytes_per_row | scan_types | indexes_used | size_source |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 50000 | Q1_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 50000 | Q1_indexed | LIVE_MEASURED | 376832 | 7.53664 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_province_name | historical summary; not EXPLAIN |
-| 50000 | Q2_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 50000 | Q2_indexed | LIVE_MEASURED | 3014656 | 60.29312 | Index Scan | idx_properties_location_price | historical summary; not EXPLAIN |
-| 50000 | Q3_A | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 50000 | Q3_B | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 50000 | Q3_C | LIVE_MEASURED | 1138688 | 22.77376 | Seq Scan |  | historical summary; not EXPLAIN |
-| 50000 | Q3_D | LIVE_MEASURED | 1138688 | 22.77376 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_published_at | historical summary; not EXPLAIN |
-| 50000 | Q4_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 50000 | Q4_indexed | LIVE_MEASURED | 368640 | 7.3728 | Seq Scan |  | historical summary; not EXPLAIN |
-| 200000 | Q1_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 200000 | Q1_indexed | LIVE_MEASURED | 1441792 | 7.20896 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_province_name | historical summary; not EXPLAIN |
-| 200000 | Q2_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 200000 | Q2_indexed | LIVE_MEASURED | 11976704 | 59.88352 | Index Scan | idx_properties_location_price | historical summary; not EXPLAIN |
-| 200000 | Q3_A | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 200000 | Q3_B | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 200000 | Q3_C | LIVE_MEASURED | 4513792 | 22.56896 | Seq Scan |  | historical summary; not EXPLAIN |
-| 200000 | Q3_D | LIVE_MEASURED | 4513792 | 22.56896 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_published_at | historical summary; not EXPLAIN |
-| 200000 | Q4_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 200000 | Q4_indexed | LIVE_MEASURED | 1409024 | 7.04512 | Seq Scan |  | historical summary; not EXPLAIN |
-| 500000 | Q1_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 500000 | Q1_indexed | LIVE_MEASURED | 3555328 | 7.110656 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_province_name | historical summary; not EXPLAIN |
-| 500000 | Q2_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 500000 | Q2_indexed | LIVE_MEASURED | 29917184 | 59.834368 | Index Scan | idx_properties_location_price | historical summary; not EXPLAIN |
-| 500000 | Q3_A | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 500000 | Q3_B | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 500000 | Q3_C | LIVE_MEASURED | 11255808 | 22.511616 | Seq Scan |  | historical summary; not EXPLAIN |
-| 500000 | Q3_D | LIVE_MEASURED | 11255808 | 22.511616 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_published_at | historical summary; not EXPLAIN |
-| 500000 | Q4_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | historical summary; not EXPLAIN |
-| 500000 | Q4_indexed | LIVE_MEASURED | 3522560 | 7.04512 | Seq Scan |  | historical summary; not EXPLAIN |
+| 50000 | Q1_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 50000 | Q1_indexed | LIVE_MEASURED | 376832 | 7.53664 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_province_name | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 50000 | Q2_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 50000 | Q2_indexed | LIVE_MEASURED | 3014656 | 60.29312 | Index Scan | idx_properties_location_price | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 50000 | Q3_A | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 50000 | Q3_B | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 50000 | Q3_C | LIVE_MEASURED | 1138688 | 22.77376 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 50000 | Q3_D | LIVE_MEASURED | 1138688 | 22.77376 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_published_at | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 50000 | Q4_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 50000 | Q4_indexed | LIVE_MEASURED | 368640 | 7.3728 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 200000 | Q1_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 200000 | Q1_indexed | LIVE_MEASURED | 1441792 | 7.20896 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_province_name | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 200000 | Q2_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 200000 | Q2_indexed | LIVE_MEASURED | 11976704 | 59.88352 | Index Scan | idx_properties_location_price | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 200000 | Q3_A | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 200000 | Q3_B | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 200000 | Q3_C | LIVE_MEASURED | 4513792 | 22.56896 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 200000 | Q3_D | LIVE_MEASURED | 4513792 | 22.56896 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_published_at | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 200000 | Q4_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 200000 | Q4_indexed | LIVE_MEASURED | 1409024 | 7.04512 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 500000 | Q1_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 500000 | Q1_indexed | LIVE_MEASURED | 3555328 | 7.110656 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_province_name | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 500000 | Q2_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 500000 | Q2_indexed | LIVE_MEASURED | 29917184 | 59.834368 | Index Scan | idx_properties_location_price | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 500000 | Q3_A | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 500000 | Q3_B | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 500000 | Q3_C | LIVE_MEASURED | 11255808 | 22.511616 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 500000 | Q3_D | LIVE_MEASURED | 11255808 | 22.511616 | Bitmap Heap Scan,Bitmap Index Scan | idx_properties_published_at | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 500000 | Q4_baseline | LIVE_MEASURED | 0 | 0.0 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |
+| 500000 | Q4_indexed | LIVE_MEASURED | 3522560 | 7.04512 | Seq Scan |  | per-scale PostgreSQL catalog validation; not EXPLAIN |

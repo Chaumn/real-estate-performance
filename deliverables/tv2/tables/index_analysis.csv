@@ -1,31 +1,31 @@
-scale,configuration,status,index_bytes,bytes_per_row,scan_types,indexes_used,size_source
-50000,Q1_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-50000,Q1_indexed,LIVE_MEASURED,376832,7.53664,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_province_name,historical summary; not EXPLAIN
-50000,Q2_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-50000,Q2_indexed,LIVE_MEASURED,3014656,60.29312,Index Scan,idx_properties_location_price,historical summary; not EXPLAIN
-50000,Q3_A,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-50000,Q3_B,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-50000,Q3_C,LIVE_MEASURED,1138688,22.77376,Seq Scan,,historical summary; not EXPLAIN
-50000,Q3_D,LIVE_MEASURED,1138688,22.77376,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_published_at,historical summary; not EXPLAIN
-50000,Q4_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-50000,Q4_indexed,LIVE_MEASURED,368640,7.3728,Seq Scan,,historical summary; not EXPLAIN
-200000,Q1_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-200000,Q1_indexed,LIVE_MEASURED,1441792,7.20896,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_province_name,historical summary; not EXPLAIN
-200000,Q2_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-200000,Q2_indexed,LIVE_MEASURED,11976704,59.88352,Index Scan,idx_properties_location_price,historical summary; not EXPLAIN
-200000,Q3_A,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-200000,Q3_B,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-200000,Q3_C,LIVE_MEASURED,4513792,22.56896,Seq Scan,,historical summary; not EXPLAIN
-200000,Q3_D,LIVE_MEASURED,4513792,22.56896,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_published_at,historical summary; not EXPLAIN
-200000,Q4_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-200000,Q4_indexed,LIVE_MEASURED,1409024,7.04512,Seq Scan,,historical summary; not EXPLAIN
-500000,Q1_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-500000,Q1_indexed,LIVE_MEASURED,3555328,7.110656,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_province_name,historical summary; not EXPLAIN
-500000,Q2_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-500000,Q2_indexed,LIVE_MEASURED,29917184,59.834368,Index Scan,idx_properties_location_price,historical summary; not EXPLAIN
-500000,Q3_A,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-500000,Q3_B,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-500000,Q3_C,LIVE_MEASURED,11255808,22.511616,Seq Scan,,historical summary; not EXPLAIN
-500000,Q3_D,LIVE_MEASURED,11255808,22.511616,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_published_at,historical summary; not EXPLAIN
-500000,Q4_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,historical summary; not EXPLAIN
-500000,Q4_indexed,LIVE_MEASURED,3522560,7.04512,Seq Scan,,historical summary; not EXPLAIN
+﻿scale,configuration,status,index_bytes,bytes_per_row,scan_types,indexes_used,size_source
+50000,Q1_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/50000_validation.json: configurations.Q1_baseline.catalog.index_bytes
+50000,Q1_indexed,LIVE_MEASURED,376832,7.53664,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_province_name,evidence/50000_validation.json: configurations.Q1_indexed.catalog.index_bytes
+50000,Q2_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/50000_validation.json: configurations.Q2_baseline.catalog.index_bytes
+50000,Q2_indexed,LIVE_MEASURED,3014656,60.29312,Index Scan,idx_properties_location_price,evidence/50000_validation.json: configurations.Q2_indexed.catalog.index_bytes
+50000,Q3_A,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/50000_validation.json: configurations.Q3_A.catalog.index_bytes
+50000,Q3_B,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/50000_validation.json: configurations.Q3_B.catalog.index_bytes
+50000,Q3_C,LIVE_MEASURED,1138688,22.77376,Seq Scan,,evidence/50000_validation.json: configurations.Q3_C.catalog.index_bytes
+50000,Q3_D,LIVE_MEASURED,1138688,22.77376,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_published_at,evidence/50000_validation.json: configurations.Q3_D.catalog.index_bytes
+50000,Q4_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/50000_validation.json: configurations.Q4_baseline.catalog.index_bytes
+50000,Q4_indexed,LIVE_MEASURED,368640,7.3728,Seq Scan,,evidence/50000_validation.json: configurations.Q4_indexed.catalog.index_bytes
+200000,Q1_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/200000_validation.json: configurations.Q1_baseline.catalog.index_bytes
+200000,Q1_indexed,LIVE_MEASURED,1441792,7.20896,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_province_name,evidence/200000_validation.json: configurations.Q1_indexed.catalog.index_bytes
+200000,Q2_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/200000_validation.json: configurations.Q2_baseline.catalog.index_bytes
+200000,Q2_indexed,LIVE_MEASURED,11976704,59.88352,Index Scan,idx_properties_location_price,evidence/200000_validation.json: configurations.Q2_indexed.catalog.index_bytes
+200000,Q3_A,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/200000_validation.json: configurations.Q3_A.catalog.index_bytes
+200000,Q3_B,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/200000_validation.json: configurations.Q3_B.catalog.index_bytes
+200000,Q3_C,LIVE_MEASURED,4513792,22.56896,Seq Scan,,evidence/200000_validation.json: configurations.Q3_C.catalog.index_bytes
+200000,Q3_D,LIVE_MEASURED,4513792,22.56896,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_published_at,evidence/200000_validation.json: configurations.Q3_D.catalog.index_bytes
+200000,Q4_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/200000_validation.json: configurations.Q4_baseline.catalog.index_bytes
+200000,Q4_indexed,LIVE_MEASURED,1409024,7.04512,Seq Scan,,evidence/200000_validation.json: configurations.Q4_indexed.catalog.index_bytes
+500000,Q1_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/500000_validation.json: configurations.Q1_baseline.catalog.index_bytes
+500000,Q1_indexed,LIVE_MEASURED,3555328,7.110656,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_province_name,evidence/500000_validation.json: configurations.Q1_indexed.catalog.index_bytes
+500000,Q2_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/500000_validation.json: configurations.Q2_baseline.catalog.index_bytes
+500000,Q2_indexed,LIVE_MEASURED,29917184,59.834368,Index Scan,idx_properties_location_price,evidence/500000_validation.json: configurations.Q2_indexed.catalog.index_bytes
+500000,Q3_A,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/500000_validation.json: configurations.Q3_A.catalog.index_bytes
+500000,Q3_B,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/500000_validation.json: configurations.Q3_B.catalog.index_bytes
+500000,Q3_C,LIVE_MEASURED,11255808,22.511616,Seq Scan,,evidence/500000_validation.json: configurations.Q3_C.catalog.index_bytes
+500000,Q3_D,LIVE_MEASURED,11255808,22.511616,"Bitmap Heap Scan,Bitmap Index Scan",idx_properties_published_at,evidence/500000_validation.json: configurations.Q3_D.catalog.index_bytes
+500000,Q4_baseline,LIVE_MEASURED,0,0.0,Seq Scan,,evidence/500000_validation.json: configurations.Q4_baseline.catalog.index_bytes
+500000,Q4_indexed,LIVE_MEASURED,3522560,7.04512,Seq Scan,,evidence/500000_validation.json: configurations.Q4_indexed.catalog.index_bytes

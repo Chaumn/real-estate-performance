@@ -1,4 +1,4 @@
-"""Build a portable, explicitly historical handoff from immutable archived plans."""
+"""Build a portable handoff with explicit historical or live provenance."""
 import csv
 import hashlib
 import json
@@ -11,6 +11,10 @@ from scripts.benchmark_runner import compute_statistics, extract_plan_metrics
 ROOT = Path(__file__).resolve().parents[1]
 
 def build(output, experiment=None):
+    mode = "live" if experiment else "historical"
+    status = "LIVE_MEASURED" if experiment else "HISTORICAL"
+    if output.exists() and any(output.iterdir()):
+        raise ValueError("Use an empty output directory to avoid mixing evidence")
     output.mkdir(parents=True, exist_ok=True)
     for directory in ('tables','figures','evidence','dashboard'):
         (output/directory).mkdir(exist_ok=True)
@@ -54,7 +58,11 @@ def build(output, experiment=None):
             raise ValueError('Median mismatch: '+key)
         row={'scale':old['scale'],'query':old['query_id'],'configuration':old['config_id'],
              'runs':len(plans),'median_ms':stats['median'],'iqr_ms':stats['iqr'],'min_ms':stats['min'],'max_ms':stats['max'],
-             'index_bytes_historical':old['index_bytes'],'status':'HISTORICAL'}
+             'index_bytes':old['index_bytes'],'status':status}
+        if experiment:
+            validation = json.loads((source_dir/f"{old['scale']}_validation.json").read_text())
+            if validation['configurations'][old['config_id']]['catalog']['index_bytes'] != row['index_bytes']:
+                raise ValueError('Catalog index size mismatch: '+key)
         metrics=extract_plan_metrics(plans[0][1])
         row['scan']=','.join(metrics['all_scan_types'])
         row['representative_plan']=plans[0][0]
@@ -69,13 +77,13 @@ def build(output, experiment=None):
         fields=list(records[0])
         with (output/'tables'/f'{name}.csv').open('w',encoding='utf-8-sig',newline='') as f:
             w=csv.DictWriter(f,fieldnames=fields);w.writeheader();w.writerows(records)
-        md='Status: HISTORICAL. Source: evidence/benchmark_raw_plans.zip. Time: ms; storage: bytes. Speedup = baseline median / configuration median. IQR = median upper half - median lower half. Index size comes from historical summary, not EXPLAIN.\n\n'
+        md=f'Status: {status}. Source: evidence/benchmark_raw_plans.zip. Time: ms; storage: bytes. Speedup = baseline median / configuration median. IQR = median upper half - median lower half. Index size source: {"per-scale PostgreSQL catalog validation" if experiment else "historical summary; not EXPLAIN"}.\n\n'
         md+='| '+' | '.join(fields)+' |\n| '+' | '.join(['---']*len(fields))+' |\n'
         md+='\n'.join('| '+' | '.join(str(r[k]) for k in fields)+' |' for r in records)
         (output/'tables'/f'{name}.md').write_text(md,encoding='utf-8')
     table('benchmark_summary', rows)
     from scripts.benchmark_tables import analytical_tables
-    for name, records in analytical_tables(rows, groups, compute_statistics).items():
+    for name, records in analytical_tables(rows, groups, compute_statistics, mode).items():
         table(name, records)
     table('q3_factorial_analysis',[{'scale':scale,'comparison':a+'/'+b,'speedup':lookup[scale,a]['median_ms']/lookup[scale,b]['median_ms']} for scale in (50000,200000,500000) for a,b in [('Q3_A','Q3_B'),('Q3_C','Q3_D'),('Q3_A','Q3_C'),('Q3_B','Q3_D')]])
     shutil.copy2(source,output/'evidence'/source.name)
@@ -86,11 +94,6 @@ def build(output, experiment=None):
     from scripts.handoff_assets import complete_assets
     complete_assets(output, rows, groups, 'LIVE_MEASURED' if experiment else 'HISTORICAL')
     if experiment:
-        status='LIVE_MEASURED — nghiệm thu provenance còn giới hạn'
-        # Presentation assets must clearly distinguish this experiment from history.
-        for path in list((output/'tables').glob('*'))+[output/'dashboard/index.html',output/'chapter5_handoff.md',output/'README.md']:
-            content=path.read_text(encoding='utf-8-sig').replace('HISTORICAL','LIVE_MEASURED')
-            path.write_text(content,encoding='utf-8')
         (output/'evidence/source_status.json').write_text(json.dumps({'experiment_id':meta['experiment_id'],'status':'LIVE_MEASURED','source_revision':'UNPROVEN','official_plans':600,'warmups':90},indent=2),encoding='utf-8')
         env=summary['environment']
         narrative = '# Chương 5 — thí nghiệm mới LIVE_MEASURED\n\n'
@@ -101,17 +104,15 @@ def build(output, experiment=None):
             narrative += f"- {row['scale']} / {row['configuration']}: median {row['median_ms']} ms, IQR {row['iqr_ms']} ms, speedup {row['speedup']:.3f}.\n"
         narrative += '\n## 5.4 Khả năng mở rộng\n\nXem [scaling_analysis](tables/scaling_analysis.md) và [FIG03](figures/FIG03.png). Tỷ lệ latency được tính so với 50K; ba tập là prefix nên không phải các mẫu độc lập.\n\n'
         narrative += '## 5.5 Giải thích kết quả\n\nXem [Q3 factorial](tables/q3_factorial_analysis.md): A/B và C/D tách rewriting; A/C và B/D tách index. [FIG06](figures/FIG06.png) đếm node scan thực sự, không đếm truy vấn. Q4 là đối chứng, không giả định index luôn nhanh hơn. [index_analysis](tables/index_analysis.md) ghi index usage và dung lượng.\n\n'
-        narrative += '## 5.6 Hạn chế thực nghiệm\n\nRevision upstream chưa chứng minh; SHA CSV chỉ khóa đầu vào hiện tại. Thí nghiệm warm-cache, không cold-cache; EXPLAIN có overhead. Chưa kiểm soát toàn bộ tải nền, autovacuum và nhiễu hệ điều hành; IQR và min/max phải đi kèm median. Không trộn với 600 plan lịch sử. Chưa nghiệm thu browser/visual QA mới; không khẳng định tính tổng quát ngoài máy và workload này.\n'
+        narrative += '## 5.6 Hạn chế thực nghiệm\n\nRevision upstream chưa chứng minh; SHA CSV chỉ khóa đầu vào hiện tại. Thí nghiệm warm-cache, không cold-cache; EXPLAIN có overhead. Chưa kiểm soát toàn bộ tải nền, autovacuum và nhiễu hệ điều hành; IQR và min/max phải đi kèm median. Không trộn với 600 plan lịch sử. Browser/visual QA: NOT_RUN khi sinh gói; không khẳng định tính tổng quát ngoài máy và workload này.\n'
         (output/'chapter5_handoff.md').write_text(narrative,encoding='utf-8')
-    artifacts=[]
-    for p in sorted(output.rglob('*')):
-        if p.is_file() and p.name not in ('manifest.json','SHA256SUMS.txt'): artifacts.append({'path':p.relative_to(output).as_posix(),'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'status':'HISTORICAL','source_files':[str(source.relative_to(ROOT))]})
-    (output/'manifest.json').write_text(json.dumps({'status':'PARTIAL','valid_official_plans':600,'limitations':limitations,'artifacts':artifacts},indent=2),encoding='utf-8')
-    (output/'SHA256SUMS.txt').write_text('\n'.join(f"{a['sha256']}  {a['path']}" for a in artifacts),encoding='utf-8')
+    from scripts.validate_handoff import write_inventory
+    write_inventory(output, {'benchmark_acceptance': 'NOT_VALIDATED', 'delivery_status': 'NOT_VALIDATED'}, mode)
 
 if __name__=='__main__':
     import argparse
     parser=argparse.ArgumentParser()
     parser.add_argument('--experiment',type=Path)
+    parser.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
-    build(ROOT/'deliverables/tv2',args.experiment)
+    build(args.output,args.experiment)

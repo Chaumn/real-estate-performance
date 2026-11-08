@@ -37,18 +37,25 @@ def complete_assets(output, rows, groups, status='HISTORICAL'):
             chosen = [r for r in rows if (number != 4 or r['query']=='Q3') and (number != 5 or r['query']=='Q4')]
             if number in (1, 2, 7):
                 chosen = [r for r in chosen if r['configuration'] not in ('Q3_B','Q3_C')]
-            metric = 'speedup' if number == 2 else 'index_bytes_historical' if number == 7 else 'median_ms'
+            metric = 'speedup' if number == 2 else 'index_bytes' if number == 7 else 'median_ms'
             for config in sorted({r['configuration'] for r in chosen}):
                 records = sorted([r for r in chosen if r['configuration']==config], key=lambda r:r['scale'])
                 ax.plot([r['scale'] for r in records], [r[metric] for r in records], marker='o', label=config)
             ax.set(xlabel='Số bản ghi', ylabel='Speedup (lần)' if number==2 else 'Dung lượng (byte)' if number==7 else 'Median Execution Time (ms)')
             ax.legend(fontsize=8, ncol=2)
-        ax.set_title(f'FIG{number:02d} — {title}\n{status} — xem giới hạn thực nghiệm trong bàn giao')
+        figure_status = 'DATASET_QUALITY_BUILD_REPORT' if number == 8 else status
+        ax.set_title(f'FIG{number:02d} — {title}\n{figure_status} — xem giới hạn thực nghiệm trong bàn giao')
         ax.set_ylim(bottom=0); ax.grid(axis='y', alpha=.2); fig.tight_layout()
         for ext in ('png','svg'): fig.savefig(output/'figures'/f'FIG{number:02d}.{ext}', dpi=300)
         plt.close(fig)
+    figure_readme = '# FIG01-FIG08\n\nGenerated PNG (300 DPI) and SVG. Browser/visual QA: NOT_RUN.\n\n'
+    for number, title in enumerate(titles, 1):
+        source = 'evidence/build_report.json' if number == 8 else 'evidence/benchmark_raw_plans.zip' if number == 6 else 'tables/benchmark_summary.csv'
+        provenance = 'DATASET_QUALITY_BUILD_REPORT' if number == 8 else status
+        figure_readme += f'- FIG{number:02d}: {title}; source: {source}; provenance: {provenance}.\n'
+    (output/'figures/README.md').write_text(figure_readme, encoding='utf-8')
     from scripts.dashboard import export_handoff_dashboard
-    export_handoff_dashboard(output, rows)
+    export_handoff_dashboard(output, rows, status)
     sections = [
         ('5.1 Môi trường thực nghiệm', 'Metadata lịch sử ghi PostgreSQL 18.3. Thông tin CPU và logical cores giữa các manifest chưa nhất quán; không suy ra cấu hình máy từ thời gian đo. Xem evidence/environment_historical.json.'),
         ('5.2 Vận hành hệ thống', 'Bộ dữ liệu gồm ba quy mô 50K/200K/500K. Gói có 600 plan lịch sử, 30 trường hợp × 20 lượt. Không có bằng chứng độc lập về 90 warm-up, bất biến database hoặc equivalence đầy đủ; không xem đây là nhật ký vận hành mới.'),
@@ -65,4 +72,7 @@ def complete_assets(output, rows, groups, status='HISTORICAL'):
     for i,p in enumerate(sorted((output/'tables').glob('*.csv')),1):
         doc+=f'- Bảng {i}: [{p.stem}](tables/{p.name}). Đơn vị và nguồn tại bản Markdown tương ứng; kết quả benchmark là HISTORICAL.\n'
     (output/'chapter5_handoff.md').write_text(doc,encoding='utf-8')
+    if status == 'LIVE_MEASURED':
+        (output/'README.md').write_text('# TV2 — LIVE_MEASURED / NOT_VALIDATED\n\nNguồn: experiment.json, raw plans và catalog validation. QA chưa chạy. FIG08 lấy từ build report. environment_historical.json chỉ là tham chiếu lịch sử; không suy diễn cùng môi trường.\n', encoding='utf-8')
+        return
     (output/'README.md').write_text('# Gói TV2 — HISTORICAL / PARTIAL\n\nMở dashboard/index.html trực tiếp; không cần mạng hay API. TV3 dùng chapter5_handoff.md và tables/*.md; PNG 300 DPI, SVG để chỉnh kích thước. Không công bố là benchmark chính thức.\n\nTái tạo từ repository: `python -B -m scripts.package_benchmark`. Raw nguồn không bị thay đổi. Benchmark mới chỉ trên database thử nghiệm độc lập; runner còn cần nghiệm thu hardening trước khi chạy.\n',encoding='utf-8')

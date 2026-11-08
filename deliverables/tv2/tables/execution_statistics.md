@@ -1,4 +1,4 @@
-Status: LIVE_MEASURED. Source: evidence/benchmark_raw_plans.zip. Time: ms; storage: bytes. Speedup = baseline median / configuration median. IQR = median upper half - median lower half. Index size comes from historical summary, not EXPLAIN.
+Status: LIVE_MEASURED. Source: evidence/benchmark_raw_plans.zip. Time: ms; storage: bytes. Speedup = baseline median / configuration median. IQR = median upper half - median lower half. Index size is verified against evidence/{scale}_validation.json catalog.index_bytes; not derived from EXPLAIN.
 
 | scale | configuration | status | execution_median_ms | execution_mean_ms | execution_min_ms | execution_max_ms | execution_std_ms | execution_iqr_ms | execution_p95_ms | planning_median_ms | planning_mean_ms | planning_min_ms | planning_max_ms | planning_std_ms | planning_iqr_ms | planning_p95_ms |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |

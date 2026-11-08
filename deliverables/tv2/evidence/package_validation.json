@@ -1,11 +1,20 @@
 {
-  "table_rows": 30,
-  "static_links": "PASS",
-  "representative_links": "PASS",
-  "visual_review": "Contact sheet reviewed; 8 figures generated at 300 DPI with Vietnamese titles",
-  "browser_smoke": "PASS: Chrome headless DOM verified, table populated with 30 configs, filter hooks intact, 0 JS errors",
-  "postgresql": "CONNECTED real_estate_db 5432; live import and rollback passed",
-  "benchmark_acceptance": "EXPERIMENT_ACCEPTED; LIVE_MEASURED; scientific limitations remain",
+  "verified": {
+    "execution_statistics": 30,
+    "query_comparison": 18,
+    "scaling_analysis": 30,
+    "q3_factorial_analysis": 12,
+    "catalog_configurations": 30,
+    "official_plans": 600,
+    "warmups": 90,
+    "mismatches": 0
+  },
+  "benchmark_acceptance": "EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE",
+  "delivery_status": "PACKAGE_INTEGRITY_VERIFIED",
+  "postgresql": "NOT_RUN_CURRENT; archived experiment evidence verified offline",
+  "browser_smoke": "PRIOR_REPORTED_PASS: DOM rendering only; not independently rerun",
+  "cdp_interaction": "NOT_VERIFIED; no reproducible interaction evidence",
+  "visual_review": "PRIOR_REPORTED_PASS: contact sheet and Vietnamese labels only; no new visual review",
   "tests": {
     "passed": 211,
     "failed": 0,
@@ -18,11 +27,17 @@
     "command": "py -m pytest -v --junitxml=deliverables/tv2/evidence/regression_current.xml",
     "source": "evidence/regression_current.xml"
   },
-  "experiment": {
-    "experiment_id": "62ea434decd44713b3752af152f81de8",
-    "status": "LIVE_MEASURED",
-    "source_revision": "UNPROVEN",
-    "official_plans": 600,
-    "warmups": 90
-  }
+  "current_tests": {
+    "passed": 210,
+    "skipped": 1,
+    "failed": 0,
+    "scope": "offline revision working tree based on c7a93a7; live module excluded",
+    "source": "evidence/offline_revision.xml"
+  },
+  "handoff_baseline": "c7a93a7",
+  "limitations": [
+    "No current database connection or benchmark execution",
+    "Prior regression attribution remains c51b2c2",
+    "Historical collation C differs from experiment English_United States.1252; environment equivalence unproven"
+  ]
 }

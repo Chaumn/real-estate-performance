@@ -417,3 +417,8 @@ Bạn cũng có thể chạy quy trình trọn gói chỉ với một lệnh:
 ```powershell
 python -m scripts.pipeline --action all
 ```
+
+
+### Phạm vi kiểm định TV2
+
+Gói [TV2](deliverables/tv2/README.md): EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE / PACKAGE_INTEGRITY_VERIFIED. Full regression: 211 PASS, 0 FAIL, 1 SKIP tại c51b2c2; bàn giao ban đầu tại c7a93a7. Không gắn kết quả test cũ cho commit mới. environment_historical.json là tham chiếu lịch sử với collation C; environment_info.json của experiment mới dùng English_United States.1252. Chưa chứng minh hai môi trường tương đương. Trạng thái hiện tại: EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE / PACKAGE_INTEGRITY_VERIFIED. QA được báo cáo trước đây: PASS cho Chrome headless DOM và contact sheet (nhãn tiếng Việt, không thấy clipping), xem evidence/prior_validation.json. Chưa có bằng chứng tái hiện tương tác CDP; CDP interaction: NOT_VERIFIED. Lần này không chạy lại browser, visual QA, PostgreSQL hoặc benchmark.

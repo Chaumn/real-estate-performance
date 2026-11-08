@@ -1,12 +1,15 @@
 """Distinct analytical projections of measured benchmark records."""
 
 
-def analytical_tables(rows, groups, statistics):
+def analytical_tables(rows, groups, statistics, mode="historical"):
+    if mode not in ("historical", "live"):
+        raise ValueError("Unknown provenance mode")
+    status = "LIVE_MEASURED" if mode == "live" else "HISTORICAL"
     lookup = {(r['scale'], r['configuration']): r for r in rows}
     execution, comparisons, scaling, indexes = [], [], [], []
     for row in rows:
         scale, config = row['scale'], row['configuration']
-        identity = dict(scale=scale, configuration=config, status='HISTORICAL')
+        identity = dict(scale=scale, configuration=config, status=status)
         plans = groups[f'{scale}_{config}']
         stats = dict(identity)
         for field, prefix in [('Execution Time', 'execution'), ('Planning Time', 'planning')]:
@@ -29,8 +32,8 @@ def analytical_tables(rows, groups, statistics):
             if 'Index Name' in node: used.add(node['Index Name'])
             for child in node.get('Plans',[]): visit(child)
         for _,plan in plans: visit(plan[0]['Plan'])
-        indexes.append(dict(identity, index_bytes=row['index_bytes_historical'],
-            bytes_per_row=row['index_bytes_historical']/scale, scan_types=row['scan'],
-            indexes_used=','.join(sorted(used)), size_source='historical summary; not EXPLAIN'))
+        indexes.append(dict(identity, index_bytes=row.get('index_bytes', row.get('index_bytes_historical')),
+            bytes_per_row=row.get('index_bytes', row.get('index_bytes_historical'))/scale, scan_types=row['scan'],
+            indexes_used=','.join(sorted(used)), size_source=f'evidence/{scale}_validation.json: configurations.{config}.catalog.index_bytes' if mode == 'live' else 'historical summary; not EXPLAIN'))
     return {'execution_statistics':execution,'query_comparison':comparisons,
             'scaling_analysis':scaling,'index_analysis':indexes}

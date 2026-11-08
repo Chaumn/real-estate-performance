@@ -1,0 +1,28 @@
+{
+  "table_rows": 30,
+  "static_links": "PASS",
+  "representative_links": "PASS",
+  "visual_review": "Contact sheet reviewed; 8 figures generated at 300 DPI with Vietnamese titles",
+  "browser_smoke": "PASS: Chrome headless DOM verified, table populated with 30 configs, filter hooks intact, 0 JS errors",
+  "postgresql": "CONNECTED real_estate_db 5432; live import and rollback passed",
+  "benchmark_acceptance": "EXPERIMENT_ACCEPTED; LIVE_MEASURED; scientific limitations remain",
+  "tests": {
+    "passed": 211,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 1,
+    "scope": "full regression suite including live PostgreSQL e2e",
+    "live_status": "PASSED",
+    "python": "3.13.7",
+    "commit": "c51b2c2690e676416189fdea2c0eedc72fd20677",
+    "command": "py -m pytest -v --junitxml=deliverables/tv2/evidence/regression_current.xml",
+    "source": "evidence/regression_current.xml"
+  },
+  "experiment": {
+    "experiment_id": "62ea434decd44713b3752af152f81de8",
+    "status": "LIVE_MEASURED",
+    "source_revision": "UNPROVEN",
+    "official_plans": 600,
+    "warmups": 90
+  }
+}
