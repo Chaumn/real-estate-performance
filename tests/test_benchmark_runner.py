@@ -209,8 +209,8 @@ def test_extract_plan_metrics_parallel_workers():
     ]
 
     metrics = extract_plan_metrics(sample_plan)
-    assert metrics["shared_hit_blocks"] == 10 + 100 + 120
-    assert metrics["shared_read_blocks"] == 5 + 20 + 15
+    assert metrics["shared_hit_blocks"] == 10
+    assert metrics["shared_read_blocks"] == 5
     assert metrics["primary_scan_type"] == "Seq Scan"
 
 

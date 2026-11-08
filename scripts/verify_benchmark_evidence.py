@@ -7,6 +7,8 @@ EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) execution plan files.
 from __future__ import annotations
 
 import hashlib
+import math
+import re
 import json
 from pathlib import Path
 import sys
@@ -63,12 +65,21 @@ def audit_raw_evidence(
         }
 
     files = sorted(raw_dir.glob("*.json"))
+    configs = ['Q1_baseline','Q1_indexed','Q2_baseline','Q2_indexed','Q3_A','Q3_B','Q3_C','Q3_D','Q4_baseline','Q4_indexed']
+    expected = {f'{scale}_{config}_run{run:02d}.json' for scale in (50000,200000,500000) for config in configs for run in range(1,21)}
+    errors = []
+    if {f.name for f in files} != expected:
+        errors.append('Run matrix does not match expected scale/configuration/run identities')
+
     manifest = []
     scales_found = set()
     configs_found = set()
 
     for fpath in files:
         # Expected naming pattern: {scale}_{config}_run{run:02d}.json
+        if not re.fullmatch(r'(50000|200000|500000)_(Q[124]_(baseline|indexed)|Q3_[ABCD])_run(0[1-9]|1[0-9]|20)', fpath.stem):
+            errors.append(f'Invalid identity: {fpath.name}')
+            continue
         parts = fpath.stem.split("_")
         scale = int(parts[0]) if parts[0].isdigit() else 0
         run_part = parts[-1]
@@ -84,7 +95,12 @@ def audit_raw_evidence(
             with open(fpath, "r", encoding="utf-8") as f:
                 content = json.load(f)
             p_time, e_time, scan_node = extract_plan_metrics(content)
+            if not isinstance(content, list) or len(content) != 1 or not isinstance(content[0].get('Plan'), dict):
+                raise ValueError('Invalid plan structure')
+            if not all(isinstance(v,(int,float)) and not isinstance(v,bool) and math.isfinite(v) and v >= 0 for v in (p_time,e_time)):
+                raise ValueError('Missing or invalid timing')
         except Exception as e:
+            errors.append(f"{fpath.name}: {e}")
             p_time, e_time, scan_node = None, None, f"Error: {e}"
 
         manifest.append({
@@ -100,7 +116,9 @@ def audit_raw_evidence(
         })
 
     summary = {
-        "status": "VERIFIED" if len(files) == 600 else f"PARTIAL ({len(files)}/600)",
+        "status": "STRUCTURE_VERIFIED" if not errors else "INVALID",
+        "errors": errors,
+        "limitations": ["Hashes computed, not compared against trusted manifest; filename identities do not prove execution provenance"],
         "total_files": len(files),
         "expected_files": 600,
         "scales_audited": sorted(scales_found),

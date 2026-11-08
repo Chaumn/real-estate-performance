@@ -24,7 +24,7 @@ echo Chọn tác vụ bạn muốn thực hiện:
 echo   [1] Mở Web Dashboard trực quan (Khuyến nghị xem kết quả ngay)
 echo   [2] Chạy lại toàn bộ Benchmark tự động (3 quy mô x 10 cấu hình)
 echo   [3] Cập nhật lại biểu đồ và báo cáo phân tích (analyze_results)
-echo   [4] Chạy toàn bộ 182 Unit Tests kiểm thử hệ thống
+echo   [4] Chạy toàn bộ 203 Unit & Integration Tests kiểm thử hệ thống
 echo   [5] Chạy quy trình Data Science (Quality, EDA, Features, Processing Benchmark)
 echo   [6] Dừng dịch vụ PostgreSQL (stop_db)
 echo   [0] Thoát
@@ -63,7 +63,7 @@ if "%opt%"=="3" (
 
 if "%opt%"=="4" (
     echo.
-    echo [*] Đang chạy toàn bộ 182 Unit Tests...
+    echo [*] Đang chạy toàn bộ 203 Unit & Integration Tests...
     python -m pytest
     pause
     goto end

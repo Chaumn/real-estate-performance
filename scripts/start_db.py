@@ -20,7 +20,7 @@ PORT = 5433
 
 
 def is_running():
-    cmd = [str(PG_BIN / "pg_isready.exe"), "-h", "127.0.0.1", "-p", str(PORT)]
+    cmd = [str(PG_BIN / "pg_isready.exe"), "-U", "postgres", "-h", "127.0.0.1", "-p", str(PORT)]
     res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     return res.returncode == 0
 

@@ -1,0 +1,21 @@
+{
+  "table_rows": 30,
+  "static_links": "PASS",
+  "representative_links": "PASS",
+  "visual_review": "Contact sheet reviewed; Vietnamese labels visible, no apparent clipping",
+  "browser_smoke": "NOT_RUN: Playwright CLI unavailable locally",
+  "postgresql": "BLOCKED: connection timeout on 127.0.0.1:5433",
+  "benchmark_acceptance": "NOT_ACCEPTED",
+  "tests": {
+    "passed": 198,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 1,
+    "scope": "offline; live module excluded",
+    "live_status": "NOT_RUN",
+    "python": "3.13.7",
+    "commit": "eb1c2dbebe824f1bdf72e95636352d28fd9b34fc",
+    "command": "python -B -m pytest -q -rs -p no:cacheprovider --ignore=tests/test_live_postgresql_e2e.py --junitxml=deliverables/tv2/evidence/offline_tests.xml",
+    "source": "evidence/offline_tests.xml"
+  }
+}

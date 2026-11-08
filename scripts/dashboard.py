@@ -449,6 +449,26 @@ class BenchmarkDashboardHandler(http.server.SimpleHTTPRequestHandler):
             super().do_GET()
 
 
+def export_handoff_dashboard(output, rows):
+    """Export an offline results view of this dashboard, without CDN or DB actions."""
+    css = DASHBOARD_HTML.split('<style>')[1].split('</style>')[0]
+    payload = json.dumps(rows, ensure_ascii=False).replace('</', '<\\/')
+    html = '''<!doctype html><html lang="vi"><meta charset="utf-8"><title>TV2 Benchmark Results</title>
+    <style>CSS table{border-collapse:collapse;width:100%}td,th{padding:10px;border-bottom:1px solid #ddd}img{max-width:100%}</style>
+    <header><h1>Benchmark Results — HISTORICAL</h1><p>SHA và median đã đối chiếu; nghiệm thu thực nghiệm chính thức: BLOCKED.</p></header>
+    <p id="overview"></p><label>Quy mô <select id="scale"><option value="">Tất cả</option></select></label>
+    <label>Truy vấn <select id="query"><option value="">Tất cả</option></select></label>
+    <table><thead><tr><th>Quy mô</th><th>Cấu hình</th><th>Median (ms)</th><th>IQR (ms)</th><th>Speedup</th><th>Scan</th><th>Plan</th></tr></thead><tbody id="body"></tbody></table>
+    <h2>Bảng và tài liệu</h2>LINKS<h2>Biểu đồ và tải ảnh</h2>FIGURES
+    <script>const rows=DATA;const scale=document.getElementById('scale'),query=document.getElementById('query');
+    for(const [el,key] of [[scale,'scale'],[query,'query']])for(const v of [...new Set(rows.map(r=>r[key]))]){let o=document.createElement('option');o.value=v;o.textContent=v;el.append(o)}
+    document.getElementById('overview').textContent=`${new Set(rows.map(r=>r.scale)).size} dataset; ${rows.length} trường hợp; ${rows.reduce((s,r)=>s+r.runs,0)} plan lịch sử.`;
+    function render(){document.getElementById('body').innerHTML=rows.filter(r=>(!scale.value||r.scale==scale.value)&&(!query.value||r.query==query.value)).map(r=>`<tr><td>${r.scale}</td><td>${r.configuration}</td><td>${r.median_ms}</td><td>${r.iqr_ms}</td><td>${r.speedup==null?'N/A':r.speedup.toFixed(2)}</td><td>${r.scan}</td><td><a href="../evidence/${r.representative_plan}">JSON execution plan</a></td></tr>`).join('')};scale.onchange=query.onchange=render;render();</script></html>'''
+    links = '<p><a href="../chapter5_handoff.md">Chương 5</a></p>' + ''.join(f'<p><a href="../tables/{p.name}">{p.name}</a></p>' for p in sorted((output/'tables').glob('*.csv')))
+    figures = ''.join(f'<section><h3>FIG{i:02d}</h3><a href="../figures/FIG{i:02d}.png">PNG</a> · <a href="../figures/FIG{i:02d}.svg">SVG</a><img alt="FIG{i:02d}: kết quả lịch sử" src="../figures/FIG{i:02d}.png"></section>' for i in range(1,9))
+    (output/'dashboard/index.html').write_text(html.replace('CSS',css).replace('LINKS',links).replace('FIGURES',figures).replace('DATA',payload),encoding='utf-8')
+
+
 def run_dashboard(port: int = 8000, open_browser: bool = False):
     handler = BenchmarkDashboardHandler
     with socketserver.TCPServer(("", port), handler) as httpd:

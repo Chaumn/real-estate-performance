@@ -130,6 +130,11 @@ def test_full_benchmark_to_analysis_pipeline(tmp_path):
                     )
 
     # Verify outputs
+    experiments = list(output_dir.iterdir())
+    assert len(experiments) == 1
+    output_dir = experiments[0]
+    assert (output_dir / 'experiment.json').is_file()
+    assert len(list(output_dir.glob('*warmup*.json'))) == 2
     csv_file = output_dir / "benchmark_results.csv"
     json_file = output_dir / "benchmark_summary.json"
     env_file = output_dir / "environment_info.json"

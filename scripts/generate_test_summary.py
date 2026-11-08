@@ -86,12 +86,12 @@ def main():
     summary_data = {
         "timestamp": datetime.now().isoformat(),
         "total_collected": total_tests,
-        "overall_status": "ALL_PASSED" if total_failed == 0 else "FAILED",
+        "overall_status": "ALL_PASSED" if total_failed == 0 and res.returncode == 0 else "FAILED",
         "total_passed": total_passed,
         "total_failed": total_failed,
         "total_skipped": total_skipped,
         "by_tier": category_counts,
-        "live_postgresql_verified": True,
+        "live_postgresql_verified": res.returncode == 0 and any("test_live_postgresql_e2e.py::test_transactional_copy_csv_into_test_db" in t["nodeid"] and t["status"] == "PASSED" for t in tests_detail),
         "live_port": 5433,
         "database_tested": "ephemeral_isolated_db (real_estate_qa_e2e_<uuid>)",
         "tests_detail": tests_detail

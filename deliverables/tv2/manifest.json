@@ -1,0 +1,712 @@
+{
+  "status": "PARTIAL",
+  "artifacts": [
+    {
+      "path": "chapter5_handoff.md",
+      "type": ".md",
+      "sha256": "68407b42346411db2d6933a063a34c6c8934e4ebc535cf0a7cf16ac29c01be63",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "dashboard/index.html",
+      "type": ".html",
+      "sha256": "5f238bd959861eca88d593c4acfc1e4f19f21869fd16f4afd7922efaafcb030e",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/200000_Q1_baseline_run01.json",
+      "type": ".json",
+      "sha256": "3507de9a6a0c06146af08b5651501ea89df6db7b88974aef23a88a079410412a",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/200000_Q1_indexed_run01.json",
+      "type": ".json",
+      "sha256": "e692dc0abe4f94305afdf7b89004b4a263646938110e3b77323011350e920c8b",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/200000_Q2_baseline_run01.json",
+      "type": ".json",
+      "sha256": "8d9f2edf04eacd63a5848b0fe99d999dbbd7758ac1d41dd3634b372376b7ab0a",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/200000_Q2_indexed_run01.json",
+      "type": ".json",
+      "sha256": "fd2424004a21c284430dec7d7ea0936d50ee39057d2431115fc87b7a3e67b626",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/200000_Q3_A_run01.json",
+      "type": ".json",
+      "sha256": "fb3ec7e4e748894e26eecf362cc895441b9cecc8c4a0a1164664d669f711c9c3",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/200000_Q3_B_run01.json",
+      "type": ".json",
+      "sha256": "c831dcbd3a846ce3846270b6b11f3930b10610bd04232e85b5e326226002e9d8",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/200000_Q3_C_run01.json",
+      "type": ".json",
+      "sha256": "d7ce07d86dda6387db73eae8ad1be2a9458687491983b70a712ee0f2dcaf425e",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/200000_Q3_D_run01.json",
+      "type": ".json",
+      "sha256": "06c39cc5bd0fd05029853078642706f6ac81b99cd809b66a10b896c76bcccae2",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/200000_Q4_baseline_run01.json",
+      "type": ".json",
+      "sha256": "d1ba7f1e682579cdf6651da0ae64b4341cecaa12f92a33c3927a21b34107ccb1",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/200000_Q4_indexed_run01.json",
+      "type": ".json",
+      "sha256": "2a0721ba2cfa3396172749d0700a55ab11bbb9e36a09ea7d57131fbebdb2f5c7",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/500000_Q1_baseline_run01.json",
+      "type": ".json",
+      "sha256": "012443f875d071ec16c065bf67c9593dccf2a6ca19cc2e801c006e23b647312c",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/500000_Q1_indexed_run01.json",
+      "type": ".json",
+      "sha256": "d8807b969d19de14b550a15539fbfcd25d93fbff578e86cba1f1a9aa4fb859ed",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/500000_Q2_baseline_run01.json",
+      "type": ".json",
+      "sha256": "e3cd23c0d851a41cdae69b8b07121f071eda5548876379f7099746dd44bab126",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/500000_Q2_indexed_run01.json",
+      "type": ".json",
+      "sha256": "b66213ab45d0af255e4cead046f3294ee60be1f8748ddd7a2b9584b92a95dfde",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/500000_Q3_A_run01.json",
+      "type": ".json",
+      "sha256": "40b32909710680ea949b2a5d2d1fe4a4914097437c29e7eafaec161f6fc59cb6",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/500000_Q3_B_run01.json",
+      "type": ".json",
+      "sha256": "688b155d5b3af76cacbd4aaf081a7434c2d4704b5c80eb4f29538036594108cd",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/500000_Q3_C_run01.json",
+      "type": ".json",
+      "sha256": "c6af41ee6488e4e85da3d44a79313c7b15a9d23e76d61f0178c7e50e5095f99b",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/500000_Q3_D_run01.json",
+      "type": ".json",
+      "sha256": "83f796b01d7c942f34f2f4a81e864a0a08b374e84495539e47912c65a7e7f6ee",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/500000_Q4_baseline_run01.json",
+      "type": ".json",
+      "sha256": "869e114b3e7f171eeb946b7e85904224be3e2f77b86e5425e2280c06235b913a",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/500000_Q4_indexed_run01.json",
+      "type": ".json",
+      "sha256": "28305d416765c6ba75e86677ab79d740ccd9009f57c831fffa795fe064d620d0",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/50000_Q1_baseline_run01.json",
+      "type": ".json",
+      "sha256": "4a23f007342221cb8d73c00d30c9d6300cdc03b42beabc9ce81451de25667686",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/50000_Q1_indexed_run01.json",
+      "type": ".json",
+      "sha256": "4a429f1ea7760e82c8fc74edff0cd3de4b2d1b25d9370059a29120882f8db92b",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/50000_Q2_baseline_run01.json",
+      "type": ".json",
+      "sha256": "691e5f141b95e183c7ad82b4fba1f4e93f496d864483de5f3711f353eda63835",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/50000_Q2_indexed_run01.json",
+      "type": ".json",
+      "sha256": "6012a9b87824d980e3eb46f56ee31763201f4338fe4fd299880ecdaa73fa16ea",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/50000_Q3_A_run01.json",
+      "type": ".json",
+      "sha256": "a8a5a67088a370a33dc6eb285f4a6a12985d2060422c97938ead0617f3675c8b",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/50000_Q3_B_run01.json",
+      "type": ".json",
+      "sha256": "2dd9c5cd31684b045811a5c30d02ae795071da17e512b08e6f728fbe455ecaa8",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/50000_Q3_C_run01.json",
+      "type": ".json",
+      "sha256": "0542b5bf7709f36e6bd9aa20fedc81ec823c3da0770bf1039c7991d2e00f87f5",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/50000_Q3_D_run01.json",
+      "type": ".json",
+      "sha256": "716f6b6b9508953f7e88427cef58eccd1570b026ae1a70b19f7330802e8d70b2",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/50000_Q4_baseline_run01.json",
+      "type": ".json",
+      "sha256": "853b6bc6d26132d327ce3ee59dae13bbd96733721fbf437a21a3149b8d25e813",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/50000_Q4_indexed_run01.json",
+      "type": ".json",
+      "sha256": "f6dd5d1be6f8cdae21e8010bd53996319db5089d3b1b47f5e23586608c45de74",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/benchmark_raw_plans.zip",
+      "type": ".zip",
+      "sha256": "262ed49431c0a4c758ad638dd253726273119acf27a23ca20997cec477677753",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/build_report.json",
+      "type": ".json",
+      "sha256": "4e6b793eb0ae2665e5d3eac2cb608a959e83e4aab32e6b33f6d0157fedaa5ea7",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/environment_historical.json",
+      "type": ".json",
+      "sha256": "6ea21d870a3ff4d2b7e5b60c9edebef10d8cdf8a129470dfefb78d22bd808a1e",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "evidence/offline_tests.xml",
+      "type": ".xml",
+      "sha256": "8d650f6eca08a673f05524d4b5ee3bb59ea0a095c5c7aaf9857e05df090c7826",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "OFFLINE_ONLY"
+    },
+    {
+      "path": "evidence/package_validation.json",
+      "type": ".json",
+      "sha256": "2f215166a0febc5afab30a304b751d28e522599575797570e78e5ae4fe7ff93c",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG01.png",
+      "type": ".png",
+      "sha256": "1bdb605ea860ac192d66bed940c7b7a723075d5ea7753e6d2200e8b01030469b",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG01.svg",
+      "type": ".svg",
+      "sha256": "c0533724ca1fa3e050ff5a05ef8b69c5b48771266bec557af329edb6ba05895d",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG02.png",
+      "type": ".png",
+      "sha256": "200a4fb15a1646d7f610df268e86f6336f1c8cbdeb928d2a443a039150e2840e",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG02.svg",
+      "type": ".svg",
+      "sha256": "ddfcd70df7d54e1c2fefd7d1989f648365bfbba4f1b3c926d85888ed41bd2b36",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG03.png",
+      "type": ".png",
+      "sha256": "7834718b77ea876db85b3c4885a71944e51bdd6f13c993197e27d998bdeed65c",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG03.svg",
+      "type": ".svg",
+      "sha256": "752ccb4dbb312ca958083a30756bdfc6faee42be34f1b87fe0f94263612d7431",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG04.png",
+      "type": ".png",
+      "sha256": "3d9b0bfaa71efaf1864eead08244f9934f3c842a47275b2d019fa7b6c50b8ac7",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG04.svg",
+      "type": ".svg",
+      "sha256": "0b1d2dfdd7d1afbd8fd66d44a132630b2d50b958629828d43156e17bdccf125e",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG05.png",
+      "type": ".png",
+      "sha256": "83cea7f497636f018beff616d04029aac9bf8cd95d4634bdd952514ed5aa6ee1",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG05.svg",
+      "type": ".svg",
+      "sha256": "4a74577f280e7c91af16fade55416cbab93fdf364726d902b54b9d662fb5e7ac",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG06.png",
+      "type": ".png",
+      "sha256": "b9b860ae572489179a15821d5fec07db524816d7ccf6139df8fb94b12fba7d0c",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG06.svg",
+      "type": ".svg",
+      "sha256": "4b8b6d2a2323918276a4c1548181163ba1a4f6c08e7aef30b4c12d734a44d819",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG07.png",
+      "type": ".png",
+      "sha256": "81446413386f0f8a167886bb8f0808fe41a5832fb851de36fe94595381bc7d17",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG07.svg",
+      "type": ".svg",
+      "sha256": "e7ae9582fbf5bb8ff5f74218bfd6d868056508f61b7a925f1c624a113b9f4491",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG08.png",
+      "type": ".png",
+      "sha256": "090ce4b85d80e3e27741a6e9eeb741068082a8c3e8cae14ab7b05e5809b82d93",
+      "source_files": [
+        "evidence/build_report.json"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/FIG08.svg",
+      "type": ".svg",
+      "sha256": "e97a197328de9e67d457da517f859a7ab97a836b3f313b8a9e3cc97c4b966757",
+      "source_files": [
+        "evidence/build_report.json"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "figures/README.md",
+      "type": ".md",
+      "sha256": "6a6a0642de761d08eb8be908c7dcf0783b5c4890ca6ab78f9f8bf8bac0082275",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "README.md",
+      "type": ".md",
+      "sha256": "cddfd294bd2ed6f3f43670712c9e44ebba2d9aac929bdadc5b1bc0eb3f0084b9",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/benchmark_summary.csv",
+      "type": ".csv",
+      "sha256": "5b848e91e2f6c5be7e89c911b56c583b30118967feb52cee5fa7f2df4d7adec8",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/benchmark_summary.md",
+      "type": ".md",
+      "sha256": "7f4339cb409856b879275ddd12098926d16b9067a42a193de1b4b7800d2a0cd6",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/execution_statistics.csv",
+      "type": ".csv",
+      "sha256": "5b848e91e2f6c5be7e89c911b56c583b30118967feb52cee5fa7f2df4d7adec8",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/execution_statistics.md",
+      "type": ".md",
+      "sha256": "7f4339cb409856b879275ddd12098926d16b9067a42a193de1b4b7800d2a0cd6",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/index_analysis.csv",
+      "type": ".csv",
+      "sha256": "5b848e91e2f6c5be7e89c911b56c583b30118967feb52cee5fa7f2df4d7adec8",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/index_analysis.md",
+      "type": ".md",
+      "sha256": "7f4339cb409856b879275ddd12098926d16b9067a42a193de1b4b7800d2a0cd6",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/q3_factorial_analysis.csv",
+      "type": ".csv",
+      "sha256": "d7842931905c1403f505338d47fc2759fccce753d041fdf08565bf4536b37002",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/q3_factorial_analysis.md",
+      "type": ".md",
+      "sha256": "decad560d50987dd987fc1700b2755d59b33120e308b6e0fe9f71dec71525355",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/query_comparison.csv",
+      "type": ".csv",
+      "sha256": "5b848e91e2f6c5be7e89c911b56c583b30118967feb52cee5fa7f2df4d7adec8",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/query_comparison.md",
+      "type": ".md",
+      "sha256": "7f4339cb409856b879275ddd12098926d16b9067a42a193de1b4b7800d2a0cd6",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/scaling_analysis.csv",
+      "type": ".csv",
+      "sha256": "5b848e91e2f6c5be7e89c911b56c583b30118967feb52cee5fa7f2df4d7adec8",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/scaling_analysis.md",
+      "type": ".md",
+      "sha256": "7f4339cb409856b879275ddd12098926d16b9067a42a193de1b4b7800d2a0cd6",
+      "source_files": [
+        "evidence/benchmark_raw_plans.zip",
+        "tables/benchmark_summary.csv"
+      ],
+      "status": "HISTORICAL"
+    },
+    {
+      "path": "tables/test_summary.csv",
+      "type": ".csv",
+      "sha256": "3b5c9178d85fbb36e11eeed981e8e2995e4f480a34fdf1fa61c0d86e4d1acc24",
+      "source_files": [
+        "evidence/offline_tests.xml"
+      ],
+      "status": "OFFLINE_ONLY"
+    },
+    {
+      "path": "tables/test_summary.md",
+      "type": ".md",
+      "sha256": "d04d6426d01c057cb7cef98ba2de3450443d3fa0fedca9e0aa2c18ade916db46",
+      "source_files": [
+        "evidence/offline_tests.xml"
+      ],
+      "status": "OFFLINE_ONLY"
+    }
+  ],
+  "limitations": {
+    "table_rows": 30,
+    "static_links": "PASS",
+    "representative_links": "PASS",
+    "visual_review": "Contact sheet reviewed; Vietnamese labels visible, no apparent clipping",
+    "browser_smoke": "NOT_RUN: Playwright CLI unavailable locally",
+    "postgresql": "BLOCKED: connection timeout on 127.0.0.1:5433",
+    "benchmark_acceptance": "NOT_ACCEPTED",
+    "tests": {
+      "passed": 198,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 1,
+      "scope": "offline; live module excluded",
+      "live_status": "NOT_RUN",
+      "python": "3.13.7",
+      "commit": "eb1c2dbebe824f1bdf72e95636352d28fd9b34fc",
+      "command": "python -B -m pytest -q -rs -p no:cacheprovider --ignore=tests/test_live_postgresql_e2e.py --junitxml=deliverables/tv2/evidence/offline_tests.xml",
+      "source": "evidence/offline_tests.xml"
+    }
+  }
+}

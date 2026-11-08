@@ -1,0 +1,47 @@
+[
+  {
+    "Plan": {
+      "Node Type": "Seq Scan",
+      "Parallel Aware": false,
+      "Async Capable": false,
+      "Relation Name": "properties",
+      "Alias": "properties",
+      "Startup Cost": 0.0,
+      "Total Cost": 7628.0,
+      "Plan Rows": 4153,
+      "Plan Width": 122,
+      "Actual Startup Time": 0.021,
+      "Actual Total Time": 17.397,
+      "Actual Rows": 4180.0,
+      "Actual Loops": 1,
+      "Disabled": false,
+      "Filter": "(province_name = 'H\u1ea3i Ph\u00f2ng'::text)",
+      "Rows Removed by Filter": 195820,
+      "Shared Hit Blocks": 5128,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0
+    },
+    "Planning": {
+      "Shared Hit Blocks": 0,
+      "Shared Read Blocks": 0,
+      "Shared Dirtied Blocks": 0,
+      "Shared Written Blocks": 0,
+      "Local Hit Blocks": 0,
+      "Local Read Blocks": 0,
+      "Local Dirtied Blocks": 0,
+      "Local Written Blocks": 0,
+      "Temp Read Blocks": 0,
+      "Temp Written Blocks": 0
+    },
+    "Planning Time": 0.077,
+    "Triggers": [],
+    "Execution Time": 17.538
+  }
+]

@@ -21,6 +21,7 @@ import platform
 import statistics
 import sys
 import time
+import uuid
 from typing import Any, Dict, List, Optional, Tuple
 
 # Ensure UTF-8 output encoding on Windows consoles
@@ -201,8 +202,10 @@ def extract_plan_metrics(explain_json: List[Dict[str, Any]]) -> Dict[str, Any]:
         raise ValueError("EXPLAIN JSON phai la danh sach chua it nhat mot phan tu")
     
     root = explain_json[0]
-    planning_time = float(root.get("Planning Time", 0.0))
-    execution_time = float(root.get("Execution Time", 0.0))
+    planning_time = float(root["Planning Time"])
+    execution_time = float(root["Execution Time"])
+    if not all(math.isfinite(v) and v >= 0 for v in (planning_time, execution_time)):
+        raise ValueError("Invalid EXPLAIN timing")
     plan_root = root.get("Plan", {})
 
     all_nodes = extract_plan_nodes(plan_root)
@@ -233,17 +236,6 @@ def extract_plan_metrics(explain_json: List[Dict[str, Any]]) -> Dict[str, Any]:
     shared_written = int(plan_root.get("Shared Written Blocks", 0))
     temp_read = int(plan_root.get("Temp Read Blocks", 0))
     temp_written = int(plan_root.get("Temp Written Blocks", 0))
-
-    # Also sum worker buffers if parallel workers were involved
-    for node in all_nodes:
-        if "Workers" in node:
-            for worker in node["Workers"]:
-                shared_hit += int(worker.get("Shared Hit Blocks", 0))
-                shared_read += int(worker.get("Shared Read Blocks", 0))
-                shared_dirtied += int(worker.get("Shared Dirtied Blocks", 0))
-                shared_written += int(worker.get("Shared Written Blocks", 0))
-                temp_read += int(worker.get("Temp Read Blocks", 0))
-                temp_written += int(worker.get("Temp Written Blocks", 0))
 
     return {
         "planning_time_ms": planning_time,
@@ -467,8 +459,11 @@ class BenchmarkRunner:
         auto_import: bool = False,
     ) -> Dict[str, Any]:
         """Execute the full benchmark suite across scales and configurations."""
+        experiment_id = uuid.uuid4().hex
+        output_dir = output_dir / experiment_id
         raw_output_dir = output_dir / "raw"
-        raw_output_dir.mkdir(parents=True, exist_ok=True)
+        raw_output_dir.mkdir(parents=True, exist_ok=False)
+        (output_dir / "experiment.json").write_text(json.dumps({"experiment_id": experiment_id, "status": "STARTED", "warmups": warmup_runs, "official_runs": official_runs}), encoding="utf-8")
 
         env_info = self.inspect_environment()
         env_file = output_dir / "environment_info.json"
@@ -540,7 +535,10 @@ class BenchmarkRunner:
                     # 2. Warm-up runs (discarded)
                     print(f"    Warm-up {warmup_runs} lan...", end="", flush=True)
                     for w in range(warmup_runs):
-                        self.execute_explain_analyze(conn, query_sql)
+                        warmup, _ = self.execute_explain_analyze(conn, query_sql)
+                        warmup_path = output_dir / f"{scale}_{cid}_warmup{w+1:02d}.json"
+                        with warmup_path.open('x', encoding='utf-8') as warmup_file:
+                            json.dump(warmup, warmup_file)
                     print(" xong.", flush=True)
 
                     # 3. Official runs
@@ -558,7 +556,8 @@ class BenchmarkRunner:
                         # Save raw EXPLAIN JSON
                         raw_filename = f"{scale}_{cid}_run{r:02d}.json"
                         raw_filepath = raw_output_dir / raw_filename
-                        raw_filepath.write_text(json.dumps(raw_json, indent=2), encoding="utf-8")
+                        with raw_filepath.open('x', encoding='utf-8') as raw_file:
+                            json.dump(raw_json, raw_file, indent=2)
 
                         run_exec_times.append(metrics["execution_time_ms"])
                         run_plan_times.append(metrics["planning_time_ms"])
@@ -579,8 +578,8 @@ class BenchmarkRunner:
 
                     # Speedup relative to the query's baseline
                     baseline_cid = f"{qid}_baseline" if qid != "Q3" else "Q3_A"
-                    baseline_median = scale_medians.get(baseline_cid, exec_stats["median"])
-                    speedup = round(baseline_median / exec_stats["median"], 2) if exec_stats["median"] > 0 else 1.0
+                    baseline_median = scale_medians.get(baseline_cid)
+                    speedup = round(baseline_median / exec_stats["median"], 2) if baseline_median is not None and exec_stats["median"] > 0 else None
 
                     print(f"    -> Median Execution: {exec_stats['median']} ms (IQR: {exec_stats['iqr']} ms, min: {exec_stats['min']}, max: {exec_stats['max']})")
                     print(f"    -> Primary Scan: {dominant_scan} | Speedup: {speedup}x | Shared Hit: {hit_median} blk | Read: {read_median} blk")
