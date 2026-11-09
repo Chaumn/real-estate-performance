@@ -1,2 +1,2 @@
-﻿passed,failed,errors,skipped,scope,live_status,python,commit,command,source
+passed,failed,errors,skipped,scope,live_status,python,commit,command,source
 220,0,0,0,full regression suite including live PostgreSQL e2e,PASSED,3.13.7,b944dc41b9a782d063d61aac7ea9ff7663bdcd88,py -m pytest -v --junitxml=deliverables/tv2/evidence/regression_current.xml,evidence/regression_current.xml

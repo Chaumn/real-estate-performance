@@ -5,7 +5,7 @@
 **Tập dữ liệu kiểm định:** `data/processed/properties_50000.csv` $\rightarrow$ `properties_500000.csv`  
 **Cơ sở dữ liệu kiểm thử độc lập:** Cấu hình cơ sở dữ liệu cách ly động (ephemeral) `real_estate_qa_e2e_<uuid>` trên cụm PostgreSQL port 5433 (không DROP cơ sở dữ liệu có sẵn)  
 **Tổng số ca kiểm thử:** **220 test cases** (220 passed, 0 failed, 0 skipped - 100% Pass)  
-**Thời gian thực thi:** 16,54 giây
+**Thời gian thực thi:** 20,71 giây (ghi nhận chính thức tại `regression_current.xml`)
 
 ---
 
@@ -64,10 +64,15 @@ Bảng 2.1 liệt kê toàn bộ 17 tệp kiểm thử trong thư mục `tests/`
 | `tests/test_benchmark_processing.py` | Integration | 5 | 5 | 0 | 0 | Kiểm tra hiệu năng nạp tệp CSV/Parquet và tính toán gom nhóm bằng Pandas và Polars thật trên đĩa. |
 | `tests/test_import_csv.py` | Integration | 36 | 36 | 0 | 0 | Kiểm tra các hàm hỗ trợ import CSV, phân tích cú pháp kết nối và cấu trúc lệnh COPY. |
 | `tests/test_benchmark_sql.py` | Integration | 11 | 11 | 0 | 0 | Kiểm tra tính hợp lệ cú pháp của 5 câu lệnh SQL chuẩn hóa tại `sql/benchmark/queries/`. |
+| `tests/test_benchmark_tables.py` | Integration | 1 | 1 | 0 | 0 | Kiểm tra định dạng bảng dữ liệu tổng hợp và xuất bản Markdown từ kết quả đo. |
+| `tests/test_benchmark_validation.py` | Integration | 2 | 2 | 0 | 0 | Kiểm tra tính hợp lệ của cấu hình benchmark và tham số đo lường. |
 | `tests/test_live_postgresql_e2e.py` | Integration & E2E | 10 | 10 | 0 | 0 | **Kiểm thử trực tiếp trên PostgreSQL 18.3 thật (port 5433):** Nạp CSV bằng COPY thật, kiểm tra số dòng, kiểm tra Rollback, thực thi Q1–Q4, kiểm tra tương đương ngữ nghĩa Q3 Original vs Rewritten, smoke pipeline và bảo toàn database có sẵn. |
 | `tests/test_pipeline.py` | End-to-End | 2 | 2 | 0 | 0 | Kiểm tra luồng thực thi toàn bộ pipeline từ nạp dữ liệu đến xuất báo cáo tóm tắt. |
 | `tests/test_benchmark_evidence.py` | End-to-End | 6 | 6 | 0 | 0 | Kiểm toán mã băm SHA-256 của toàn bộ 600 tệp JSON kế hoạch thực thi thô đối soát với `results/benchmark/raw_manifest.json`, tích hợp 3 bài kiểm tra tiêu cực (negative tests) phát hiện dữ liệu giả mạo. |
+| `tests/test_evidence_validation.py` | End-to-End | 6 | 6 | 0 | 0 | Kiểm toán tính toàn vẹn của cấu trúc gói evidence và sơ đồ quan hệ artifact. |
+| `tests/test_handoff_validation.py` | End-to-End | 9 | 9 | 0 | 0 | Kiểm tra tính sẵn sàng của gói bàn giao, web dashboard và các liên kết kiểm chứng. |
 | `tests/test_report_statistics_consistency.py` | End-to-End | 8 | 8 | 0 | 0 | Kiểm tra tính nhất quán số liệu giữa các tệp báo cáo Markdown và dữ liệu JSON gốc: tỷ lệ khuyết thiếu ward 14,43%, district 2,85%, Hải Phòng 10.422 dòng, trung vị 7,4 tỷ và 80 m², Delta RAM Chunked, đồng thời bảo đảm không có mã băm SHA-256 lỗi thời. |
+| **TỔNG CỘNG (21 module)** | **Toàn bộ hệ thống** | **220** | **220** | **0** | **0** | **100% PASS** |
 
 ---
 

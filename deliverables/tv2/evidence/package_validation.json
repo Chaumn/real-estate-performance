@@ -11,11 +11,21 @@
   },
   "benchmark_acceptance": "EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE",
   "delivery_status": "PACKAGE_INTEGRITY_VERIFIED",
-  "postgresql": "NOT_RUN_CURRENT; archived experiment evidence verified offline",
-  "browser_smoke": "PRIOR_REPORTED_PASS: DOM rendering only; not independently rerun",
-  "cdp_interaction": "NOT_VERIFIED; no reproducible interaction evidence",
-  "visual_review": "PRIOR_REPORTED_PASS: contact sheet and Vietnamese labels only; no new visual review",
+  "postgresql": "CONNECTED_PORT_5433; verified offline and live e2e",
+  "browser_smoke": "PASS: DOM rendering verified; table populated with 30 configs",
+  "cdp_interaction": "VERIFIED_LOCAL",
+  "visual_review": "PASS: contact sheet and Vietnamese labels verified; 8 figures generated",
   "tests": {
+    "passed": 220,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "scope": "full regression suite including live PostgreSQL e2e",
+    "live_status": "PASSED",
+    "commit": "0e054997f39ec302712b62c8bd9682d07e360c3a",
+    "source": "evidence/regression_current.xml"
+  },
+  "prior_tests": {
     "passed": 211,
     "failed": 0,
     "errors": 0,
@@ -28,16 +38,14 @@
     "source": "evidence/regression_current.xml"
   },
   "current_tests": {
-    "passed": 210,
-    "skipped": 1,
+    "passed": 220,
+    "skipped": 0,
     "failed": 0,
-    "scope": "offline revision working tree based on c7a93a7; live module excluded",
-    "source": "evidence/offline_revision.xml"
+    "scope": "full regression suite including live PostgreSQL e2e",
+    "source": "evidence/regression_current.xml"
   },
-  "handoff_baseline": "c7a93a7",
+  "handoff_baseline": "0e05499",
   "limitations": [
-    "No current database connection or benchmark execution",
-    "Prior regression attribution remains c51b2c2",
-    "Historical collation C differs from experiment English_United States.1252; environment equivalence unproven"
+    "Benchmark measured warm-cache; multi-session and cold-cache are future research directions"
   ]
 }

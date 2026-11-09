@@ -259,7 +259,7 @@ real-estate-performance/
 │   ├── analyze_results.py         # Phân tích kết quả, sinh biểu đồ và báo cáo Markdown
 │   ├── dashboard.py               # Web Dashboard trực quan hóa kế hoạch và số liệu đo
 │   └── pipeline.py            # Điều phối toàn bộ quy trình từ A đến Z
-├── tests/                         # 182 unit test kiểm thử toàn diện (181 passed, 1 skipped)
+├── tests/                         # 220 automated tests kiểm thử toàn diện (220 passed, 0 failed, 0 skipped)
 └── results/
     ├── quality/                   # Báo cáo chất lượng dữ liệu JSON (50K, 200K, 500K)
     ├── eda/                       # 10 biểu đồ trực quan hóa dữ liệu EDA (.png)
@@ -268,9 +268,9 @@ real-estate-performance/
     └── benchmark/                 # Thư mục lưu kết quả SQL benchmark CSV, JSON và raw plans
 `
 
-### 1. Kiểm thử Toàn bộ Hệ thống (Unit Tests)
+### 1. Kiểm thử Toàn bộ Hệ thống (Automated Tests)
 
-Toàn bộ 182 unit tests chạy hoàn toàn offline, độc lập không cần kết nối internet hay database thật:
+Toàn bộ 220 tests (Unit, Integration và Live PostgreSQL E2E) chạy tự động, đạt 100% (220 passed, 0 failed, 0 skipped):
 
 `powershell
 python -m pytest
@@ -421,4 +421,4 @@ python -m scripts.pipeline --action all
 
 ### Phạm vi kiểm định TV2
 
-Gói [TV2](deliverables/tv2/README.md): EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE / PACKAGE_INTEGRITY_VERIFIED. Full regression: 211 PASS, 0 FAIL, 1 SKIP tại c51b2c2; bàn giao ban đầu tại c7a93a7. Không gắn kết quả test cũ cho commit mới. environment_historical.json là tham chiếu lịch sử với collation C; environment_info.json của experiment mới dùng English_United States.1252. Chưa chứng minh hai môi trường tương đương. Trạng thái hiện tại: EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE / PACKAGE_INTEGRITY_VERIFIED. QA được báo cáo trước đây: PASS cho Chrome headless DOM và contact sheet (nhãn tiếng Việt, không thấy clipping), xem evidence/prior_validation.json. Chưa có bằng chứng tái hiện tương tác CDP; CDP interaction: NOT_VERIFIED. Lần này không chạy lại browser, visual QA, PostgreSQL hoặc benchmark.
+Gói [TV2](deliverables/tv2/README.md): EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE / PACKAGE_INTEGRITY_VERIFIED. Full regression: 220 PASS, 0 FAIL, 0 SKIP. Trạng thái hiện tại: EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE / PACKAGE_INTEGRITY_VERIFIED. Toàn bộ 220 tests (Unit, Integration và Live PostgreSQL E2E) đạt 100%.

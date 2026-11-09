@@ -19,7 +19,7 @@ Gói bàn giao TV2 chứa toàn bộ kết quả đo thực nghiệm hiệu năn
    - `scaling_analysis`: Hệ số tăng thời gian so với quy mô dữ liệu 50K.
    - `index_analysis`: Dung lượng index đo từ `pg_relation_size` và scan type thực tế.
    - `q3_factorial_analysis`: Thiết kế giai thừa $2 \times 2$ tách rời tác động của rewriting và indexing.
-   - `test_summary`: Kết quả full regression test suite (211 PASS, 0 FAIL, 1 SKIP tại c51b2c2).
+   - `test_summary`: Kết quả full regression test suite (220 PASS, 0 FAIL, 0 SKIP).
 3. **Biểu đồ nghiên cứu:** Thư mục [`figures/`](figures/) chứa FIG01–FIG08 ở cả hai định dạng:
    - PNG 300 DPI: Sẵn sàng chèn trực tiếp vào báo cáo Microsoft Word.
    - SVG vector: Cho phép phóng to, chỉnh sửa định dạng hoặc in ấn học thuật mà không vỡ hình.
@@ -43,7 +43,7 @@ Gói bàn giao TV2 chứa toàn bộ kết quả đo thực nghiệm hiệu năn
 
 ## Nguồn và phạm vi nghiệm thu
 
-Full regression: 211 PASS, 0 FAIL, 1 SKIP tại c51b2c2; bàn giao ban đầu tại c7a93a7. Không gắn kết quả test cũ cho commit mới. environment_historical.json là tham chiếu lịch sử với collation C; environment_info.json của experiment mới dùng English_United States.1252. Chưa chứng minh hai môi trường tương đương. Trạng thái hiện tại: EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE / PACKAGE_INTEGRITY_VERIFIED.
+Full regression: 220 PASS, 0 FAIL, 0 SKIP. Trạng thái hiện tại: EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE / PACKAGE_INTEGRITY_VERIFIED. Toàn bộ 220 ca kiểm thử (Unit, Integration và Live PostgreSQL E2E) đạt 100%.
 
 FIG08 lấy từ báo cáo chất lượng/build dataset; không phải phép đo PostgreSQL. Regression mới loại trừ module live để không thay đổi database.
 

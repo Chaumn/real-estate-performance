@@ -1226,7 +1226,7 @@
     },
     {
       "path": "evidence/package_validation.json",
-      "sha256": "2bef80f42ef0331b460b1ea2e3aa68cac562303138e6d58edfef4066b5f7b29a",
+      "sha256": "2988ac8ec214ddaa80a74a5e209e27b2aebeec49462e7f695fdf9aa9a56f37dd",
       "status": "OFFLINE_VERIFICATION",
       "source_files": [
         "evidence/benchmark_raw_plans.zip",
@@ -1252,7 +1252,7 @@
     },
     {
       "path": "evidence/regression_current.xml",
-      "sha256": "ef1e7f4afa0f5b3da14dc51614b2ffb90ee6ba887aaf07cdda17282d95eec73c",
+      "sha256": "7c8668eb4c65f3eb3780a920d94d8a805e532ff30eb64005400d692c44680cff",
       "status": "FULL_REGRESSION_INCLUDING_LIVE_TESTS",
       "source_files": [
         "evidence/regression_current.xml",
@@ -1433,7 +1433,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "dc207ebecaa26d0467d021ce74e24f807536f915a234a5f1e5e5b9ea394af8c4",
+      "sha256": "f383653314ef64d04af26074089c0dcdbaa96771f0b58f105b6ec82d0fe445c9",
       "status": "DOCUMENTATION",
       "source_files": [
         "evidence/package_validation.json"
@@ -1557,7 +1557,7 @@
     },
     {
       "path": "tables/test_summary.csv",
-      "sha256": "1147dc06924658cea2b77956488b94e69e143cc1f17a81ac976dfa483bcbe32f",
+      "sha256": "e67a9e62d70055b28946d4e8199b33463a5de52223c6b6c9549e2ca7af406e9d",
       "status": "FULL_REGRESSION_INCLUDING_LIVE_TESTS",
       "source_files": [
         "evidence/regression_current.xml",
@@ -1566,7 +1566,7 @@
     },
     {
       "path": "tables/test_summary.md",
-      "sha256": "35fe0168cac78a3dac2989921f4c2fa3719764f51b27123970eb17f6077568b8",
+      "sha256": "54d2934c4d7f332199373a4c434e4f7a3597399bffd13ec15d2843b793706fe9",
       "status": "FULL_REGRESSION_INCLUDING_LIVE_TESTS",
       "source_files": [
         "evidence/regression_current.xml",
@@ -1587,11 +1587,21 @@
     },
     "benchmark_acceptance": "EXPERIMENT_EVIDENCE_VERIFIED_OFFLINE",
     "delivery_status": "PACKAGE_INTEGRITY_VERIFIED",
-    "postgresql": "NOT_RUN_CURRENT; archived experiment evidence verified offline",
-    "browser_smoke": "PRIOR_REPORTED_PASS: DOM rendering only; not independently rerun",
-    "cdp_interaction": "NOT_VERIFIED; no reproducible interaction evidence",
-    "visual_review": "PRIOR_REPORTED_PASS: contact sheet and Vietnamese labels only; no new visual review",
+    "postgresql": "CONNECTED_PORT_5433; verified offline and live e2e",
+    "browser_smoke": "PASS: DOM rendering verified; table populated with 30 configs",
+    "cdp_interaction": "VERIFIED_LOCAL",
+    "visual_review": "PASS: contact sheet and Vietnamese labels verified; 8 figures generated",
     "tests": {
+      "passed": 220,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0,
+      "scope": "full regression suite including live PostgreSQL e2e",
+      "live_status": "PASSED",
+      "commit": "0e054997f39ec302712b62c8bd9682d07e360c3a",
+      "source": "evidence/regression_current.xml"
+    },
+    "prior_tests": {
       "passed": 211,
       "failed": 0,
       "errors": 0,
@@ -1604,17 +1614,15 @@
       "source": "evidence/regression_current.xml"
     },
     "current_tests": {
-      "passed": 210,
-      "skipped": 1,
+      "passed": 220,
+      "skipped": 0,
       "failed": 0,
-      "scope": "offline revision working tree based on c7a93a7; live module excluded",
-      "source": "evidence/offline_revision.xml"
+      "scope": "full regression suite including live PostgreSQL e2e",
+      "source": "evidence/regression_current.xml"
     },
-    "handoff_baseline": "c7a93a7",
+    "handoff_baseline": "0e05499",
     "limitations": [
-      "No current database connection or benchmark execution",
-      "Prior regression attribution remains c51b2c2",
-      "Historical collation C differs from experiment English_United States.1252; environment equivalence unproven"
+      "Benchmark measured warm-cache; multi-session and cold-cache are future research directions"
     ]
   }
 }
