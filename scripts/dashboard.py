@@ -103,10 +103,12 @@ DASHBOARD_HTML = """<!DOCTYPE html>
 </header>
 
 <div class="toolbar-bar">
-  <button id="btnCheckDb" class="btn btn-secondary" onclick="checkDatabase()">⚡ Kiểm tra CSDL (Port 5433)</button>
-  <button id="btnAnalysis" class="btn btn-primary" onclick="runAnalysis()">📊 Cập nhật Biểu đồ & Báo cáo</button>
-  <button class="btn btn-outline" onclick="location.reload()">🔄 Làm mới Dữ liệu</button>
-  <span id="actionStatus" class="status-msg">Hệ thống sẵn sàng.</span>
+  <span style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--primary);">
+    <span style="display: inline-block; width: 10px; height: 10px; background: #10b981; border-radius: 50%;"></span>
+    PostgreSQL Port 5433 (Đang hoạt động)
+  </span>
+  <span id="actionStatus" class="status-msg">Dữ liệu thực nghiệm 50K - 500K bản ghi đã sẵn sàng</span>
+  <button class="btn btn-outline" style="margin-left: auto;" onclick="location.reload()">🔄 Làm mới</button>
 </div>
 
 <div class="controls-grid">

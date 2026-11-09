@@ -73,5 +73,6 @@ def start_database():
 
 
 if __name__ == "__main__":
-    start_database()
+    if not start_database():
+        sys.exit(1)
 
