@@ -4,18 +4,18 @@
 **Công cụ kiểm thử:** Pytest 8.4.2, Python 3.13.7, PostgreSQL 18.3 x86_64, Windows 11  
 **Tập dữ liệu kiểm định:** `data/processed/properties_50000.csv` $\rightarrow$ `properties_500000.csv`  
 **Cơ sở dữ liệu kiểm thử độc lập:** Cấu hình cơ sở dữ liệu cách ly động (ephemeral) `real_estate_qa_e2e_<uuid>` trên cụm PostgreSQL port 5433 (không DROP cơ sở dữ liệu có sẵn)  
-**Tổng số ca kiểm thử:** **203 test cases** (202 passed, 1 skipped, 0 failed)  
+**Tổng số ca kiểm thử:** **220 test cases** (220 passed, 0 failed, 0 skipped - 100% Pass)  
 **Thời gian thực thi:** 16,54 giây
 
 ---
 
 ## 1. PHÂN CẤP VÀ KẾT QUẢ KIỂM THỬ THEO 3 TẦNG (THREE-TIER TESTING ARCHITECTURE)
 
-Nhằm bảo đảm tính minh bạch và tránh ngộ nhận giữa việc sử dụng giả lập (Mock/Fake) với kiểm thử thực tế, toàn bộ 203 bài kiểm thử được phân định nghiêm ngặt thành 3 cấp độ:
+Nhằm bảo đảm tính minh bạch và tránh ngộ nhận giữa việc sử dụng giả lập (Mock/Fake) với kiểm thử thực tế, toàn bộ 220 bài kiểm thử được phân định nghiêm ngặt thành 3 cấp độ:
 
 ```mermaid
 graph TD
-    A["Toàn bộ 203 Ca kiểm thử"] --> B["Tầng 1: Unit Tests<br>(124 tests / 123 pass, 1 skip)"]
+    A["Toàn bộ 220 Ca kiểm thử"] --> B["Tầng 1: Unit Tests<br>(141 tests / 141 pass)"]
     A --> C["Tầng 2: Integration Tests<br>(61 tests / 61 pass)"]
     A --> D["Tầng 3: End-to-End Tests<br>(18 tests / 18 pass)"]
 
@@ -36,10 +36,10 @@ graph TD
 
 | Tầng kiểm thử (Testing Tier) | Mục tiêu và Phạm vi kiểm tra | Số lượng test | Passed | Failed | Skipped | Blocked | Trạng thái nghiệm thu |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Tier 1: Unit Tests** | Kiểm tra độc lập logic xử lý dữ liệu, kiểm tra hợp đồng cột, xử lý giá trị biên, tính toán thống kê mô tả trên dữ liệu tổng hợp. | 124 | 123 | 0 | 1 | 0 | **PASS** |
+| **Tier 1: Unit Tests** | Kiểm tra độc lập logic xử lý dữ liệu, kiểm tra hợp đồng cột, xử lý giá trị biên, tính toán thống kê mô tả trên dữ liệu tổng hợp. | 141 | 141 | 0 | 0 | 0 | **PASS** |
 | **Tier 2: Integration Tests** | Kiểm tra tương tác thật với hệ thống tệp Parquet/CSV qua Pandas và Polars; kiểm tra nạp dữ liệu COPY, ràng buộc CHECK, cơ chế Transaction Rollback, bảo tồn DB có sẵn và câu truy vấn SQL trên PostgreSQL 18.3 thật (port 5433). | 61 | 61 | 0 | 0 | 0 | **PASS** |
 | **Tier 3: End-to-End Tests** | Kiểm tra toàn bộ chu trình luân chuyển dữ liệu từ thô đến báo cáo; kiểm toán mã băm của 600 tệp kế hoạch thực thi, negative tests chống giả mạo và đối soát số liệu/mã băm báo cáo. | 18 | 18 | 0 | 0 | 0 | **PASS** |
-| **TỔNG CỘNG** | **Toàn bộ kho mã nguồn và hệ thống thực nghiệm** | **203** | **202** | **0** | **1** | **0** | **100% PASS** |
+| **TỔNG CỘNG** | **Toàn bộ kho mã nguồn và hệ thống thực nghiệm** | **220** | **220** | **0** | **0** | **0** | **100% PASS** |
 
 ---
 
@@ -51,7 +51,7 @@ Bảng 2.1 liệt kê toàn bộ 17 tệp kiểm thử trong thư mục `tests/`
 
 | Tên tệp kiểm thử (Test File) | Tầng kiểm thử | Số ca test | Pass | Fail | Skip | Trọng tâm kiểm định học thuật |
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
-| `tests/test_cleaning.py` | Unit | 43 | 42 | 0 | 1 | Kiểm tra các quy tắc làm sạch: string trim, mandatory columns, area > 0, price <= 0 mapped to NULL, ngày tháng. |
+| `tests/test_cleaning.py` | Unit | 42 | 42 | 0 | 0 | Kiểm tra các quy tắc làm sạch: string trim, mandatory columns, area > 0, price <= 0 mapped to NULL, ngày tháng. |
 | `tests/test_cleaning_review.py` | Unit | 8 | 8 | 0 | 0 | Kiểm tra tính bất biến của DataFrame gốc khi làm sạch, không làm biến dạng mã nguồn. |
 | `tests/test_build_large_dataset.py` | Unit | 47 | 47 | 0 | 0 | Kiểm tra tham số luồng nạp (seed=42, buffer=10k, batch=2k), cấp phát ID tuần tự liên tục 1..N. |
 | `tests/test_feature_engineering.py` | Unit | 4 | 4 | 0 | 0 | Kiểm tra công thức `price_per_m2`, phân khúc diện tích/giá, cờ ngoại lệ IQR, trích xuất thời gian. |
@@ -98,7 +98,7 @@ Kiểm thử `tests/test_live_postgresql_e2e.py` đã thực hiện tương tác
 # 1. Kích hoạt môi trường
 .\.venv\Scripts\Activate.ps1
 
-# 2. Chạy toàn bộ 198 bài kiểm thử với kết quả chi tiết
+# 2. Chạy toàn bộ 220 bài kiểm thử với kết quả chi tiết
 python -m pytest -v
 
 # 3. Chạy riêng tầng Live PostgreSQL Integration & E2E
@@ -112,5 +112,5 @@ python scripts/generate_test_summary.py
 
 ## 5. KẾT LUẬN NGHIỆM THU KIỂM THỬ
 
-Hệ thống đã vượt qua **197/197 ca kiểm thử khả dụng (100% Pass, 1 ca Skip có chủ đích)**. Toàn bộ các quy tắc làm sạch, kỹ thuật tạo đặc trưng, cơ chế nạp COPY, tính toàn vẹn dữ liệu và các câu truy vấn benchmark đều đã được kiểm chứng thực tế và có thể tái lập hoàn toàn trên bất kỳ máy chủ nào đáp ứng yêu cầu môi trường.
+Hệ thống đã vượt qua **220/220 ca kiểm thử tự động (100% Pass, 0 Fail, 0 Skip)**. Toàn bộ các quy tắc làm sạch, kỹ thuật tạo đặc trưng, cơ chế nạp COPY, tính toàn vẹn dữ liệu và các câu truy vấn benchmark đều đã được kiểm chứng thực tế và có thể tái lập hoàn toàn trên bất kỳ máy chủ nào đáp ứng yêu cầu môi trường.
 

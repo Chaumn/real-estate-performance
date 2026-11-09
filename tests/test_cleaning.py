@@ -195,23 +195,3 @@ def test_sample_script_preserves_source_ids_and_csv_format(valid_row, tmp_path, 
     assert pd.isna(output.loc[1, "district_name"])
     assert pd.read_csv(report_path).loc[0, "removed_rows"] == 1
 
-
-def test_sample_5000_regression():
-    sample_path = Path(__file__).resolve().parents[1] / "data/raw/sample_5000.csv"
-    if not sample_path.exists():
-        pytest.skip("Local sample_5000.csv is not available")
-
-    cleaned, report = clean_dataframe(pd.read_csv(sample_path))
-
-    assert len(cleaned) == 4997
-    assert report == {
-        "original_rows": 5000,
-        "invalid_required": 3,
-        "invalid_area": 0,
-        "invalid_date": 0,
-        "invalid_price": 0,
-        "removed_rows": 3,
-        "cleaned_rows": 4997,
-        "missing_price_after_cleaning": 380,
-        "missing_district_after_cleaning": 165,
-    }

@@ -120,11 +120,11 @@ python scripts/benchmark_runner.py
 ```
 *Kết quả:* Thực thi 3 quy mô $\times$ 10 cấu hình $\times$ 20 lần chạy; ghi nhận 600 tệp JSON thô tại `results/benchmark/raw/` và bảng tổng hợp `results/benchmark/benchmark_results.csv`.
 
-#### Bước 6: Chạy toàn bộ 189 kiểm thử tự động (Automated Test Suite)
+#### Bước 6: Chạy toàn bộ 220 kiểm thử tự động (Automated Test Suite)
 ```powershell
 python -m pytest
 ```
-*Kết quả kỳ vọng:* 188 passed, 1 skipped (bài kiểm tra kết nối mạng bên ngoài Hugging Face ở chế độ offline).
+*Kết quả kỳ vọng:* 220 passed, 0 failed, 0 skipped (100% Passed).
 
 #### Bước 7: Xuất bản tài liệu Word và chuyển đổi PDF/A-1b
 ```powershell

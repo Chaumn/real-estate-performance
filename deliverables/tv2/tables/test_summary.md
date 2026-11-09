@@ -1,10 +1,10 @@
-- passed: 211
+- passed: 220
 - failed: 0
 - errors: 0
-- skipped: 1
+- skipped: 0
 - scope: full regression suite including live PostgreSQL e2e
 - live_status: PASSED
 - python: 3.13.7
-- commit: c51b2c2690e676416189fdea2c0eedc72fd20677
+- commit: b944dc41b9a782d063d61aac7ea9ff7663bdcd88
 - command: py -m pytest -v --junitxml=deliverables/tv2/evidence/regression_current.xml
 - source: evidence/regression_current.xml
